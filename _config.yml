@@ -1,0 +1,56 @@
+title: 별로 고급지지 않은 개발일기
+description: My Personal Stack Problems
+author: parkjangwon
+github: https://github.com/parkjangwon
+about: 가산디지털단지역 근처에서 개발하고 있습니다.
+
+enableTags: true
+tagarray: []
+
+collections:
+  project:
+    output: true
+    permalink: /project/:path/
+
+social:
+#    - icon: fa-facebook
+#      link: "#"
+#    - icon: fa-twitter
+#      link: "#"
+#    - icon: fa-linkedin
+#      link: "#"
+#    - icon: fa-stack-exchange
+#      link: "#"
+    - icon: fa-github
+      link: "https://github.com/parkjangwon"
+    - icon: fa-envelope
+      link: mailto:vim@kakao.com
+
+share:
+  twitter_username: github.io
+  fb_appid: 1749788565247320
+
+urls:
+    - text: About Me
+      url: /about/
+#    - text: My Projects
+#      url: /projects/
+#    - text: XML Feed
+#      url: /feed.xml
+
+url: "https://parkjangwon.github.io"
+baseurl: ""
+paginate: 20
+per_page: 20
+paginate_path: "/page/:num/"
+markdown: kramdown
+gems:
+  - jekyll-paginate
+  - jekyll-gist
+
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: all
+  ignore:
+    envs: ['development']

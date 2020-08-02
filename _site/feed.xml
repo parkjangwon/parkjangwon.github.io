@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>별로 고급지지 않은 개발일기</title>
+    <description>My Personal Stack Problems</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 03 Aug 2020 00:17:07 +0900</pubDate>
+    <lastBuildDate>Mon, 03 Aug 2020 00:17:07 +0900</lastBuildDate>
+    <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>HTTPS는 어떻게 동작하는거지?</title>
+        <description>&lt;p&gt;웹 어플리케이션을 개발하고, 운영을 하다보면, 항상 &lt;strong&gt;보안&lt;/strong&gt; 문제에 부딪치게 된다.&lt;/p&gt;
+
+&lt;p&gt;XSS 취약점, CSRF 취약점 등 OWASP TOP 10에 포함되어 있는 여러 이슈들이 많지만,&lt;/p&gt;
+
+&lt;p&gt;이번 포스팅에는 HTTPS에 대해서 간단히 정리해보려고 한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;https&quot;&gt;HTTPS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper&lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol over &lt;strong&gt;S&lt;/strong&gt;ecure Socket Layer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HTTPS는 독립된 프로토콜이 아닌, 말 그대로 &lt;strong&gt;SSL위에서 동작하는 HTTP&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;p&gt;HTTPS를 알기 위해서는 먼저, &lt;strong&gt;HTTP&lt;/strong&gt;와 &lt;strong&gt;SSL&lt;/strong&gt;에 대해서 이해 해야한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;http&quot;&gt;HTTP&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper&lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;텍스트 기반의 통신규약&lt;/strong&gt;으로 인터넷에서 데이터를 주고 받는 프로토콜
+&lt;img src=&quot;/static/img/https-1.png&quot; alt=&quot;http&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP 메시지는 HTTP 서버와 HTTP 클라이언트에 의해 해석이 된다.
+
+TCP/ IP를 이용하는 응용 프로토콜이다.
+
+HTTP는 연결 상태를 유지하지 않는 비연결성 프로토콜이다.
+
+HTTP는 연결을 유지하지 않는 프로토콜이기 때문에 요청/응답 방식으로 동작한다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;http-https-통신간-패킷-비교&quot;&gt;HTTP, HTTPS 통신간 패킷 비교&lt;/h1&gt;
+
+&lt;p&gt;클라이언트와 서버간의 패킷을 분석할 수 있는 &lt;strong&gt;WireShark&lt;/strong&gt;를 통하여&lt;/p&gt;
+
+&lt;p&gt;HTTP 통신과 HTTPS통신시 패킷을 비교하면 아래와 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/img/https-2.png&quot; alt=&quot;http_https&quot; /&gt;
+&lt;a href=&quot;https://yunzema.tistory.com/358&quot;&gt;이미지출처: yunzema님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;보라색 부분이 HTTPS 통신 패킷, 연두색 부분이 HTTP 통신 패킷
+
+각 통신에서 Application Data가 들어 있는 패킷을 열어보았다. (빨간 밑줄 친 패킷)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/img/https-3.png&quot; alt=&quot;http_https&quot; /&gt;
+&lt;a href=&quot;https://yunzema.tistory.com/358&quot;&gt;이미지출처: yunzema님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;위가 HTTPS 패킷(198163), 아래가 HTTP 패킷(198787)
+
+HTTPS 패킷에서는 전송 내용을 평문으로 확인할 수 없도록 암호화되어있는 반면에,
+
+HTTP 패킷에서는 값이 평문으로 그대로 노출되는 것을 확인할 수 있다.
+
+위 그림을 통해 확인할 수 있듯이, HTTP 전송의 경우 데이터 자체를 암호화 하지 않으면
+
+패킷 도청으로 데이터 유출이 가능하다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;여기서-알고-넘어가자&quot;&gt;여기서 알고 넘어가자!&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;브라우저 개발자 도구에서 확인할 수 있는 Request 정보는 패킷의 정보가 아니다. 평문으로 보여지는 것이 당연함!&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;웹 디버그 툴 Fiddler를 통한 관찰에서는 HTTPS 통신의 데이터를 평문으로 확인할 수 가 있는데,&lt;/p&gt;
+
+    &lt;p&gt;이는 Fiddler에서 SSL 복호화를 위해 동적으로 조작 인증서를 생성하는 과정을 거치기 때문이다.&lt;/p&gt;
+
+    &lt;p&gt;(Fiddler에서 HTTPS 패킷을 확인하기 위해 아마 조작된 Root 인증서 설치과정을 미리 거쳤을 것이다.)&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://medium.com/sjk5766/wireshark와-fiddler-패킷-캡쳐-원리-a0cf8bc6698f&quot;&gt;참고 URL&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;각 Wireshark와 Fiddler의 패킷정보는 다른 방식으로 가져온 패킷 정보이다.&lt;/p&gt;
+
+    &lt;p&gt;(순수 통신 패킷은 NIC에 들어오는 패킷을 캡쳐하는 Wireshark가 맞음)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl&quot;&gt;SSL&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;S&lt;/strong&gt;ocket &lt;strong&gt;L&lt;/strong&gt;ayer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/img/https-4.png&quot; alt=&quot;ssl&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Netscape에서 서버와 브라우저 간 보안을 위해 만든 프로토콜
+
+SSL은 CA(Certificate Authority)라 불리는 서드 파티로부터 서버와 클라이언트의 인증을 하는데 사용한다.
+
+또한 SSL을 사용한 HTTP 암호화 통신 (HTTPS) 을 사용하기 위해선 SSL 인증서가 필요하다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ca-인증기관&quot;&gt;CA (인증기관)&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;C&lt;/strong&gt;ertificate &lt;strong&gt;A&lt;/strong&gt;uthority&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;SSL 인증서의 역할은 클라이언트가 접속한 서버가 클라이언트가 &lt;strong&gt;의도한 서버&lt;/strong&gt;가 맞는지를 &lt;strong&gt;보장하는 역할&lt;/strong&gt;을 한다.&lt;/p&gt;
+
+&lt;p&gt;이 역할을 하는 민간기업들이 있는데 이런 기업들을 &lt;strong&gt;CA&lt;/strong&gt;(Certificate authority) 혹은 &lt;strong&gt;Root Certificate&lt;/strong&gt; 라고 부른다.&lt;/p&gt;
+
+&lt;p&gt;CA는 아무 기업이나 할 수 있는 것이 아니고 &lt;strong&gt;신뢰성이 엄격하게 공인된 기업&lt;/strong&gt;들만이 참여할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그 중에 대표적인 기업들은 아래와 같다. 수치는 현시점의 시장점유율이다. (위키피디아 참조)&lt;/p&gt;
+
+&lt;p&gt;Comodo with 26%&lt;/p&gt;
+
+&lt;p&gt;GoDaddy with 14%&lt;/p&gt;
+
+&lt;p&gt;GlobalSign with 7.7%&lt;/p&gt;
+
+&lt;p&gt;……………..&lt;/p&gt;
+
+&lt;p&gt;SSL을 통해서 암호화된 통신을 제공하려는 서비스는 CA를 통해서 인증서를 구입해야 한다.&lt;/p&gt;
+
+&lt;p&gt;CA는 서비스의 신뢰성을 다양한 방법으로 평가하게 된다.&lt;/p&gt;
+
+&lt;p&gt;물론 무료로 인증서를 제공하는 기업도 있다. ex: Let’s Encrypt&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;범용 브라우저&lt;/strong&gt; 및 &lt;strong&gt;OS&lt;/strong&gt;에서는 &lt;strong&gt;Trusted CA List&lt;/strong&gt; (신뢰하는 인증기관 리스트)를 가지고 있다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-certification-ssl-인증서&quot;&gt;SSL Certification (SSL 인증서)&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;S&lt;/strong&gt;ocket &lt;strong&gt;L&lt;/strong&gt;ayer &lt;strong&gt;C&lt;/strong&gt;ertification&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;클라이언트가 접속한 서버가 클라이언트가 의도한 서버가 맞는지를 보장 및&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;데이터 암/복호화&lt;/strong&gt;에 필요한 &lt;strong&gt;알고리즘&lt;/strong&gt;, &lt;strong&gt;공개키&lt;/strong&gt; 등을 제공&lt;/p&gt;
+
+&lt;p&gt;그러면 인증서에 어떤 정보가…?
+&lt;img src=&quot;/static/img/https-7.png&quot; alt=&quot;sslc&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/img/https-8.png&quot; alt=&quot;sslc&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-인증서를-사용한-데이터-암호화-동작-원리&quot;&gt;SSL 인증서를 사용한 데이터 암호화 동작 원리&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;그 전에, 대칭 키, 공개 키 암호화가 뭔지 알고 갑시다….&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;대칭키-암호화&quot;&gt;대칭키 암호화&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/static/img/https-9.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;http://blog.naver.com/success1834/221480331793&amp;quot;&quot;&gt;이미지 출처: LG CNS님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;하나의 비밀키&lt;/strong&gt;를 양쪽(client &amp;amp; server)가 모두 같이 사용&lt;/li&gt;
+  &lt;li&gt;암호화와 복호화에 사용하는 키가 같은 암호화 알고리즘&lt;/li&gt;
+  &lt;li&gt;공개키와 비밀키를 별도로 가지는 것과 구별되는데, 이와 비교하면 &lt;strong&gt;계산속도가 빠르다는 장점&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;비밀키 하나만 알아내면 암호화된 내용을 해독 가능 → &lt;strong&gt;해커로부터 안전 X&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;대표적인 대칭키 알고리즘을 사용하는 암호화 방식으로는 아래와 같다.&lt;/p&gt;
+
+    &lt;p&gt;DES, 3-DES, AES, SEED, ARIA, MASK 등…&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;공개키-암호화&quot;&gt;공개키 암호화&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/static/img/https-10.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;https://gaeko-security-hack.tistory.com/123&amp;quot;&quot;&gt;이미지 출처: Gae Ko님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;비밀키 하나만 가지는 대칭키 암호 방법과 달리, &lt;strong&gt;공개키와 비밀키 두 개가 존재&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;공개키 암호를 구성하는 알고리즘을 대칭키 암호 방식과 비교하여 &lt;strong&gt;비대칭 암호&lt;/strong&gt;라고 불림&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;암호화&lt;/strong&gt;와 &lt;strong&gt;복호화&lt;/strong&gt;에 사용하는 키가 &lt;strong&gt;서로 다름&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;암호화할 때의 키는 공개키(public key), 복호화할 때의 키는 개인키(private key)&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;공개키는 누구나 알 수 있지만, 그에 대응하는 비밀키는 키의 소유자만이 알 수 있어서&lt;/p&gt;
+
+    &lt;p&gt;특정한 비밀키를 가지는 사용자만이 내용을 열어볼 수 있도록 하는 방식&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-통신과정&quot;&gt;SSL 통신과정&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/static/img/https-11.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;https://wayhome25.github.io/cs/2018/03/11/ssl-https/&amp;quot;&quot;&gt;이미지 출처: 초보몽키님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;STEP 1 # from Client to Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;클라이언트는 랜덤 데이터 및 사용 가능한 암호화 알고리즘 목록 서버로 전달.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 2 # from Server to Client&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;서버는 랜덤 데이터, 선택한 암호화 알고리즘 및 SSL 인증서를 클라이언트로 전달.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 3 # from Client to Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;전달 받은 인증서의 유효성 검증 및 &lt;strong&gt;클라이언트와 서버가 생성한 랜덤 데이터를 조합&lt;/strong&gt; 하여,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;pre master secret&lt;/strong&gt;를 생성하고, 이 값을 인증서의 공개키로 암호화하여 서버로 전달.&lt;/p&gt;
+
+&lt;p&gt;클라이언트는 암호화 하기 전, &lt;strong&gt;pre master secret&lt;/strong&gt;을 &lt;strong&gt;master secret&lt;/strong&gt;으로 저장 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;master secret&lt;/strong&gt;를 key로 사용하여 &lt;strong&gt;session key&lt;/strong&gt;를 생성한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 4 # from Server to Client&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;클라이언트로부터 전달 받은 암호화 된 &lt;strong&gt;pre master secret&lt;/strong&gt;를 서버에서 가지고 있는 &lt;strong&gt;개인키로 복호화&lt;/strong&gt; 한 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;master secret&lt;/strong&gt; 으로 저장하다.이를 key로 사용하여 &lt;strong&gt;session key&lt;/strong&gt;를 생성한다.&lt;/p&gt;
+
+&lt;p&gt;이로써 &lt;strong&gt;클라이언트와 서버는 동일한 session key&lt;/strong&gt;를 가지게 되었고,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session key&lt;/strong&gt;는 송/수신 데이터에 대한 &lt;strong&gt;암/복호화에 사용되는 키&lt;/strong&gt;가 된다.&lt;/p&gt;
+
+&lt;p&gt;즉, 이 때 부터 클라이언트와 서버는 &lt;strong&gt;동일한 키로 암/복호화하는 대칭키 알고리즘&lt;/strong&gt;을 사용한다.&lt;/p&gt;
+
+&lt;p&gt;클라이언트와 서버의 &lt;strong&gt;세션이 종료되는 순간, session key는 폐기&lt;/strong&gt;가 된다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;요약하자면, &lt;strong&gt;세션이 수립&lt;/strong&gt;될 때, 양측은 &lt;strong&gt;공개키 방식으로 마스터키를 생성&lt;/strong&gt; 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;세션간&lt;/strong&gt; 양측은 &lt;strong&gt;동일한 마스터키&lt;/strong&gt;로 &lt;strong&gt;대칭키 방식&lt;/strong&gt;으로 데이터를 &lt;strong&gt;암호화 하여 통신&lt;/strong&gt;한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;이제 SSL이 뭔지는 알겠어. 근데 요즘은 SSL말고, TLS 통신 어쩌구 하는데.. TLS는 뭐지?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;tls&quot;&gt;TLS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;T&lt;/strong&gt;ransport &lt;strong&gt;L&lt;/strong&gt;ayer &lt;strong&gt;S&lt;/strong&gt;ecurity&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;SSL을 기반한 기술이며, 국제 인터넷 표준화 기구에서 표준으로 인정 받은 프로토콜이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SSL과 TLS은 다른 프로토콜이 아니고&lt;/strong&gt;, 본질적으로 같으며, &lt;strong&gt;TLS는 SSL의 최신 버전&lt;/strong&gt;으로 보면 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SSL의 역사&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;최초 제안 : 넷스케이프사
+
+버젼 : SSL v1.0 (1994.7), SSL v2.0 (1994.12), SSL v3.0 (1996.11)
+
+SSL v3.0은 그 당시 사실상의 웹 보안 표준이었음
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TLS의 역사&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SSL v3.0 을 참고로하여 RFC 2246(1999년)으로 표준화된 것이 TLS임
+
+버젼 : TLS 1.0 (RFC 2246,1999) : SSL v3.1에 해당, 
+
+TLS 1.1 (RFC 4346, 2006), TLS 1.2 (RFC 5246, 2008), TLS 1.3 (RFC 8446, 2018)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;참고로 SSL의 최신 버전인 &lt;strong&gt;SSL v3.0&lt;/strong&gt;은 2015년에 POODLE, DROWN 등의 &lt;strong&gt;취약점이 발견&lt;/strong&gt;되어&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;암호화 프로토콜로서의 기능을 잃은 상태&lt;/strong&gt;이다. 이하 버전도 마찬가지이다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;이쯤에서 다시 HTTPS가 무엇인지 정리해보자.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;https-1&quot;&gt;HTTPS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper &lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol Over &lt;strong&gt;S&lt;/strong&gt;ecure Socket Layer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HTTPS는 독립된 프로토콜이 아닌, 말 그대로 &lt;strong&gt;SSL위에서 동작하는 HTTP&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;즉, HTTPS는 독립된 프로토콜이 아니며, &lt;br /&gt;HTTP 통신을 할 때의 &lt;strong&gt;Socket&lt;/strong&gt; 부분을 &lt;strong&gt;SSL이나 TLS 프로토콜로 대체&lt;/strong&gt;하는 것!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;PS. 이 글을 보신분께서는 주위에서 HTTPS, SSL, TLS라는 단어가 나왔을 때,&lt;/p&gt;
+
+&lt;p&gt;약간의 TMI를 말할 수 있는 변태 엔지니어가 되셨으면 좋겠습니다.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Aug 2020 22:02:00 +0900</pubDate>
+        <link>http://localhost:4000/http/https/ssl/security/2020/08/01/HTTPS.html</link>
+        <guid isPermaLink="true">http://localhost:4000/http/https/ssl/security/2020/08/01/HTTPS.html</guid>
+        
+        
+        <category>http</category>
+        
+        <category>https</category>
+        
+        <category>ssl</category>
+        
+        <category>security</category>
+        
+      </item>
+    
+  </channel>
+</rss>
