@@ -1,0 +1,15 @@
+[
+  
+    {
+      "title"    : "HTTPS는 어떻게 동작하는거지?",
+      "title-lower"    : "https는 어떻게 동작하는거지?",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "https",
+      "tags"     : "",
+      "url"      : "/https/2020/08/01/HTTPS.html",
+      "date"     : "2020-08-01 22:02:00 +0900",
+      "content"     : "웹 어플리케이션을 개발하고, 운영을 하다보면, 항상 보안 문제에 부딪치게 된다.XSS 취약점, CSRF 취약점 등 OWASP TOP 10에 포함되어 있는 여러 이슈들이 많지만,이번 포스팅에는 HTTPS에 대해서 간단히 정리해보려고 한다.HTTPS  HyperText Transfer Protocol over Secure Socket LayerHTTPS는..."
+    } 
+  
+]

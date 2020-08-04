@@ -1,80 +1,199 @@
-## My Stack Problems
+# plainwhite
 
-> This project forked and has been modified from [A simple grey theme for Jekyll](https://github.com/liamsymonds/simplygrey-jekyll),
-> and the search posts using [Super Search](https://github.com/chinchang/super-search)
+Simplistic jekyll portfolio-style theme for writers.
 
-### Demo
-* [https://agusmakmun.github.io](https://agusmakmun.github.io)
+**Demo**: [thelehhman.com](https://thelehhman.com)
 
-#### Features
+![plainwhite theme preview](/screenshot.png)
 
-* Sitemap and XML Feed
-* Pagination in homepage
-* Posts under category
-* Realtime Search Posts _(title & description)_ by query.
-* Related Posts
-* Highlight pre
-* Next & Previous Post
-* Disqus comment
-* Projects page & Detail Project page
-* Share on social media
-* Google analytics
-* HTML Minify _(Compress HTML)_ using [Jekyll Compress HTML](https://github.com/penibelst/jekyll-compress-html)
+## Installation on Github Pages
 
-#### Screenshot
+Add this line to your site's `_config.yml`:
 
-![Screenshot Post Page](https://raw.githubusercontent.com/agusmakmun/agusmakmun.github.io/master/static/img/screenshot-post-page.png  "Screenshot Post Page")
-
-### Install & Configuration
-
-1. Fork this repository
-2. Edit site settings inside file of `_config.yml`
-3. Edit your projects at file of `projects.md`, `_data/projects.json` and inside path of `_project/` _(for detail project)_.
-4. Edit about yourself inside file of `about.md`
-
-### How to Use?
-
-**a. Add new Category**
-
-All categories saved inside path of `category/`, you can see the existed categories.
-
-**b. Add new Posts**
-
-* All posts bassed on markdown syntax _(please googling)_. allowed extensions is `*.markdown` or `*.md`.
-* This files can found at the path of `_posts/`.
-* and the name of files are following `<date:%Y-%m-%d>-<slug>.<extension>`, for example:
-
-```
-2013-09-23-welcome-to-jekyll.md
-
-# or
-
-2013-09-23-welcome-to-jekyll.markdown
+```yaml
+remote_theme: samarsault/plainwhite-jekyll
 ```
 
-Inside the file of it,
+## Installation
 
-```
----
-layout: post                          # (require) default post layout
-title: "Your Title"                   # (require) a string title
-date: 2016-04-20 19:51:02 +0700       # (require) a post date
-categories: [python, django]          # (custom) some categories, but makesure these categories already exists inside path of `category/`
-tags: [foo, bar]                      # (custom) tags only for meta `property="article:tag"`
-image: Broadcast_Mail.png             # (custom) image only for meta `property="og:image"`, save your image inside path of `static/img/_posts`
----
+Add this line to your Jekyll site's `Gemfile`:
 
-# your content post with markdown syntax goes here...
+```ruby
+gem "plainwhite"
 ```
 
+And add this line to your Jekyll site's `_config.yml`:
 
-#### Installing in your local
-
-```
-bundle install
-jekyll serve
+```yaml
+theme: plainwhite
 ```
 
-### Contributing
+And then execute:
 
-Feel free to [open a bug](https://github.com/agusmakmun/agusmakmun.github.io/issues) or [contribute to code](https://github.com/agusmakmun/agusmakmun.github.io/pulls)!
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install plainwhite
+
+## Usage
+
+The "plainwhite" key in \_config.yml is used to customize the theme data.
+
+```yaml
+plainwhite:
+  name: Adam Denisov
+  tagline: Developer. Designer
+  date_format: "%b %-d, %Y"
+
+  social_links:
+    twitter: samarsault
+    github: samarsault
+    linkedIn: in/samarsault # format: locale/username
+```
+
+**Updating Placeholder Image**
+
+The placeholder portfolio image can be replaced by the desired image by placing it as `assets/portfolio.png` in your jekyll website, or by changing the following line in `_config.yaml`
+
+```yaml
+plainwhite:
+  portfolio_image:  "assets/portfolio.png" # the path from the base directory of the site to the image to display (no / at the start)
+```
+
+**Comments (Disqus)**
+
+Comments on posts can be enabled by specifying your disqus_shortname under plainwhite in `_config.yml`. For example,
+
+```yaml
+plainwhite:
+  disqus_shortname: games
+```
+
+**Google Analytics**
+
+It can be enabled by specifying your analytics id under plainwhite in `_config.yml`
+
+```yaml
+plainwhite:
+  analytics_id: "< YOUR ID >"
+```
+
+**Sitemap**
+
+It can be toggled by the following line to under plainwhite in `_config.yml`
+
+```yaml
+plainwhite:
+  sitemap: true
+```
+
+**Excerpts**
+
+Excerpts can be enabled by adding the following line to your `_config.yml`
+
+```yaml
+show_excerpts: true
+```
+
+**Layouts**
+
+- Home
+- Page
+- Post
+
+**Navigation**
+
+Navigation can be enabled by adding the following line to your `_config.yml`
+
+```yaml
+plainwhite:
+  navigation:
+    - title: My Work
+      url: "/my-work"
+    - title: Resume
+      url: "/resume"
+```
+
+**Dark mode**
+
+Dark mode can be enabled by setting the `dark_mode` flag in your `_config.yml`
+
+The website will check the OS preferred color scheme and set the theme accordingly, the preference will then be saved in a cookie
+
+```yaml
+plainwhite:
+  dark_mode: true
+```
+
+![plainwhite dark theme previe](/dark.png)
+
+**Multiline tagline**
+
+Tagline can be multiline in this way
+
+```yaml
+plainwhite:
+  tagline: |
+  First Line. 
+
+  Second Line. 
+
+  Third Line.
+```
+
+**Search-bar**
+
+Search-bar can be enabled by adding the following line to `config.yml`
+
+```yaml
+plainwhite:
+  search: true
+```
+
+Search is powered by [Simple-Jekyll-Search](https://github.com/christian-fei/Simple-Jekyll-Search) Jekyll plugin. A `search.json` containing post meta and contents will be generated in site root folder. Plugin JavaScript will then match for posts based on user input. More info and `search.json` customization documentation can be found in plugin repository.
+
+**Base URL**
+
+You can specify a custom base URL (eg. example.com/blog/) by adding the following line to `_config.yaml`. Note that there is no trailing slash on the URL.
+
+```yaml
+baseurl: "/blog"
+```
+
+**Language**
+
+You can set the `lang` attribute of the `<html>` tag on your pages by changing the following line in `_config.yml`:
+
+```yaml
+plainwhite:
+  html_lang: "en"
+```
+
+[See here for a full list of available language codes](https://www.w3schools.com/tags/ref_country_codes.asp)
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/samarsault/plainwhite-jekyll. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+## Development
+
+To set up your environment to develop this theme, run `bundle install`.
+
+Your theme is setup just like a normal Jekyll site! To test your theme, run `bundle exec jekyll serve` and open your browser at `http://localhost:4000`. This starts a Jekyll server using your theme. Add pages, documents, data, etc. like normal to test your theme's contents. As you make modifications to your theme and to your content, your site will regenerate and you should see the changes in the browser after a refresh, just like normal.
+
+When your theme is released, only the files in `_layouts`, `_includes`, `_sass` and `assets` tracked with Git will be bundled.
+To add a custom directory to your theme-gem, please edit the regexp in `plainwhite.gemspec` accordingly.
+
+## Donation
+If this project help you reduce time to develop, you can give me a cup of coffee :) 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/thelehhman)
+
+## License
+
+The theme is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## More themes
+
+- [Texture](https://github.com/samarsault/texture)

@@ -1,56 +1,55 @@
-title: 별로 고급지지 않은 개발일기
-description: My Personal Stack Problems
+title: 생각날때쓰는개발일기
 author: parkjangwon
-github: https://github.com/parkjangwon
-about: 가산디지털단지역 근처에서 개발하고 있습니다.
+email: vim@kakao.com
+description: > # this means to ignore newlines until "show_exerpts:"
+  혼자 끄적이는 잡다한 개발지식
+show_excerpts: true # set to true to show excerpts on the homepage
 
-enableTags: true
-tagarray: []
+# Minima date format
+# refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
+sass:
+  sass_dir: _sass
+plainwhite:
+  name: Park Jangwon
+  tagline: Web Developer
+  date_format: "%b %-d, %Y"
+  sitemap: true # set to true to generate sitemap.xml content
+  search: true # set to true to enable searchbar
+  dark_mode: true # set to true to add dark mode toggle
+  portfolio_image: "assets/pjw.png" # the path from the base directory of the site to the image to display (no / at the start)
+  html_lang: "en" # set the lang attribute of the <html> tag for the pages. See here for a list of codes: https://www.w3schools.com/tags/ref_country_codes.asp
 
-collections:
-  project:
-    output: true
-    permalink: /project/:path/
+  # generate social links in footer
+  social_links:
+#    twitter: thelehhman
+    github:  parkjangwon
+#    linkedIn: in/thelehhman
+#    rss: rss
+#    dribbble: jekyll
+#    flickr:   jekyll
+    instagram: p._.jw
+#    pinterest: jekyll
+#    youtube: jekyll
+#    facebook: jekyll
+#    soundcloud: jekyll
+#    telegram: jekyll
+#    gitlab: jekyll
 
-social:
-#    - icon: fa-facebook
-#      link: "#"
-#    - icon: fa-twitter
-#      link: "#"
-#    - icon: fa-linkedin
-#      link: "#"
-#    - icon: fa-stack-exchange
-#      link: "#"
-    - icon: fa-github
-      link: "https://github.com/parkjangwon"
-    - icon: fa-envelope
-      link: mailto:vim@kakao.com
+    # Mastodon instances
+    # mastodon:
+    # - username: jekyll
+    #   instance: example.com
+    # - username: jekyll2
+    #   instance: example.com
 
-share:
-  twitter_username: github.io
-  fb_appid: 1749788565247320
+# If you want to link only specific pages in your header, uncomment
+# this and add the path to the pages in order as they should show up
+#header_pages:
+# - about.md
 
-urls:
-    - text: About Me
-      url: /about/
-#    - text: My Projects
-#      url: /projects/
-#    - text: XML Feed
-#      url: /feed.xml
+# Build settings
+theme: plainwhite
 
-url: "https://parkjangwon.github.io"
-baseurl: ""
-paginate: 20
-per_page: 20
-paginate_path: "/page/:num/"
-markdown: kramdown
-gems:
-  - jekyll-paginate
-  - jekyll-gist
-
-compress_html:
-  clippings: all
-  comments: ["<!-- ", " -->"]
-  endings: all
-  ignore:
-    envs: ['development']
+plugins:
+  - jekyll-seo-tag
+#  - jekyll-feed
