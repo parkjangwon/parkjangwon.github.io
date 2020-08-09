@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "HttpServletRequest의 모든 파라미터를 출력하는 방법",
+      "title-lower"    : "httpservletrequest의 모든 파라미터를 출력하는 방법",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "javaservlet",
+      "tags"     : "",
+      "url"      : "/java/servlet/2020/08/10/req.html",
+      "date"     : "2020-08-10 00:34:00 +0900",
+      "content"     : "서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다.break point를 걸어 variables view에서 값을 하나 하나 볼 수 있지만… 가끔 너무 귀찮을 때가 있다.아래 구문을 메모를 해두고, 디버깅 조차하기도 너무나 귀찮을 때 종종 꺼내서 쓰면 편리하다.HttpServletR..."
+    } ,
+  
+    {
       "title"    : "bash 쉘에서 base64 인코딩 및 디코딩하는 방법",
       "title-lower"    : "bash 쉘에서 base64 인코딩 및 디코딩하는 방법",
       "sub-titile" : "",

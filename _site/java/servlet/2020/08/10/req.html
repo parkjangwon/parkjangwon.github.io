@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="/assets/favicon.ico" rel="shortcut icon"/>
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>HttpServletRequest의 모든 파라미터를 출력하는 방법</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>HttpServletRequest의 모든 파라미터를 출력하는 방법 | 생각날때쓰는개발일기</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="HttpServletRequest의 모든 파라미터를 출력하는 방법" />
+<meta name="author" content="parkjangwon" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다." />
+<meta property="og:description" content="서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다." />
+<link rel="canonical" href="http://localhost:4000/java/servlet/2020/08/10/req.html" />
+<meta property="og:url" content="http://localhost:4000/java/servlet/2020/08/10/req.html" />
+<meta property="og:site_name" content="생각날때쓰는개발일기" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-10T00:34:00+09:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-08-10T00:34:00+09:00","headline":"HttpServletRequest의 모든 파라미터를 출력하는 방법","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/java/servlet/2020/08/10/req.html"},"url":"http://localhost:4000/java/servlet/2020/08/10/req.html","author":{"@type":"Person","name":"parkjangwon"},"description":"서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다.","@type":"BlogPosting","dateModified":"2020-08-10T00:34:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+
+<body>
+  <main class="container">
+    <section class="about">
+      <a href="/"><img src="/assets/pjw.png" alt="Park Jangwon"></a>
+      <h2 id="title">
+        <a href="/">Park Jangwon</a>
+      </h2>
+      <p class="tagline">Web Developer</p>
+      <ul class="social"><a href="https://github.com/parkjangwon" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://instagram.com/p._.jw" target="_blank">
+          <li>
+            <i class="icon-instagram"></i>
+          </li>
+        </a></ul><p>&copy;
+        2020</p></section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/java/servlet/2020/08/10/req.html">
+    <h2 class="post-title">HttpServletRequest의 모든 파라미터를 출력하는 방법</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 10, 2020</div><ul class="post-categories"><li>java</li><li>servlet</li></ul></div>
+  <div class="post">
+    <p>서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다.</p>
+
+<p>break point를 걸어 variables view에서 값을 하나 하나 볼 수 있지만… <strong>가끔 너무 귀찮을 때가 있다.</strong></p>
+
+<p>아래 구문을 메모를 해두고, 디버깅 조차하기도 너무나 귀찮을 때 종종 꺼내서 쓰면 편리하다.</p>
+
+<p><strong>HttpServletRequest</strong>를 파라미터로 받는 메서드 (컨트롤러) 첫 줄에 아래 코드를 copy &amp; paste를 한다.</p>
+
+<h1 id="리퀘스트에-담긴-모든-파라미터-출력하기">리퀘스트에 담긴 모든 파라미터 출력하기</h1>
+
+<pre><code class="language-{.java}">Enumeration params = request.getParameterNames();
+System.out.println("----------------------------");
+while (params.hasMoreElements()){
+    String name = (String)params.nextElement();
+    System.out.println(name + " : " +request.getParameter(name));
+}
+System.out.println("----------------------------");
+</code></pre>
+
+  </div></div>
+
+    </section>
+  </main>
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>
