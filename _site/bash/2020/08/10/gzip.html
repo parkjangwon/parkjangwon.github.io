@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="/assets/favicon.ico" rel="shortcut icon"/>
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>gzip 명령어를 활용한 로그 압축하는 방법</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>gzip 명령어를 활용한 로그 압축하는 방법 | 생각날때쓰는개발일기</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="gzip 명령어를 활용한 로그 압축하는 방법" />
+<meta name="author" content="parkjangwon" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다." />
+<meta property="og:description" content="웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다." />
+<link rel="canonical" href="http://localhost:4000/bash/2020/08/10/gzip.html" />
+<meta property="og:url" content="http://localhost:4000/bash/2020/08/10/gzip.html" />
+<meta property="og:site_name" content="생각날때쓰는개발일기" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-10T00:56:00+09:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-08-10T00:56:00+09:00","headline":"gzip 명령어를 활용한 로그 압축하는 방법","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/bash/2020/08/10/gzip.html"},"url":"http://localhost:4000/bash/2020/08/10/gzip.html","author":{"@type":"Person","name":"parkjangwon"},"description":"웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다.","@type":"BlogPosting","dateModified":"2020-08-10T00:56:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+
+<body>
+  <main class="container">
+    <section class="about">
+      <a href="/"><img src="/assets/pjw.png" alt="Park Jangwon"></a>
+      <h2 id="title">
+        <a href="/">Park Jangwon</a>
+      </h2>
+      <p class="tagline">Web Developer</p>
+      <ul class="social"><a href="https://github.com/parkjangwon" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://instagram.com/p._.jw" target="_blank">
+          <li>
+            <i class="icon-instagram"></i>
+          </li>
+        </a></ul><p>&copy;
+        2020</p></section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/bash/2020/08/10/gzip.html">
+    <h2 class="post-title">gzip 명령어를 활용한 로그 압축하는 방법</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Aug 10, 2020</div><ul class="post-categories"><li>bash</li></ul></div>
+  <div class="post">
+    <p>웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다.</p>
+
+<p>로그에서는 어플리케이션의 오류, 오류가 났을때 원인 분석에 필요한 정보, 비정상적으로 접근하는 클라이언트의 ip등…</p>
+
+<p>중요한 정보들이 기록되어있다. 문제는 서버 스토리지의 용량이다.</p>
+
+<p>용량이 넘쳐나는 경우가 아니라면, 마냥 로그를 보관할 수 없고 주기적으로 백업서버로 옮겨줘야한다.</p>
+
+<p>가끔 백업서버로 옮기기는 작업을 할 수 없을 때가 있거나, 서버의 용량이 99퍼센트와 같이 거의 꽉차기 일보직전일 때</p>
+
+<p>* 여기서 하나의 tip을 주자면 아파치나, 톰캣의 <strong>로그가 떨어지는 디렉토리가 속한 마운트 포지션의 용량이 100%가 되면 아파치, 톰캣은 죽어버린다 ㅠ.ㅠ</strong></p>
+
+<p>아래 스킬(?)을 활용하여 <strong>로그 자체의 용량을 압축</strong>하여 용량을 확보하길 바란다.</p>
+
+<h1 id="gzip-명령어를-통한-로그-파일-압축하기">gzip 명령어를 통한 로그 파일 압축하기</h1>
+
+<p>필자는 gzip 명령어를 사용할 것이기 때문에, 사전에 gzip 명령어를 설치하길 바란다.</p>
+
+<p>아래 방법으로 gzip 명령어(정확히 말하면 패키지..라고 표현하는게 맞다.)가 설치 되어 있는지 확인한다.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# ls /usr/bin/ | grep gzip
+gzip
+[root@parkjw _logs_]# gzip
+gzip: compressed data not written to a terminal. Use -f to force compression.
+For help, type: gzip -h
+</code></pre></div></div>
+
+<h1 id="1-find-명령어를-통하여-압축을-할-로그를-찾는다">1) find 명령어를 통하여 압축을 할 로그를 찾는다</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*.log"
+./wrapper_20200810.log
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200809.log
+./wrapper_20200717.log
+</code></pre></div></div>
+
+<blockquote>
+  <p>Tip 아래와 같이 특정 날짜의 로그만 검색 할 수 있다.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*07[1...2]*.log"
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200717.log
+./wrapper_20200713.log
+./wrapper_20200716.log
+./wrapper_20200722.log
+./wrapper_20200718.log
+./wrapper_20200724.log
+./wrapper_20200720.log
+./wrapper_20200714.log
+./wrapper_20200725.log
+./wrapper_20200719.log
+./wrapper_20200721.log
+./wrapper_20200723.log
+</code></pre></div></div>
+
+<h1 id="2-임시-shell-script-file을-생성하여-검색-결과-값을-저장한다">2) 임시 shell script file을 생성하여 검색 결과 값을 저장한다.</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*.log" &gt; zip.sh
+[root@parkjw _logs_]# cat zip.sh
+./wrapper_20200810.log
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200809.log
+./wrapper_20200717.log
+</code></pre></div></div>
+
+<h1 id="3-zipsh-파일에-아래-정규표현식을-사용하여-일괄로-gzip-명령어를-추가한다">3) zip.sh 파일에 아래 정규표현식을 사용하여 일괄로 gzip 명령어를 추가한다.</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# vi zip.sh
+vim &gt; :%s/\.\//gzip -9 \.\//g
+설명: "./" 을 "gzip -9 ./"로 치환한다.
+
+vim &gt; :wq
+설명: 변경 내용을 저장하고 vim 에디터를 닫는다.
+</code></pre></div></div>
+
+<h1 id="4-일괄-압축쉘-zipsh의-내용을-확인한다">4) 일괄 압축쉘 (zip.sh)의 내용을 확인한다.</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# cat zip.sh
+gzip -9 ./wrapper_20200810.log
+gzip -9 ./wrapper_20200710.log
+gzip -9 ./wrapper_20200712.log
+gzip -9 ./wrapper_20200711.log
+gzip -9 ./wrapper_20200715.log
+gzip -9 ./wrapper_20200726.log
+gzip -9 ./wrapper_20200809.log
+gzip -9 ./wrapper_20200717.log
+</code></pre></div></div>
+
+<h1 id="5-일괄-압축쉘-zipsh을-실행한다">5) 일괄 압축쉘 (zip.sh)을 실행한다.</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# sh zip.sh &amp;
+설명 : zip.sh에 작성된 명령어를 백그라운드(&amp;)에서 작업을 돌리겠다.
+
+[1] 9822
+설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. (bg 명령어로 통해 확인 가능)
+
+[root@parkjw _logs_]# ps -ef | grep gzip
+위 명령어로 쉘이 돌고 있는지(프로세스가 살아 있는지) 확인 할 수 있다.
+
+[1]+  Done                    sh zip.sh
+설명: 쉘에 작성된 작업이 다 끝나면 아래와 같이 터미널에 완료 메시지가 출력된다.
+</code></pre></div></div>
+
+<h1 id="6-압축된-로그의-용량-확인">6) 압축된 로그의 용량 확인</h1>
+<p>gzip으로 압축하기전과 용량차이가 꽤 많이 나는 것을 확인 할 수 있다.</p>
+
+<blockquote>
+  <p>Tip  <strong>.gz으로 압축된 로그 파일은 vim 에디터</strong>로 열 수 있다! 아쉽게도 tail로는 볼 수 없다 ㅠ.ㅠ</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# ll wrapper_20200710.log.gz
+-rw-r--r-- 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
+
+[압축하기전 로그 파일 용량]
+-rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+</code></pre></div></div>
+
+<h1 id="7-gz-파일을-원래대로-압축-해제하는-방법">7) .gz 파일을 원래대로 압축 해제하는 방법</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# gzip -d wrapper_20200710.log.gz
+[root@parkjw _logs_]# ll wrapper_20200710.log
+-rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+</code></pre></div></div>
+
+  </div></div>
+
+    </section>
+  </main>
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>
