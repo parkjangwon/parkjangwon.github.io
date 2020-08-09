@@ -6,9 +6,14 @@
                 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
         <url>
             <loc>http://localhost:4000</loc>
-	    <lastmod>2020-08-05T02:10:26+09:00</lastmod>
+	    <lastmod>2020-08-09T16:30:26+09:00</lastmod>
             <priority>1.00</priority>
         </url><url>
+                <loc>http://localhost:4000/bash/2020/08/05/bash_base64.html</loc>
+                <lastmod>2020-08-05T17:11:00+09:00</lastmod>
+                <changefreq>weekly</changefreq>
+                <priority>0.80</priority>
+            </url><url>
                 <loc>http://localhost:4000/tip/2020/08/05/eclipse.html</loc>
                 <lastmod>2020-08-05T01:21:00+09:00</lastmod>
                 <changefreq>weekly</changefreq>

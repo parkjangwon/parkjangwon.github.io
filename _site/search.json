@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "bash 쉘에서 base64 인코딩 및 디코딩하는 방법",
+      "title-lower"    : "bash 쉘에서 base64 인코딩 및 디코딩하는 방법",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "bash",
+      "tags"     : "",
+      "url"      : "/bash/2020/08/05/bash_base64.html",
+      "date"     : "2020-08-05 17:11:00 +0900",
+      "content"     : "로그 분석 시 평문이 아닌 base64로 인코딩 된 값을 디코딩 해야 하는 상황이 발생된다.반대로 평문을 인코딩해야하는 경우도 있다.이 때 구글에 ‘base64 encoding &amp;amp; decoding’ 키워드로 검색을 해서 웹에 구현된 인코더 서비스를 쓸 수 있지만,bash shell에서 base64라는 명령어를 활용하는 방법을 소개한다.먼..."
+    } ,
+  
+    {
       "title"    : "Java 개발자를 위한 이클립스 세팅",
       "title-lower"    : "java 개발자를 위한 이클립스 세팅",
       "sub-titile" : "",
