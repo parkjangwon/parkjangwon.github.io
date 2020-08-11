@@ -4,7 +4,7 @@ email: vim@kakao.com
 description: > # this means to ignore newlines until "show_exerpts:"
   혼자 끄적이는 잡다한 개발지식
 show_excerpts: true # set to true to show excerpts on the homepage
-
+google_analytics_id: UA-175163096-1
 # Minima date format
 # refer to http://shopify.github.io/liquid/filters/date/ if you want to customize this
 sass:
