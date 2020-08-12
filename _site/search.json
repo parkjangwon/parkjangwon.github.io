@@ -7,7 +7,7 @@
       "sub-titile-lower" : "",
       "categories" : "bash",
       "tags"     : "",
-      "url"      : "/bash/2020/08/10/gzip.html",
+      "url"      : "/bash/2020/08/10/gzip-%EB%AA%85%EB%A0%B9%EC%96%B4%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8-%EC%95%95%EC%B6%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95.html",
       "date"     : "2020-08-10 01:41:00 +0900",
       "content"     : "웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다.로그에서는 어플리케이션의 오류, 오류가 났을때 원인 분석에 필요한 정보, 비정상적으로 접근하는 클라이언트의 ip등…중요한 정보들이 기록되어있다. 문제는 서버 스토리지의 용량이다.용량이 넘쳐나는 경우가 아니라면, 마냥 로그를 보관할 수 없고 주기적으로 백업서버로 옮겨줘야한다.가..."
     } ,
@@ -19,7 +19,7 @@
       "sub-titile-lower" : "",
       "categories" : "javaservlet",
       "tags"     : "",
-      "url"      : "/java/servlet/2020/08/10/req.html",
+      "url"      : "/java/servlet/2020/08/10/HttpServletRequest%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95.html",
       "date"     : "2020-08-10 00:34:00 +0900",
       "content"     : "서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다.break point를 걸어 variables view에서 값을 하나 하나 볼 수 있지만… 가끔 너무 귀찮을 때가 있다.아래 구문을 메모를 해두고, 디버깅 조차하기도 너무나 귀찮을 때 종종 꺼내서 쓰면 편리하다.HttpServletR..."
     } ,
@@ -31,7 +31,7 @@
       "sub-titile-lower" : "",
       "categories" : "bash",
       "tags"     : "",
-      "url"      : "/bash/2020/08/05/bash_base64.html",
+      "url"      : "/bash/2020/08/05/bash-%EC%89%98%EC%97%90%EC%84%9C-base64-%EC%9D%B8%EC%BD%94%EB%94%A9-%EB%B0%8F-%EB%94%94%EC%BD%94%EB%94%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95.html",
       "date"     : "2020-08-05 17:11:00 +0900",
       "content"     : "로그 분석 시 평문이 아닌 base64로 인코딩 된 값을 디코딩 해야 하는 상황이 발생된다.반대로 평문을 인코딩해야하는 경우도 있다.이 때 구글에 ‘base64 encoding &amp;amp; decoding’ 키워드로 검색을 해서 웹에 구현된 인코더 서비스를 쓸 수 있지만,bash shell에서 base64라는 명령어를 활용하는 방법을 소개한다.먼..."
     } ,
@@ -43,7 +43,7 @@
       "sub-titile-lower" : "",
       "categories" : "tip",
       "tags"     : "",
-      "url"      : "/tip/2020/08/05/eclipse.html",
+      "url"      : "/tip/2020/08/05/Java-%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4-%EC%84%B8%ED%8C%85.html",
       "date"     : "2020-08-05 01:21:00 +0900",
       "content"     : "Java 기반의 프로그램을 개발할 때 많은 IDE가 있겠지만, 주로 인텔리제이나, 이클립스를 사용합니다.회사에서 인텔리제이 라이센스를 구매해서 사용하지 않는 이상, 많은 회사에서는 무료로 사용 가능한 이클립스를 사용하는데요.인텔리제이에 비해 이클립스는 성능이 조금 그시기하다… 라고 이클립스에 대한 불만을 토로하시는 동료분들을 종종 보게 됩니다.가끔 저..."
     } ,
@@ -55,7 +55,7 @@
       "sub-titile-lower" : "",
       "categories" : "https",
       "tags"     : "",
-      "url"      : "/https/2020/08/01/HTTPS.html",
+      "url"      : "/https/2020/08/01/HTTPS%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94%EA%B1%B0%EC%A7%80.html",
       "date"     : "2020-08-01 20:02:00 +0900",
       "content"     : "웹 어플리케이션을 개발하고, 운영을 하다보면, 항상 보안 문제에 부딪치게 된다.XSS 취약점, CSRF 취약점 등 OWASP TOP 10에 포함되어 있는 여러 이슈들이 많지만,이번 포스팅에는 HTTPS에 대해서 간단히 정리해보려고 한다.HTTPS  HyperText Transfer Protocol over Secure Socket LayerHTTPS는..."
     } 
