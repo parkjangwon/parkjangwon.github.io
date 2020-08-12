@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>생각날때쓰는개발일기</title>
+    <description>혼자 끄적이는 잡다한 개발지식
+</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 12 Aug 2020 17:30:48 +0900</pubDate>
+    <lastBuildDate>Wed, 12 Aug 2020 17:30:48 +0900</lastBuildDate>
+    <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>gzip 명령어를 활용한 로그 압축하는 방법</title>
+        <description>&lt;p&gt;웹서버를 운영하게 될 때 항상 신경을 써줘야하는 것중에 하나가 로그 관리이다.&lt;/p&gt;
+
+&lt;p&gt;로그에서는 어플리케이션의 오류, 오류가 났을때 원인 분석에 필요한 정보, 비정상적으로 접근하는 클라이언트의 ip등…&lt;/p&gt;
+
+&lt;p&gt;중요한 정보들이 기록되어있다. 문제는 서버 스토리지의 용량이다.&lt;/p&gt;
+
+&lt;p&gt;용량이 넘쳐나는 경우가 아니라면, 마냥 로그를 보관할 수 없고 주기적으로 백업서버로 옮겨줘야한다.&lt;/p&gt;
+
+&lt;p&gt;가끔 백업서버로 옮기기는 작업을 할 수 없을 때가 있거나, 서버의 용량이 99퍼센트와 같이 거의 꽉차기 일보직전일 때&lt;/p&gt;
+
+&lt;p&gt;* 여기서 하나의 tip을 주자면 아파치나, 톰캣의 &lt;strong&gt;로그가 떨어지는 디렉토리가 속한 마운트 포지션의 용량이 100%가 되면 아파치, 톰캣은 죽어버린다 ㅠ.ㅠ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;아래 스킬(?)을 활용하여 &lt;strong&gt;로그 자체의 용량을 압축&lt;/strong&gt;하여 용량을 확보하길 바란다.&lt;/p&gt;
+
+&lt;h1 id=&quot;gzip-명령어를-통한-로그-파일-압축하기&quot;&gt;gzip 명령어를 통한 로그 파일 압축하기&lt;/h1&gt;
+
+&lt;p&gt;필자는 gzip 명령어를 사용할 것이기 때문에, 사전에 gzip 명령어를 설치하길 바란다.&lt;/p&gt;
+
+&lt;p&gt;아래 방법으로 gzip 명령어(정확히 말하면 패키지..라고 표현하는게 맞다.)가 설치 되어 있는지 확인한다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# ls /usr/bin/ | grep gzip
+gzip
+[root@parkjw _logs_]# gzip
+gzip: compressed data not written to a terminal. Use -f to force compression.
+For help, type: gzip -h
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;1-find-명령어를-통하여-압축을-할-로그를-찾는다&quot;&gt;1) find 명령어를 통하여 압축을 할 로그를 찾는다&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*.log&quot;
+./wrapper_20200810.log
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200809.log
+./wrapper_20200717.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Tip 아래와 같이 특정 날짜의 로그만 검색 할 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*07[1...2]*.log&quot;
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200717.log
+./wrapper_20200713.log
+./wrapper_20200716.log
+./wrapper_20200722.log
+./wrapper_20200718.log
+./wrapper_20200724.log
+./wrapper_20200720.log
+./wrapper_20200714.log
+./wrapper_20200725.log
+./wrapper_20200719.log
+./wrapper_20200721.log
+./wrapper_20200723.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;2-임시-shell-script-file을-생성하여-검색-결과-값을-저장한다&quot;&gt;2) 임시 shell script file을 생성하여 검색 결과 값을 저장한다.&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*.log&quot; &amp;gt; zip.sh
+[root@parkjw _logs_]# cat zip.sh
+./wrapper_20200810.log
+./wrapper_20200710.log
+./wrapper_20200712.log
+./wrapper_20200711.log
+./wrapper_20200715.log
+./wrapper_20200726.log
+./wrapper_20200809.log
+./wrapper_20200717.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;3-zipsh-파일에-아래-정규표현식을-사용하여-일괄로-gzip-명령어를-추가한다&quot;&gt;3) zip.sh 파일에 아래 정규표현식을 사용하여 일괄로 gzip 명령어를 추가한다.&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# vi zip.sh
+vim &amp;gt; :%s/\.\//gzip -9 \.\//g
+설명: &quot;./&quot; 을 &quot;gzip -9 ./&quot;로 치환한다.
+
+vim &amp;gt; :wq
+설명: 변경 내용을 저장하고 vim 에디터를 닫는다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;4-일괄-압축쉘-zipsh의-내용을-확인한다&quot;&gt;4) 일괄 압축쉘 (zip.sh)의 내용을 확인한다.&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# cat zip.sh
+gzip -9 ./wrapper_20200810.log
+gzip -9 ./wrapper_20200710.log
+gzip -9 ./wrapper_20200712.log
+gzip -9 ./wrapper_20200711.log
+gzip -9 ./wrapper_20200715.log
+gzip -9 ./wrapper_20200726.log
+gzip -9 ./wrapper_20200809.log
+gzip -9 ./wrapper_20200717.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;5-일괄-압축쉘-zipsh을-실행한다&quot;&gt;5) 일괄 압축쉘 (zip.sh)을 실행한다.&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# sh zip.sh &amp;amp;
+설명 : zip.sh에 작성된 명령어를 백그라운드(&amp;amp;)에서 작업을 돌리겠다.
+
+[1] 9822
+설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. (bg 명령어로 통해 확인 가능)
+
+[root@parkjw _logs_]# ps -ef | grep gzip
+위 명령어로 쉘이 돌고 있는지(프로세스가 살아 있는지) 확인 할 수 있다.
+
+[1]+  Done                    sh zip.sh
+설명: 쉘에 작성된 작업이 다 끝나면 아래와 같이 터미널에 완료 메시지가 출력된다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;6-압축된-로그의-용량-확인&quot;&gt;6) 압축된 로그의 용량 확인&lt;/h1&gt;
+&lt;p&gt;gzip으로 압축하기전과 용량차이가 꽤 많이 나는 것을 확인 할 수 있다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Tip  &lt;strong&gt;.gz으로 압축된 로그 파일은 vim 에디터&lt;/strong&gt;로 열 수 있다! 아쉽게도 tail로는 볼 수 없다 ㅠ.ㅠ&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# ll wrapper_20200710.log.gz
+-rw-r--r-- 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
+
+[압축하기전 로그 파일 용량]
+-rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;7-gz-파일을-원래대로-압축-해제하는-방법&quot;&gt;7) .gz 파일을 원래대로 압축 해제하는 방법&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# gzip -d wrapper_20200710.log.gz
+[root@parkjw _logs_]# ll wrapper_20200710.log
+-rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Mon, 10 Aug 2020 01:41:00 +0900</pubDate>
+        <link>http://localhost:4000/bash/2020/08/10/gzip.html</link>
+        <guid isPermaLink="true">http://localhost:4000/bash/2020/08/10/gzip.html</guid>
+        
+        
+        <category>bash</category>
+        
+      </item>
+    
+      <item>
+        <title>HttpServletRequest의 모든 파라미터를 출력하는 방법</title>
+        <description>&lt;p&gt;서블릿 기반의 웹어플리케이션을 개발할 때, 특정 컨트롤러에 요청한 request 파라미터에 대해 디버깅을 할 때가 있다.&lt;/p&gt;
+
+&lt;p&gt;break point를 걸어 variables view에서 값을 하나 하나 볼 수 있지만… &lt;strong&gt;가끔 너무 귀찮을 때가 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;아래 구문을 메모를 해두고, 디버깅 조차하기도 너무나 귀찮을 때 종종 꺼내서 쓰면 편리하다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;HttpServletRequest&lt;/strong&gt;를 파라미터로 받는 메서드 (컨트롤러) 첫 줄에 아래 코드를 copy &amp;amp; paste를 한다.&lt;/p&gt;
+
+&lt;h1 id=&quot;리퀘스트에-담긴-모든-파라미터-출력하기&quot;&gt;리퀘스트에 담긴 모든 파라미터 출력하기&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-{.java}&quot;&gt;Enumeration params = request.getParameterNames();
+System.out.println(&quot;----------------------------&quot;);
+while (params.hasMoreElements()){
+    String name = (String)params.nextElement();
+    System.out.println(name + &quot; : &quot; +request.getParameter(name));
+}
+System.out.println(&quot;----------------------------&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Mon, 10 Aug 2020 00:34:00 +0900</pubDate>
+        <link>http://localhost:4000/java/servlet/2020/08/10/req.html</link>
+        <guid isPermaLink="true">http://localhost:4000/java/servlet/2020/08/10/req.html</guid>
+        
+        
+        <category>java</category>
+        
+        <category>servlet</category>
+        
+      </item>
+    
+      <item>
+        <title>bash 쉘에서 base64 인코딩 및 디코딩하는 방법</title>
+        <description>&lt;p&gt;로그 분석 시 평문이 아닌 base64로 인코딩 된 값을 디코딩 해야 하는 상황이 발생된다.&lt;/p&gt;
+
+&lt;p&gt;반대로 평문을 인코딩해야하는 경우도 있다.&lt;/p&gt;
+
+&lt;p&gt;이 때 구글에 ‘base64 encoding &amp;amp; decoding’ 키워드로 검색을 해서 웹에 구현된 인코더 서비스를 쓸 수 있지만,&lt;/p&gt;
+
+&lt;p&gt;bash shell에서 base64라는 명령어를 활용하는 방법을 소개한다.&lt;/p&gt;
+
+&lt;h1 id=&quot;먼저-서버에-base64-명령어가-존재하는지-확인을-해야한다&quot;&gt;먼저, 서버에 ‘base64’ 명령어가 존재하는지 확인을 해야한다.&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw bin]# pwd
+/usr/bin
+[root@parkjw bin]# ls -trl | grep base64
+-rwxr-xr-x.   1 root root      37360 Aug 20  2019 base64
+
+[root@parkjw bin]# base64 --help
+Usage: base64 [OPTION]... [FILE]
+Base64 encode or decode FILE, or standard input, to standard output.
+
+Mandatory arguments to long options are mandatory for short options too.
+  -d, --decode          decode data
+  -i, --ignore-garbage  when decoding, ignore non-alphabet characters
+  -w, --wrap=COLS       wrap encoded lines after COLS character (default 76).
+                          Use 0 to disable line wrapping
+
+      --help     display this help and exit
+      --version  output version information and exit
+
+With no FILE, or when FILE is -, read standard input.
+
+The data are encoded as described for the base64 alphabet in RFC 3548.
+When decoding, the input may contain newlines in addition to the bytes of
+the formal base64 alphabet.  Use --ignore-garbage to attempt to recover
+from any other non-alphabet bytes in the encoded stream.
+
+GNU coreutils online help: &amp;lt;http://www.gnu.org/software/coreutils/&amp;gt;
+For complete documentation, run: info coreutils 'base64 invocation'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;base64-인코딩&quot;&gt;base64 인코딩&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;echo ‘인코딩할 평문 문자’ | base64&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ~]# &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hello world'&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;base64
+&lt;/span&gt;aGVsbG8gd29ybGQK
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;base64-디코딩&quot;&gt;base64 디코딩&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;echo ‘디코딩할 base64 문자’ | base64 –decode&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ~]# &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'aGVsbG8gd29ybGQK'&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--decode&lt;/span&gt;
+hello world
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 05 Aug 2020 17:11:00 +0900</pubDate>
+        <link>http://localhost:4000/bash/2020/08/05/bash_base64.html</link>
+        <guid isPermaLink="true">http://localhost:4000/bash/2020/08/05/bash_base64.html</guid>
+        
+        
+        <category>bash</category>
+        
+      </item>
+    
+      <item>
+        <title>Java 개발자를 위한 이클립스 세팅</title>
+        <description>&lt;p&gt;Java 기반의 프로그램을 개발할 때 많은 IDE가 있겠지만, 주로 인텔리제이나, 이클립스를 사용합니다.&lt;/p&gt;
+
+&lt;p&gt;회사에서 인텔리제이 라이센스를 구매해서 사용하지 않는 이상, 많은 회사에서는 무료로 사용 가능한 이클립스를 사용하는데요.&lt;/p&gt;
+
+&lt;p&gt;인텔리제이에 비해 이클립스는 성능이 조금 그시기하다… 라고 이클립스에 대한 불만을 토로하시는 동료분들을 종종 보게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;가끔 저도 그런 생각이 들긴하지만요..&lt;/p&gt;
+
+&lt;p&gt;그래서 보통 본인 컴퓨터에 이클립스 개발환경을 새로 구축하실 때 “이클립스 최적화” 키워드 등으로 검색을 하여 이것 저것 설정을 하게 되죠.&lt;/p&gt;
+
+&lt;p&gt;저도 후배 개발자들의 컴퓨터의 사양이 좋지 않을 때, 그나마 덜 답답하게 환경 설정을 도와 줄 때가 자주 있었습니다.&lt;/p&gt;
+
+&lt;p&gt;유명한 국민옵션들이라서 이미 설정을 하셨을지도 모르겠지만.. 모쪼록 유용하게 사용하셨으면 좋겠습니다.&lt;/p&gt;
+
+&lt;p&gt;* 성능 개선 옵션 말고도 개발에 편리함을 더해주는 정보도 포함되어있습니다.&lt;/p&gt;
+
+&lt;p&gt;최근에 든 생각인데, 이클립스도 설정 최적화 및 단축키 활용만 좀 더 숙지하면, 유료 IDE가 부럽지 않을 정도로 훌륭한 IDE라고 생각이 들더라구요.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;이클립스-설정파일ini에-추가-파라미터-정의&quot;&gt;이클립스 설정파일(~.ini)에 추가 파라미터 정의&lt;/h1&gt;
+&lt;p&gt;당연한 얘기이지만, 이클립스 기반으로 구성된 STS도 적용가능합니다..&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-showlocation : 워크스페이스의 절대 경로를 표시
+
+-Xms2048m : 이클립스 최소 Heap 메모리
+
+-Xmx2048m : 이클립스 최소 Heap 메모리 (참고로 Heap 최소값과 최대값을 같게하면 속도 향상에 도움이 된다.)
+
+-XX:+UseParallelGC : 병렬 가비지 컬렉션(병렬처리로 속도 향상) 사용
+
+-Xverify:none : 이클립스 실행 시 class 유효성 검증 생략
+
+-Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2 : tls 속성 설정
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;환경변수-등록-및-git-bash를-활용한-편리한-cli-빌드-필요한-경우&quot;&gt;환경변수 등록 및 Git Bash를 활용한 편리한 CLI 빌드 (필요한 경우)&lt;/h1&gt;
+&lt;p&gt;Maven 프로젝트의 경우 배포 시, Maven Build를 하게 되는데, 이클립스 GUI에서 바로 해도 되지만,&lt;/p&gt;
+
+&lt;p&gt;나중에는 그 클릭하는거 조차도 귀찮아 질 때가 생기더라구요.&lt;/p&gt;
+
+&lt;p&gt;그래서 저는 로컬 PC에 Maven, Ant등을 설치 후 환경변수에 저장해서 터미널 창에서 바로 커맨드를 통해 빌드를 하고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;[example] CMD &amp;gt; &lt;strong&gt;mvn clean install&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;windows 사용자의 경우 기본 터미널인 CMD를 사용해도 무관하지만 저는 리눅스에서 작업을 많이 하는 편이라서&lt;/p&gt;
+
+&lt;p&gt;bash 커맨드가 손에 익어 CMD를 사용하면 이질감이 느껴지더라구요…&lt;/p&gt;
+
+&lt;p&gt;windows에 Git을 설치하면 Git Bash가 같이 설치가 됩니다. 설치는 그냥 Next만 클릭하면 끝나므로 따로 내용을 기재하지 않겠습니다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. Install Git Bash
+
+2. JAVA_HOME setting
+
+3. MAVEN_HOME setting
+
+4. ANT_HOME setting
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;성능-향상에-도움-되는-이클립스-환경-설정&quot;&gt;성능 향상에 도움 되는 이클립스 환경 설정&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Window &amp;gt; Preferences &amp;gt; Appearance &amp;gt; Theme &amp;amp; Color and Font theme : 컬러 테마 사용 지양 (저사양 PC에서 영향 큼. 기본 및 테마 플러그인 모두 해당)
+
+Window &amp;gt; Preferences &amp;gt; General &amp;gt; Editors &amp;gt; Editors &amp;gt; Text Editors &amp;gt; Spelling : Enable spell checking 체크 해제
+
+Window &amp;gt; Preferences &amp;gt; Install/Update &amp;gt; Automatic Updates : Automatically find new updates and notify me 체크 해제
+
+Window &amp;gt; Preferences &amp;gt; Java &amp;gt; Editor &amp;gt; Folding &amp;gt; Enable folding 체크 해제
+
+Window &amp;gt; Preferences &amp;gt; Validation &amp;gt; Disable All 및 모든 체크박스 해제
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;유용한-단축키&quot;&gt;유용한 단축키&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;단축키를 쓰고 안 쓰고에 따라 코딩 속도에 굉장히 차이가 나더라구요.&lt;/strong&gt; 아래 단축키들은 꼭 연습을 하시는걸 추천드립니다!&lt;/p&gt;
+
+&lt;p&gt;* &lt;strong&gt;shift&lt;/strong&gt;을 누르면 &lt;strong&gt;반대&lt;/strong&gt; 동작을 합니다.&lt;/p&gt;
+
+&lt;p&gt;* &lt;strong&gt;Windows 기반의 단축키입니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ctrl + F6 : 열려있는 소스파일 선택하여 열기&lt;/p&gt;
+
+&lt;p&gt;ctrl + F8 : 퍼스펙티브 전환&lt;/p&gt;
+
+&lt;p&gt;ctrl + shift + g (커서에 위치한 메서드, 클래스를 참조하는 모든 소스 검색)&lt;/p&gt;
+
+&lt;p&gt;ctrl + shift + f (코드 포메팅)&lt;/p&gt;
+
+&lt;p&gt;ctrl + shift + o (import 정리)&lt;/p&gt;
+
+&lt;p&gt;(shift) ctrl + / (선택 영역 주석)&lt;/p&gt;
+
+&lt;p&gt;(shift) ctrl + k (코드 에디터 내 동일 키워드 이동)&lt;/p&gt;
+
+&lt;p&gt;(shift) ctrl + x (대문자 변경) or y (소문자 변경)&lt;/p&gt;
+
+&lt;p&gt;(alt) ctrl + shift + l (퀵서치)&lt;/p&gt;
+
+&lt;p&gt;alt + shift + a (블록 선택모드로 변경)&lt;/p&gt;
+
+&lt;p&gt;alt + shift + r (커서에 위치한 변수/클래스 명 일괄 변경)&lt;/p&gt;
+
+&lt;p&gt;alt + shift + s (제너레이터 메뉴 호출 주로 getter/setter 생성시 사용)&lt;/p&gt;
+
+&lt;p&gt;alt + shift + z (surround with 메뉴 호출 try~catch문, if, for 등 제어/반복문 템플릿 등)&lt;/p&gt;
+
+&lt;p&gt;alt + p, n (익스플로러 뷰에서 선택된 프로젝트 클린)&lt;/p&gt;
+
+&lt;p&gt;alt + F5 (익스플로러 뷰에서 선택된 메이븐 프로젝트 업데이트)&lt;/p&gt;
+
+&lt;p&gt;F3 (커서에 위치한 메서드, 클래스 정의부로 이동)&lt;/p&gt;
+
+&lt;p&gt;F2 (익스플로러 뷰에서 파일명 변경)&lt;/p&gt;
+
+&lt;p&gt;alt + enter (익스플로러 뷰에서 선택한 프로젝트/파일의 대한 설정 메뉴 호출)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;환경-설정-export--import&quot;&gt;환경 설정 Export &amp;amp; Import&lt;/h1&gt;
+&lt;p&gt;자체 개발 솔루션을 개발 하는 경우, 같은 기반의 프로젝트를 브랜치 별로 반복 구성하는 경우가 있습니다.&lt;/p&gt;
+
+&lt;p&gt;그러한 환경에서는 워크스페이스 세팅이 마무리 되면 그 설정을 export 하여 따로 보관하였다가,&lt;/p&gt;
+
+&lt;p&gt;유사 개발 환경 구축 시, export한 설정 파일을 import 하여, 시간을 단축 시킬 수 있습니다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;File &amp;gt; export &amp;gt; General &amp;gt; Preferences
+File &amp;gt; import &amp;gt; General &amp;gt; Preferences
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 05 Aug 2020 01:21:00 +0900</pubDate>
+        <link>http://localhost:4000/tip/2020/08/05/eclipse.html</link>
+        <guid isPermaLink="true">http://localhost:4000/tip/2020/08/05/eclipse.html</guid>
+        
+        
+        <category>tip</category>
+        
+      </item>
+    
+      <item>
+        <title>HTTPS는 어떻게 동작하는거지?</title>
+        <description>&lt;p&gt;웹 어플리케이션을 개발하고, 운영을 하다보면, 항상 &lt;strong&gt;보안&lt;/strong&gt; 문제에 부딪치게 된다.&lt;/p&gt;
+
+&lt;p&gt;XSS 취약점, CSRF 취약점 등 OWASP TOP 10에 포함되어 있는 여러 이슈들이 많지만,&lt;/p&gt;
+
+&lt;p&gt;이번 포스팅에는 HTTPS에 대해서 간단히 정리해보려고 한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;https&quot;&gt;HTTPS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper&lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol over &lt;strong&gt;S&lt;/strong&gt;ecure Socket Layer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HTTPS는 독립된 프로토콜이 아닌, 말 그대로 &lt;strong&gt;SSL위에서 동작하는 HTTP&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;p&gt;HTTPS를 알기 위해서는 먼저, &lt;strong&gt;HTTP&lt;/strong&gt;와 &lt;strong&gt;SSL&lt;/strong&gt;에 대해서 이해 해야한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;http&quot;&gt;HTTP&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper&lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;텍스트 기반의 통신규약&lt;/strong&gt;으로 인터넷에서 데이터를 주고 받는 프로토콜
+&lt;img src=&quot;/assets/https-1.png&quot; alt=&quot;http&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HTTP 메시지는 HTTP 서버와 HTTP 클라이언트에 의해 해석이 된다.
+
+TCP/ IP를 이용하는 응용 프로토콜이다.
+
+HTTP는 연결 상태를 유지하지 않는 비연결성 프로토콜이다.
+
+HTTP는 연결을 유지하지 않는 프로토콜이기 때문에 요청/응답 방식으로 동작한다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;http-https-통신간-패킷-비교&quot;&gt;HTTP, HTTPS 통신간 패킷 비교&lt;/h1&gt;
+
+&lt;p&gt;클라이언트와 서버간의 패킷을 분석할 수 있는 &lt;strong&gt;WireShark&lt;/strong&gt;를 통하여&lt;/p&gt;
+
+&lt;p&gt;HTTP 통신과 HTTPS통신시 패킷을 비교하면 아래와 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/https-2.png&quot; alt=&quot;http_https&quot; /&gt;
+&lt;a href=&quot;https://yunzema.tistory.com/358&quot;&gt;이미지출처: yunzema님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;보라색 부분이 HTTPS 통신 패킷, 연두색 부분이 HTTP 통신 패킷
+
+각 통신에서 Application Data가 들어 있는 패킷을 열어보았다. (빨간 밑줄 친 패킷)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/https-3.png&quot; alt=&quot;http_https&quot; /&gt;
+&lt;a href=&quot;https://yunzema.tistory.com/358&quot;&gt;이미지출처: yunzema님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;위가 HTTPS 패킷(198163), 아래가 HTTP 패킷(198787)
+
+HTTPS 패킷에서는 전송 내용을 평문으로 확인할 수 없도록 암호화되어있는 반면에,
+
+HTTP 패킷에서는 값이 평문으로 그대로 노출되는 것을 확인할 수 있다.
+
+위 그림을 통해 확인할 수 있듯이, HTTP 전송의 경우 데이터 자체를 암호화 하지 않으면
+
+패킷 도청으로 데이터 유출이 가능하다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;여기서-알고-넘어가자&quot;&gt;여기서 알고 넘어가자!&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;브라우저 개발자 도구에서 확인할 수 있는 Request 정보는 패킷의 정보가 아니다. 평문으로 보여지는 것이 당연함!&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;웹 디버그 툴 Fiddler를 통한 관찰에서는 HTTPS 통신의 데이터를 평문으로 확인할 수 가 있는데,&lt;/p&gt;
+
+    &lt;p&gt;이는 Fiddler에서 SSL 복호화를 위해 동적으로 조작 인증서를 생성하는 과정을 거치기 때문이다.&lt;/p&gt;
+
+    &lt;p&gt;(Fiddler에서 HTTPS 패킷을 확인하기 위해 아마 조작된 Root 인증서 설치과정을 미리 거쳤을 것이다.)&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://medium.com/sjk5766/wireshark와-fiddler-패킷-캡쳐-원리-a0cf8bc6698f&quot;&gt;참고 URL&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;각 Wireshark와 Fiddler의 패킷정보는 다른 방식으로 가져온 패킷 정보이다.&lt;/p&gt;
+
+    &lt;p&gt;(순수 통신 패킷은 NIC에 들어오는 패킷을 캡쳐하는 Wireshark가 맞음)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl&quot;&gt;SSL&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;S&lt;/strong&gt;ocket &lt;strong&gt;L&lt;/strong&gt;ayer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/https-4.png&quot; alt=&quot;ssl&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Netscape에서 서버와 브라우저 간 보안을 위해 만든 프로토콜
+
+SSL은 CA(Certificate Authority)라 불리는 서드 파티로부터 서버와 클라이언트의 인증을 하는데 사용한다.
+
+또한 SSL을 사용한 HTTP 암호화 통신 (HTTPS) 을 사용하기 위해선 SSL 인증서가 필요하다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ca-인증기관&quot;&gt;CA (인증기관)&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;C&lt;/strong&gt;ertificate &lt;strong&gt;A&lt;/strong&gt;uthority&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;SSL 인증서의 역할은 클라이언트가 접속한 서버가 클라이언트가 &lt;strong&gt;의도한 서버&lt;/strong&gt;가 맞는지를 &lt;strong&gt;보장하는 역할&lt;/strong&gt;을 한다.&lt;/p&gt;
+
+&lt;p&gt;이 역할을 하는 민간기업들이 있는데 이런 기업들을 &lt;strong&gt;CA&lt;/strong&gt;(Certificate authority) 혹은 &lt;strong&gt;Root Certificate&lt;/strong&gt; 라고 부른다.&lt;/p&gt;
+
+&lt;p&gt;CA는 아무 기업이나 할 수 있는 것이 아니고 &lt;strong&gt;신뢰성이 엄격하게 공인된 기업&lt;/strong&gt;들만이 참여할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;그 중에 대표적인 기업들은 아래와 같다. 수치는 현시점의 시장점유율이다. (위키피디아 참조)&lt;/p&gt;
+
+&lt;p&gt;Comodo with 26%&lt;/p&gt;
+
+&lt;p&gt;GoDaddy with 14%&lt;/p&gt;
+
+&lt;p&gt;GlobalSign with 7.7%&lt;/p&gt;
+
+&lt;p&gt;……………..&lt;/p&gt;
+
+&lt;p&gt;SSL을 통해서 암호화된 통신을 제공하려는 서비스는 CA를 통해서 인증서를 구입해야 한다.&lt;/p&gt;
+
+&lt;p&gt;CA는 서비스의 신뢰성을 다양한 방법으로 평가하게 된다.&lt;/p&gt;
+
+&lt;p&gt;물론 무료로 인증서를 제공하는 기업도 있다. ex: Let’s Encrypt&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;범용 브라우저&lt;/strong&gt; 및 &lt;strong&gt;OS&lt;/strong&gt;에서는 &lt;strong&gt;Trusted CA List&lt;/strong&gt; (신뢰하는 인증기관 리스트)를 가지고 있다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-certification-ssl-인증서&quot;&gt;SSL Certification (SSL 인증서)&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;S&lt;/strong&gt;ecure &lt;strong&gt;S&lt;/strong&gt;ocket &lt;strong&gt;L&lt;/strong&gt;ayer &lt;strong&gt;C&lt;/strong&gt;ertification&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;클라이언트가 접속한 서버가 클라이언트가 의도한 서버가 맞는지를 보장 및&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;데이터 암/복호화&lt;/strong&gt;에 필요한 &lt;strong&gt;알고리즘&lt;/strong&gt;, &lt;strong&gt;공개키&lt;/strong&gt; 등을 제공&lt;/p&gt;
+
+&lt;p&gt;그러면 인증서에 어떤 정보가…?
+&lt;img src=&quot;/assets/https-7.png&quot; alt=&quot;sslc&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/https-8.png&quot; alt=&quot;sslc&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-인증서를-사용한-데이터-암호화-동작-원리&quot;&gt;SSL 인증서를 사용한 데이터 암호화 동작 원리&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;그 전에, 대칭 키, 공개 키 암호화가 뭔지 알고 갑시다….&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;대칭키-암호화&quot;&gt;대칭키 암호화&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/https-9.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;http://blog.naver.com/success1834/221480331793&amp;quot;&quot;&gt;이미지 출처: LG CNS님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;하나의 비밀키&lt;/strong&gt;를 양쪽(client &amp;amp; server)가 모두 같이 사용&lt;/li&gt;
+  &lt;li&gt;암호화와 복호화에 사용하는 키가 같은 암호화 알고리즘&lt;/li&gt;
+  &lt;li&gt;공개키와 비밀키를 별도로 가지는 것과 구별되는데, 이와 비교하면 &lt;strong&gt;계산속도가 빠르다는 장점&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;비밀키 하나만 알아내면 암호화된 내용을 해독 가능 → &lt;strong&gt;해커로부터 안전 X&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;대표적인 대칭키 알고리즘을 사용하는 암호화 방식으로는 아래와 같다.&lt;/p&gt;
+
+    &lt;p&gt;DES, 3-DES, AES, SEED, ARIA, MASK 등…&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;공개키-암호화&quot;&gt;공개키 암호화&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/https-10.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;https://gaeko-security-hack.tistory.com/123&amp;quot;&quot;&gt;이미지 출처: Gae Ko님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;비밀키 하나만 가지는 대칭키 암호 방법과 달리, &lt;strong&gt;공개키와 비밀키 두 개가 존재&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;공개키 암호를 구성하는 알고리즘을 대칭키 암호 방식과 비교하여 &lt;strong&gt;비대칭 암호&lt;/strong&gt;라고 불림&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;암호화&lt;/strong&gt;와 &lt;strong&gt;복호화&lt;/strong&gt;에 사용하는 키가 &lt;strong&gt;서로 다름&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;암호화할 때의 키는 공개키(public key), 복호화할 때의 키는 개인키(private key)&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;공개키는 누구나 알 수 있지만, 그에 대응하는 비밀키는 키의 소유자만이 알 수 있어서&lt;/p&gt;
+
+    &lt;p&gt;특정한 비밀키를 가지는 사용자만이 내용을 열어볼 수 있도록 하는 방식&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;ssl-통신과정&quot;&gt;SSL 통신과정&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/https-11.png&quot; alt=&quot;ssl&quot; /&gt;
+&lt;a href=&quot;&amp;quot;https://wayhome25.github.io/cs/2018/03/11/ssl-https/&amp;quot;&quot;&gt;이미지 출처: 초보몽키님의 블로그&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;STEP 1 # from Client to Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;클라이언트는 랜덤 데이터 및 사용 가능한 암호화 알고리즘 목록 서버로 전달.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 2 # from Server to Client&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;서버는 랜덤 데이터, 선택한 암호화 알고리즘 및 SSL 인증서를 클라이언트로 전달.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 3 # from Client to Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;전달 받은 인증서의 유효성 검증 및 &lt;strong&gt;클라이언트와 서버가 생성한 랜덤 데이터를 조합&lt;/strong&gt; 하여,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;pre master secret&lt;/strong&gt;를 생성하고, 이 값을 인증서의 공개키로 암호화하여 서버로 전달.&lt;/p&gt;
+
+&lt;p&gt;클라이언트는 암호화 하기 전, &lt;strong&gt;pre master secret&lt;/strong&gt;을 &lt;strong&gt;master secret&lt;/strong&gt;으로 저장 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;master secret&lt;/strong&gt;를 key로 사용하여 &lt;strong&gt;session key&lt;/strong&gt;를 생성한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;STEP 4 # from Server to Client&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;클라이언트로부터 전달 받은 암호화 된 &lt;strong&gt;pre master secret&lt;/strong&gt;를 서버에서 가지고 있는 &lt;strong&gt;개인키로 복호화&lt;/strong&gt; 한 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;master secret&lt;/strong&gt; 으로 저장하다.이를 key로 사용하여 &lt;strong&gt;session key&lt;/strong&gt;를 생성한다.&lt;/p&gt;
+
+&lt;p&gt;이로써 &lt;strong&gt;클라이언트와 서버는 동일한 session key&lt;/strong&gt;를 가지게 되었고,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session key&lt;/strong&gt;는 송/수신 데이터에 대한 &lt;strong&gt;암/복호화에 사용되는 키&lt;/strong&gt;가 된다.&lt;/p&gt;
+
+&lt;p&gt;즉, 이 때 부터 클라이언트와 서버는 &lt;strong&gt;동일한 키로 암/복호화하는 대칭키 알고리즘&lt;/strong&gt;을 사용한다.&lt;/p&gt;
+
+&lt;p&gt;클라이언트와 서버의 &lt;strong&gt;세션이 종료되는 순간, session key는 폐기&lt;/strong&gt;가 된다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;요약하자면, &lt;strong&gt;세션이 수립&lt;/strong&gt;될 때, 양측은 &lt;strong&gt;공개키 방식으로 마스터키를 생성&lt;/strong&gt; 후,&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;세션간&lt;/strong&gt; 양측은 &lt;strong&gt;동일한 마스터키&lt;/strong&gt;로 &lt;strong&gt;대칭키 방식&lt;/strong&gt;으로 데이터를 &lt;strong&gt;암호화 하여 통신&lt;/strong&gt;한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;이제 SSL이 뭔지는 알겠어. 근데 요즘은 SSL말고, TLS 통신 어쩌구 하는데.. TLS는 뭐지?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;tls&quot;&gt;TLS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;T&lt;/strong&gt;ransport &lt;strong&gt;L&lt;/strong&gt;ayer &lt;strong&gt;S&lt;/strong&gt;ecurity&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;SSL을 기반한 기술이며, 국제 인터넷 표준화 기구에서 표준으로 인정 받은 프로토콜이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SSL과 TLS은 다른 프로토콜이 아니고&lt;/strong&gt;, 본질적으로 같으며, &lt;strong&gt;TLS는 SSL의 최신 버전&lt;/strong&gt;으로 보면 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SSL의 역사&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;최초 제안 : 넷스케이프사
+
+버젼 : SSL v1.0 (1994.7), SSL v2.0 (1994.12), SSL v3.0 (1996.11)
+
+SSL v3.0은 그 당시 사실상의 웹 보안 표준이었음
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TLS의 역사&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SSL v3.0 을 참고로하여 RFC 2246(1999년)으로 표준화된 것이 TLS임
+
+버젼 : TLS 1.0 (RFC 2246,1999) : SSL v3.1에 해당, 
+
+TLS 1.1 (RFC 4346, 2006), TLS 1.2 (RFC 5246, 2008), TLS 1.3 (RFC 8446, 2018)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;참고로 SSL의 최신 버전인 &lt;strong&gt;SSL v3.0&lt;/strong&gt;은 2015년에 POODLE, DROWN 등의 &lt;strong&gt;취약점이 발견&lt;/strong&gt;되어&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;암호화 프로토콜로서의 기능을 잃은 상태&lt;/strong&gt;이다. 이하 버전도 마찬가지이다.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;이쯤에서 다시 HTTPS가 무엇인지 정리해보자.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;https-1&quot;&gt;HTTPS&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;H&lt;/strong&gt;yper &lt;strong&gt;T&lt;/strong&gt;ext &lt;strong&gt;T&lt;/strong&gt;ransfer &lt;strong&gt;P&lt;/strong&gt;rotocol Over &lt;strong&gt;S&lt;/strong&gt;ecure Socket Layer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HTTPS는 독립된 프로토콜이 아닌, 말 그대로 &lt;strong&gt;SSL위에서 동작하는 HTTP&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;즉, HTTPS는 독립된 프로토콜이 아니며, &lt;br /&gt;HTTP 통신을 할 때의 &lt;strong&gt;Socket&lt;/strong&gt; 부분을 &lt;strong&gt;SSL이나 TLS 프로토콜로 대체&lt;/strong&gt;하는 것!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;PS. 이 글을 보신분께서는 주위에서 HTTPS, SSL, TLS라는 단어가 나왔을 때,&lt;/p&gt;
+
+&lt;p&gt;약간의 TMI를 말할 수 있는 변태 엔지니어가 되셨으면 좋겠습니다.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Aug 2020 20:02:00 +0900</pubDate>
+        <link>http://localhost:4000/https/2020/08/01/HTTPS.html</link>
+        <guid isPermaLink="true">http://localhost:4000/https/2020/08/01/HTTPS.html</guid>
+        
+        
+        <category>https</category>
+        
+      </item>
+    
+  </channel>
+</rss>
