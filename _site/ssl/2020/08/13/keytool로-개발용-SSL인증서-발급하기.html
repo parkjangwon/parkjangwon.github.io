@@ -8,11 +8,11 @@
 <link href="/assets/favicon.ico" rel="shortcut icon"/>
 <link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css">
-<title>keytool로 개발용 SSL인증서 발급하기</title>
+<title>keytool로 개발용 SSL인증서(Java KeyStore) 발급하기</title>
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>keytool로 개발용 SSL인증서 발급하기 | 생각날때쓰는개발일기</title>
+<title>keytool로 개발용 SSL인증서(Java KeyStore) 발급하기 | 생각날때쓰는개발일기</title>
 <meta name="generator" content="Jekyll v3.8.7" />
-<meta property="og:title" content="keytool로 개발용 SSL인증서 발급하기" />
+<meta property="og:title" content="keytool로 개발용 SSL인증서(Java KeyStore) 발급하기" />
 <meta name="author" content="parkjangwon" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Java 웹 어플리케이션을 개발 할 때, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다." />
@@ -23,7 +23,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-13T22:27:00+09:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-08-13T22:27:00+09:00","headline":"keytool로 개발용 SSL인증서 발급하기","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html"},"url":"http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html","author":{"@type":"Person","name":"parkjangwon"},"description":"Java 웹 어플리케이션을 개발 할 때, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다.","@type":"BlogPosting","dateModified":"2020-08-13T22:27:00+09:00","@context":"https://schema.org"}</script>
+{"datePublished":"2020-08-13T22:27:00+09:00","headline":"keytool로 개발용 SSL인증서(Java KeyStore) 발급하기","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html"},"url":"http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html","author":{"@type":"Person","name":"parkjangwon"},"description":"Java 웹 어플리케이션을 개발 할 때, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다.","@type":"BlogPosting","dateModified":"2020-08-13T22:27:00+09:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 </head>
 
@@ -48,7 +48,7 @@
     <section class="content">
       <div class="post-container">
   <a class="post-link" href="/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html">
-    <h2 class="post-title">keytool로 개발용 SSL인증서 발급하기</h2>
+    <h2 class="post-title">keytool로 개발용 SSL인증서(Java KeyStore) 발급하기</h2>
   </a>
   <div class="post-meta">
     <div class="post-date"><i class="icon-calendar"></i>Aug 13, 2020</div><ul class="post-categories"><li>ssl</li></ul></div>
@@ -57,9 +57,11 @@
 
 <p>기본적으로 SSL인증서를 발급할 때, 비용이 들게 된다.</p>
 
-<p>물론 Let’s Encrypt에서 발급할 땐 무료이다. 하지만 Let’s Encrypt에서 인증서를 발급하면 특정 도메인의 80포트로 접근 가능한 웹 서버가 필요하다.</p>
+<p>물론 Let’s Encrypt에서 발급할 땐 무료이다. 하지만 Let’s Encrypt에서 인증서를 발급하려면 특정 도메인의 80포트로 접근 가능한 웹 서버가 필요하다.</p>
 
-<p>상황이 여의치 않은 경우, CA의 인증을 받지 않은 말 그대로 개발용 인증서를 JDK에서 제공하는 keytool을 통하여 발급 받는 방법이 있다.</p>
+<p>(Let’s Encrypt에서는 pem 형식으로 발급 되기 때문에, Java기반의 미들웨어에서 사용하려면 Java KeyStore 형식으로 변환 작업이 필요하다.)</p>
+
+<p>상황이 여의치 않은 경우, CA의 인증을 받지 않은 말 그대로 개발용 인증서(Java KeyStore)를 JDK에서 제공하는 keytool을 통하여 발급 받는 방법이 있다.</p>
 
 <h1 id="1-jdk-설치-경로-이동-및-keytool-유무-확인">1. JDK 설치 경로 이동 및 keytool 유무 확인</h1>
 
@@ -106,13 +108,16 @@ keystore.jks: Java KeyStore
   <p># file 명령어로 발급된 인증서를 확인해보면 Java KeyStore라고 나온다.</p>
 </blockquote>
 
-<p>이렇게 발급한 해당 인증서를 Tomcat과 같은 WAS(Java Servlet Container)에 설정해주면 된다.</p>
+<p>이렇게 발급한 해당 인증서를 Tomcat과 같은 Java Servlet Container의 관련 설정 파일에 설정해주면 된다.</p>
 
-<p>개발용으로 발급된 인증서이긴 하지만 Was에서 keystore 설정 할 때, 정상 인증서랑 차이는 없다.</p>
+<p>개발용으로 발급된 인증서이긴 하지만 Was에서 SSL 관련 keystore 설정 할 때, 정상 인증서와 설정 값의 차이는 없다.</p>
 
 <p>개발용 인증서이기 때문에, 범용 브라우저에서는 보안 인증서 관련 경고 화면이 나온다. 브라우저 내에서 예외 옵션을 넣어주고,</p>
 
 <p>HTTPS 통신 시, 패킷이 정상적으로 암호화가 되는지 확인을 하면 된다.</p>
+
+<p>* Java Keystore 파일이기 때문에 Java Servlet Container가 아닌 다른 미들웨어, 예를 들면 아파치 웹서버
+에서는 사용할 수 없다!</p>
 
   </div><div id="disqus_thread" style="margin-top:25px"></div>
   <script>
