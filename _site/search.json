@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "컴파일된 class 파일의 버전을 확인하는 방법",
+      "title-lower"    : "컴파일된 class 파일의 버전을 확인하는 방법",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "java",
+      "tags"     : "",
+      "url"      : "/java/2020/08/13/%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%90%9C-class-%ED%8C%8C%EC%9D%BC-%EB%B2%84%EC%A0%84-%ED%99%95%EC%9D%B8%ED%95%98%EB%8A%94%EB%B0%A9%EB%B2%95.html",
+      "date"     : "2020-08-13 23:22:00 +0900",
+      "content"     : "패치 작업을 하다가 java.lang.UnsupportedClassVersionError 라는 에러를 만난적이 있을 것이다.보통 Runtime의 Java의 버전보다 class의 컴파일 버전이 더 높은 경우가 대다수이다. (runtime jdk version &amp;lt; class compile version)패치를 반영하는 운영환경의 Java 버전..."
+    } ,
+  
+    {
       "title"    : "keytool로 개발용 SSL인증서 발급하기",
       "title-lower"    : "keytool로 개발용 ssl인증서 발급하기",
       "sub-titile" : "",
