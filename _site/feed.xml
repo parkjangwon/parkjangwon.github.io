@@ -6,9 +6,81 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Aug 2020 01:13:24 +0900</pubDate>
-    <lastBuildDate>Thu, 13 Aug 2020 01:13:24 +0900</lastBuildDate>
+    <pubDate>Thu, 13 Aug 2020 22:54:54 +0900</pubDate>
+    <lastBuildDate>Thu, 13 Aug 2020 22:54:54 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>keytool로 개발용 SSL인증서 발급하기</title>
+        <description>&lt;p&gt;Java 웹 어플리케이션을 개발 할 때, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다.&lt;/p&gt;
+
+&lt;p&gt;기본적으로 SSL인증서를 발급할 때, 비용이 들게 된다.&lt;/p&gt;
+
+&lt;p&gt;물론 Let’s Encrypt에서 발급할 땐 무료이다. 하지만 Let’s Encrypt에서 인증서를 발급하면 특정 도메인의 80포트로 접근 가능한 웹 서버가 필요하다.&lt;/p&gt;
+
+&lt;p&gt;상황이 여의치 않은 경우, CA의 인증을 받지 않은 말 그대로 개발용 인증서를 JDK에서 제공하는 keytool을 통하여 발급 받는 방법이 있다.&lt;/p&gt;
+
+&lt;h1 id=&quot;1-jdk-설치-경로-이동-및-keytool-유무-확인&quot;&gt;1. JDK 설치 경로 이동 및 keytool 유무 확인&lt;/h1&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ssl]# &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$JAVA_HOME&lt;/span&gt;
+/usr/local/java
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ssl]# &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /usr/local/java/bin
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw bin]# &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;keytool
+&lt;span class=&quot;nt&quot;&gt;-rwxr-xr-x&lt;/span&gt; 1 root root   8832 Mar 12 15:33 keytool
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;# java 환경 변수가 등록 되어있지 않는 경우, keytool을 사용할 때 jdk의 절대 경로를 입력해야하기 때문에 왠만하면 환경변수에 등록하자.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;2-keytool-커맨드로-인증서keystore-발급&quot;&gt;2. keytool 커맨드로 인증서(keyStore) 발급&lt;/h1&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ssl]# keytool &lt;span class=&quot;nt&quot;&gt;-genkey&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-alias&lt;/span&gt; KeystoreAlias &lt;span class=&quot;nt&quot;&gt;-keysize&lt;/span&gt; 2048 &lt;span class=&quot;nt&quot;&gt;-keyalg&lt;/span&gt; RSA &lt;span class=&quot;nt&quot;&gt;-keystore&lt;/span&gt; keystore.jks &lt;span class=&quot;nt&quot;&gt;-dname&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;CN=mydomain.com, OU=myteam, O=mycompany, L=seoul, ST=seoul, C=kr&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;# 어차피 개발용이니까 적당한 값으로 설정하자.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Enter keystore password:
+Re-enter new password:
+Enter key password &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &amp;lt;KeystoreAlias&amp;gt;
+	&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;RETURN &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;same as keystore password&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;# keystore의 비밀번호를 입력 후 엔터를 누른다, 그리고 비밀번호 확인. 알리아스의 비밀번호를 따로 설정해줄 것이 아니면 그냥 엔터를 입력.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using &lt;span class=&quot;s2&quot;&gt;&quot;keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.jks -deststoretype pkcs12&quot;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ssl]# &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-trl&lt;/span&gt;
+total 4
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt; 1 root root 2234 Aug 13 22:24 keystore.jks
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw ssl]# file keystore.jks
+keystore.jks: Java KeyStore
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;# file 명령어로 발급된 인증서를 확인해보면 Java KeyStore라고 나온다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이렇게 발급한 해당 인증서를 Tomcat과 같은 WAS(Java Servlet Container)에 설정해주면 된다.&lt;/p&gt;
+
+&lt;p&gt;개발용으로 발급된 인증서이긴 하지만 Was에서 keystore 설정 할 때, 정상 인증서랑 차이는 없다.&lt;/p&gt;
+
+&lt;p&gt;개발용 인증서이기 때문에, 범용 브라우저에서는 보안 인증서 관련 경고 화면이 나온다. 브라우저 내에서 예외 옵션을 넣어주고,&lt;/p&gt;
+
+&lt;p&gt;HTTPS 통신 시, 패킷이 정상적으로 암호화가 되는지 확인을 하면 된다.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 13 Aug 2020 22:27:00 +0900</pubDate>
+        <link>http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html</link>
+        <guid isPermaLink="true">http://localhost:4000/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html</guid>
+        
+        
+        <category>ssl</category>
+        
+      </item>
     
       <item>
         <title>gzip 명령어를 활용한 로그 압축하는 방법</title>
