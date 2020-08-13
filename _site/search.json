@@ -21,7 +21,7 @@
       "tags"     : "",
       "url"      : "/ssl/2020/08/13/keytool%EB%A1%9C-%EA%B0%9C%EB%B0%9C%EC%9A%A9-SSL%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%ED%95%98%EA%B8%B0.html",
       "date"     : "2020-08-13 22:27:00 +0900",
-      "content"     : "Java 웹 어플리케이션을 개발 할 때, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다.기본적으로 SSL인증서를 발급할 때, 비용이 들게 된다.물론 Let’s Encrypt에서 발급할 땐 무료이다. 하지만 Let’s Encrypt에서 인증서를 발급하려면 특정 도메인의 80포트로 접근 가능한 웹 서버가 필요하다.(Let’s Encrypt에서는..."
+      "content"     : "Java 웹 어플리케이션을 개발 시, HTTPS를 적용을 해야할 때 SSL인증서를 발급해야한다.기본적으로 SSL인증서를 발급할 때, 비용이 들게 된다.물론 Let’s Encrypt에서 발급할 땐 무료이다. 하지만 Let’s Encrypt에서 인증서를 발급하려면 특정 도메인의 80포트로 접근 가능한 웹 서버가 필요하다.(Let’s Encrypt에서는 p..."
     } ,
   
     {
