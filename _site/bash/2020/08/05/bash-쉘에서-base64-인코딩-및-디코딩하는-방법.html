@@ -64,33 +64,33 @@
 
 <h1 id="먼저-서버에-base64-명령어가-존재하는지-확인을-해야한다">먼저, 서버에 ‘base64’ 명령어가 존재하는지 확인을 해야한다.</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw bin]# pwd
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw bin]# <span class="nb">pwd</span>
 /usr/bin
-[root@parkjw bin]# ls -trl | grep base64
--rwxr-xr-x.   1 root root      37360 Aug 20  2019 base64
+<span class="o">[</span>root@parkjw bin]# <span class="nb">ls</span> <span class="nt">-trl</span> | <span class="nb">grep base64</span>
+<span class="nt">-rwxr-xr-x</span><span class="nb">.</span>   1 root root      37360 Aug 20  2019 <span class="nb">base64</span>
 
-[root@parkjw bin]# base64 --help
-Usage: base64 [OPTION]... [FILE]
+<span class="o">[</span>root@parkjw bin]# <span class="nb">base64</span> <span class="nt">--help</span>
+Usage: <span class="nb">base64</span> <span class="o">[</span>OPTION]... <span class="o">[</span>FILE]
 Base64 encode or decode FILE, or standard input, to standard output.
 
-Mandatory arguments to long options are mandatory for short options too.
-  -d, --decode          decode data
-  -i, --ignore-garbage  when decoding, ignore non-alphabet characters
-  -w, --wrap=COLS       wrap encoded lines after COLS character (default 76).
+Mandatory arguments to long options are mandatory <span class="k">for </span>short options too.
+  <span class="nt">-d</span>, <span class="nt">--decode</span>          decode data
+  <span class="nt">-i</span>, <span class="nt">--ignore-garbage</span>  when decoding, ignore non-alphabet characters
+  <span class="nt">-w</span>, <span class="nt">--wrap</span><span class="o">=</span>COLS       wrap encoded lines after COLS character <span class="o">(</span>default 76<span class="o">)</span><span class="nb">.</span>
                           Use 0 to disable line wrapping
 
-      --help     display this help and exit
-      --version  output version information and exit
+      <span class="nt">--help</span>     display this <span class="nb">help </span>and <span class="nb">exit</span>
+      <span class="nt">--version</span>  output version information and <span class="nb">exit
 
-With no FILE, or when FILE is -, read standard input.
+</span>With no FILE, or when FILE is -, <span class="nb">read </span>standard input.
 
-The data are encoded as described for the base64 alphabet in RFC 3548.
-When decoding, the input may contain newlines in addition to the bytes of
-the formal base64 alphabet.  Use --ignore-garbage to attempt to recover
-from any other non-alphabet bytes in the encoded stream.
+The data are encoded as described <span class="k">for </span>the <span class="nb">base64 </span>alphabet <span class="k">in </span>RFC 3548.
+When decoding, the input may contain newlines <span class="k">in </span>addition to the bytes of
+the formal <span class="nb">base64 </span>alphabet.  Use <span class="nt">--ignore-garbage</span> to attempt to recover
+from any other non-alphabet bytes <span class="k">in </span>the encoded stream.
 
-GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;
-For complete documentation, run: info coreutils 'base64 invocation'
+GNU coreutils online <span class="nb">help</span>: &lt;http://www.gnu.org/software/coreutils/&gt;
+For <span class="nb">complete </span>documentation, run: info coreutils <span class="s1">'base64 invocation'</span>
 </code></pre></div></div>
 
 <h1 id="base64-인코딩">base64 인코딩</h1>

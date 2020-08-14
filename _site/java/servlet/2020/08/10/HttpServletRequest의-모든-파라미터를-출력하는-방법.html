@@ -64,14 +64,14 @@
 
 <h1 id="리퀘스트에-담긴-모든-파라미터-출력하기">리퀘스트에 담긴 모든 파라미터 출력하기</h1>
 
-<pre><code class="language-{.java}">Enumeration params = request.getParameterNames();
-System.out.println("----------------------------");
-while (params.hasMoreElements()){
-    String name = (String)params.nextElement();
-    System.out.println(name + " : " +request.getParameter(name));
-}
-System.out.println("----------------------------");
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Enumeration</span> <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameterNames</span><span class="o">();</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"----------------------------"</span><span class="o">);</span>
+<span class="k">while</span> <span class="o">(</span><span class="n">params</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">()){</span>
+    <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span><span class="n">params</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="n">name</span><span class="o">));</span>
+<span class="o">}</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"----------------------------"</span><span class="o">);</span>
+</code></pre></div></div>
 
   </div><div id="disqus_thread" style="margin-top:25px"></div>
   <script>

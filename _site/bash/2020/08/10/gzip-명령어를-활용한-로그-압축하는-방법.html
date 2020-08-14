@@ -74,16 +74,16 @@
 
 <p>아래 방법으로 gzip 명령어(정확히 말하면 패키지..라고 표현하는게 맞다.)가 설치 되어 있는지 확인한다.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# ls /usr/bin/ | grep gzip
-gzip
-[root@parkjw _logs_]# gzip
-gzip: compressed data not written to a terminal. Use -f to force compression.
-For help, type: gzip -h
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# <span class="nb">ls</span> /usr/bin/ | <span class="nb">grep gzip
+gzip</span>
+<span class="o">[</span>root@parkjw _logs_]# <span class="nb">gzip
+gzip</span>: compressed data not written to a terminal. Use <span class="nt">-f</span> to force compression.
+For <span class="nb">help</span>, <span class="nb">type</span>: <span class="nb">gzip</span> <span class="nt">-h</span>
 </code></pre></div></div>
 
 <h1 id="1-find-명령어를-통하여-압축을-할-로그를-찾는다">1) find 명령어를 통하여 압축을 할 로그를 찾는다</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*.log"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# find  <span class="nt">-name</span> <span class="s2">"*.log"</span>
 ./wrapper_20200810.log
 ./wrapper_20200710.log
 ./wrapper_20200712.log
@@ -98,7 +98,7 @@ For help, type: gzip -h
   <p>Tip 아래와 같이 특정 날짜의 로그만 검색 할 수 있다.</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*07[1...2]*.log"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# find  <span class="nt">-name</span> <span class="s2">"*07[1...2]*.log"</span>
 ./wrapper_20200710.log
 ./wrapper_20200712.log
 ./wrapper_20200711.log
@@ -120,8 +120,8 @@ For help, type: gzip -h
 
 <h1 id="2-임시-shell-script-file을-생성하여-검색-결과-값을-저장한다">2) 임시 shell script file을 생성하여 검색 결과 값을 저장한다.</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# find  -name "*.log" &gt; zip.sh
-[root@parkjw _logs_]# cat zip.sh
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# find  <span class="nt">-name</span> <span class="s2">"*.log"</span> <span class="o">&gt;</span> zip.sh
+<span class="o">[</span>root@parkjw _logs_]# <span class="nb">cat </span>zip.sh
 ./wrapper_20200810.log
 ./wrapper_20200710.log
 ./wrapper_20200712.log
@@ -133,37 +133,37 @@ For help, type: gzip -h
 </code></pre></div></div>
 
 <h1 id="3-zipsh-파일에-아래-정규표현식을-사용하여-일괄로-gzip-명령어를-추가한다">3) zip.sh 파일에 아래 정규표현식을 사용하여 일괄로 gzip 명령어를 추가한다.</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# vi zip.sh
-vim &gt; :%s/\.\//gzip -9 \.\//g
-설명: "./" 을 "gzip -9 ./"로 치환한다.
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# vi zip.sh
+vim <span class="o">&gt;</span> :%s/<span class="se">\.\/</span>/gzip <span class="nt">-9</span> <span class="se">\.\/</span>/g
+설명: <span class="s2">"./"</span> 을 <span class="s2">"gzip -9 ./"</span>로 치환한다.
 
-vim &gt; :wq
+vim <span class="o">&gt;</span> :wq
 설명: 변경 내용을 저장하고 vim 에디터를 닫는다.
 </code></pre></div></div>
 
 <h1 id="4-일괄-압축쉘-zipsh의-내용을-확인한다">4) 일괄 압축쉘 (zip.sh)의 내용을 확인한다.</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# cat zip.sh
-gzip -9 ./wrapper_20200810.log
-gzip -9 ./wrapper_20200710.log
-gzip -9 ./wrapper_20200712.log
-gzip -9 ./wrapper_20200711.log
-gzip -9 ./wrapper_20200715.log
-gzip -9 ./wrapper_20200726.log
-gzip -9 ./wrapper_20200809.log
-gzip -9 ./wrapper_20200717.log
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# <span class="nb">cat </span>zip.sh
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200810.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200710.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200712.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200711.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200715.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200726.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200809.log
+<span class="nb">gzip</span> <span class="nt">-9</span> ./wrapper_20200717.log
 </code></pre></div></div>
 
 <h1 id="5-일괄-압축쉘-zipsh을-실행한다">5) 일괄 압축쉘 (zip.sh)을 실행한다.</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# sh zip.sh &amp;
-설명 : zip.sh에 작성된 명령어를 백그라운드(&amp;)에서 작업을 돌리겠다.
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# sh zip.sh &amp;
+설명 : zip.sh에 작성된 명령어를 백그라운드<span class="o">(</span>&amp;<span class="o">)</span>에서 작업을 돌리겠다.
 
-[1] 9822
-설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. (bg 명령어로 통해 확인 가능)
+<span class="o">[</span>1] 9822
+설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. <span class="o">(</span><span class="nb">bg </span>명령어로 통해 확인 가능<span class="o">)</span>
 
-[root@parkjw _logs_]# ps -ef | grep gzip
-위 명령어로 쉘이 돌고 있는지(프로세스가 살아 있는지) 확인 할 수 있다.
+<span class="o">[</span>root@parkjw _logs_]# ps <span class="nt">-ef</span> | <span class="nb">grep gzip
+</span>위 명령어로 쉘이 돌고 있는지<span class="o">(</span>프로세스가 살아 있는지<span class="o">)</span> 확인 할 수 있다.
 
-[1]+  Done                    sh zip.sh
+<span class="o">[</span>1]+  Done                    sh zip.sh
 설명: 쉘에 작성된 작업이 다 끝나면 아래와 같이 터미널에 완료 메시지가 출력된다.
 </code></pre></div></div>
 
@@ -174,18 +174,18 @@ gzip -9 ./wrapper_20200717.log
   <p>Tip  <strong>.gz으로 압축된 로그 파일은 vim 에디터</strong>로 열 수 있다! 아쉽게도 tail로는 볼 수 없다 ㅠ.ㅠ</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# ll wrapper_20200710.log.gz
--rw-r--r-- 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# ll wrapper_20200710.log.gz
+<span class="nt">-rw-r--r--</span> 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
 
-[압축하기전 로그 파일 용량]
--rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+<span class="o">[</span>압축하기전 로그 파일 용량]
+<span class="nt">-rw-r--r--</span> 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
 </code></pre></div></div>
 
 <h1 id="7-gz-파일을-원래대로-압축-해제하는-방법">7) .gz 파일을 원래대로 압축 해제하는 방법</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@parkjw _logs_]# gzip -d wrapper_20200710.log.gz
-[root@parkjw _logs_]# ll wrapper_20200710.log
--rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@parkjw _logs_]# <span class="nb">gzip</span> <span class="nt">-d</span> wrapper_20200710.log.gz
+<span class="o">[</span>root@parkjw _logs_]# ll wrapper_20200710.log
+<span class="nt">-rw-r--r--</span> 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
 </code></pre></div></div>
 
   </div><div id="disqus_thread" style="margin-top:25px"></div>

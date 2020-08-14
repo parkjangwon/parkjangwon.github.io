@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 14 Aug 2020 18:57:01 +0900</pubDate>
-    <lastBuildDate>Fri, 14 Aug 2020 18:57:01 +0900</lastBuildDate>
+    <pubDate>Fri, 14 Aug 2020 19:01:57 +0900</pubDate>
+    <lastBuildDate>Fri, 14 Aug 2020 19:01:57 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -319,16 +319,16 @@ keystore.jks: Java KeyStore
 
 &lt;p&gt;아래 방법으로 gzip 명령어(정확히 말하면 패키지..라고 표현하는게 맞다.)가 설치 되어 있는지 확인한다.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# ls /usr/bin/ | grep gzip
-gzip
-[root@parkjw _logs_]# gzip
-gzip: compressed data not written to a terminal. Use -f to force compression.
-For help, type: gzip -h
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; /usr/bin/ | &lt;span class=&quot;nb&quot;&gt;grep gzip
+gzip&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# &lt;span class=&quot;nb&quot;&gt;gzip
+gzip&lt;/span&gt;: compressed data not written to a terminal. Use &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; to force compression.
+For &lt;span class=&quot;nb&quot;&gt;help&lt;/span&gt;, &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;: &lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;1-find-명령어를-통하여-압축을-할-로그를-찾는다&quot;&gt;1) find 명령어를 통하여 압축을 할 로그를 찾는다&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*.log&quot;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# find  &lt;span class=&quot;nt&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;*.log&quot;&lt;/span&gt;
 ./wrapper_20200810.log
 ./wrapper_20200710.log
 ./wrapper_20200712.log
@@ -343,7 +343,7 @@ For help, type: gzip -h
   &lt;p&gt;Tip 아래와 같이 특정 날짜의 로그만 검색 할 수 있다.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*07[1...2]*.log&quot;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# find  &lt;span class=&quot;nt&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;*07[1...2]*.log&quot;&lt;/span&gt;
 ./wrapper_20200710.log
 ./wrapper_20200712.log
 ./wrapper_20200711.log
@@ -365,8 +365,8 @@ For help, type: gzip -h
 
 &lt;h1 id=&quot;2-임시-shell-script-file을-생성하여-검색-결과-값을-저장한다&quot;&gt;2) 임시 shell script file을 생성하여 검색 결과 값을 저장한다.&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# find  -name &quot;*.log&quot; &amp;gt; zip.sh
-[root@parkjw _logs_]# cat zip.sh
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# find  &lt;span class=&quot;nt&quot;&gt;-name&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;*.log&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; zip.sh
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# &lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;zip.sh
 ./wrapper_20200810.log
 ./wrapper_20200710.log
 ./wrapper_20200712.log
@@ -378,37 +378,37 @@ For help, type: gzip -h
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;3-zipsh-파일에-아래-정규표현식을-사용하여-일괄로-gzip-명령어를-추가한다&quot;&gt;3) zip.sh 파일에 아래 정규표현식을 사용하여 일괄로 gzip 명령어를 추가한다.&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# vi zip.sh
-vim &amp;gt; :%s/\.\//gzip -9 \.\//g
-설명: &quot;./&quot; 을 &quot;gzip -9 ./&quot;로 치환한다.
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# vi zip.sh
+vim &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; :%s/&lt;span class=&quot;se&quot;&gt;\.\/&lt;/span&gt;/gzip &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\.\/&lt;/span&gt;/g
+설명: &lt;span class=&quot;s2&quot;&gt;&quot;./&quot;&lt;/span&gt; 을 &lt;span class=&quot;s2&quot;&gt;&quot;gzip -9 ./&quot;&lt;/span&gt;로 치환한다.
 
-vim &amp;gt; :wq
+vim &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; :wq
 설명: 변경 내용을 저장하고 vim 에디터를 닫는다.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;4-일괄-압축쉘-zipsh의-내용을-확인한다&quot;&gt;4) 일괄 압축쉘 (zip.sh)의 내용을 확인한다.&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# cat zip.sh
-gzip -9 ./wrapper_20200810.log
-gzip -9 ./wrapper_20200710.log
-gzip -9 ./wrapper_20200712.log
-gzip -9 ./wrapper_20200711.log
-gzip -9 ./wrapper_20200715.log
-gzip -9 ./wrapper_20200726.log
-gzip -9 ./wrapper_20200809.log
-gzip -9 ./wrapper_20200717.log
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# &lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;zip.sh
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200810.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200710.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200712.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200711.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200715.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200726.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200809.log
+&lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-9&lt;/span&gt; ./wrapper_20200717.log
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;5-일괄-압축쉘-zipsh을-실행한다&quot;&gt;5) 일괄 압축쉘 (zip.sh)을 실행한다.&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# sh zip.sh &amp;amp;
-설명 : zip.sh에 작성된 명령어를 백그라운드(&amp;amp;)에서 작업을 돌리겠다.
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# sh zip.sh &amp;amp;
+설명 : zip.sh에 작성된 명령어를 백그라운드&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&amp;amp;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;에서 작업을 돌리겠다.
 
-[1] 9822
-설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. (bg 명령어로 통해 확인 가능)
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1] 9822
+설명 : 해당 스크립트는 9822의 pid를 가지면서 백그라운드 잡에 들어갔다. &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bg &lt;/span&gt;명령어로 통해 확인 가능&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 
-[root@parkjw _logs_]# ps -ef | grep gzip
-위 명령어로 쉘이 돌고 있는지(프로세스가 살아 있는지) 확인 할 수 있다.
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep gzip
+&lt;/span&gt;위 명령어로 쉘이 돌고 있는지&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;프로세스가 살아 있는지&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 확인 할 수 있다.
 
-[1]+  Done                    sh zip.sh
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1]+  Done                    sh zip.sh
 설명: 쉘에 작성된 작업이 다 끝나면 아래와 같이 터미널에 완료 메시지가 출력된다.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -419,18 +419,18 @@ gzip -9 ./wrapper_20200717.log
   &lt;p&gt;Tip  &lt;strong&gt;.gz으로 압축된 로그 파일은 vim 에디터&lt;/strong&gt;로 열 수 있다! 아쉽게도 tail로는 볼 수 없다 ㅠ.ㅠ&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# ll wrapper_20200710.log.gz
--rw-r--r-- 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# ll wrapper_20200710.log.gz
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt; 1 root root 79439 Jul 10 23:00 wrapper_20200710.log.gz
 
-[압축하기전 로그 파일 용량]
--rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;압축하기전 로그 파일 용량]
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt; 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;7-gz-파일을-원래대로-압축-해제하는-방법&quot;&gt;7) .gz 파일을 원래대로 압축 해제하는 방법&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw _logs_]# gzip -d wrapper_20200710.log.gz
-[root@parkjw _logs_]# ll wrapper_20200710.log
--rw-r--r-- 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# &lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; wrapper_20200710.log.gz
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw _logs_]# ll wrapper_20200710.log
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt; 1 root root 968413 Jul 10 23:00 wrapper_20200710.log
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Mon, 10 Aug 2020 01:41:00 +0900</pubDate>
@@ -454,14 +454,14 @@ gzip -9 ./wrapper_20200717.log
 
 &lt;h1 id=&quot;리퀘스트에-담긴-모든-파라미터-출력하기&quot;&gt;리퀘스트에 담긴 모든 파라미터 출력하기&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-{.java}&quot;&gt;Enumeration params = request.getParameterNames();
-System.out.println(&quot;----------------------------&quot;);
-while (params.hasMoreElements()){
-    String name = (String)params.nextElement();
-    System.out.println(name + &quot; : &quot; +request.getParameter(name));
-}
-System.out.println(&quot;----------------------------&quot;);
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;Enumeration&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParameterNames&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;----------------------------&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasMoreElements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextElement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; : &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;----------------------------&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Mon, 10 Aug 2020 00:34:00 +0900</pubDate>
         <link>http://localhost:4000/java/servlet/2020/08/10/HttpServletRequest%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95.html</link>
@@ -486,33 +486,33 @@ System.out.println(&quot;----------------------------&quot;);
 
 &lt;h1 id=&quot;먼저-서버에-base64-명령어가-존재하는지-확인을-해야한다&quot;&gt;먼저, 서버에 ‘base64’ 명령어가 존재하는지 확인을 해야한다.&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@parkjw bin]# pwd
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw bin]# &lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
 /usr/bin
-[root@parkjw bin]# ls -trl | grep base64
--rwxr-xr-x.   1 root root      37360 Aug 20  2019 base64
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw bin]# &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-trl&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep base64&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-rwxr-xr-x&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;   1 root root      37360 Aug 20  2019 &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt;
 
-[root@parkjw bin]# base64 --help
-Usage: base64 [OPTION]... [FILE]
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@parkjw bin]# &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;
+Usage: &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;OPTION]... &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;FILE]
 Base64 encode or decode FILE, or standard input, to standard output.
 
-Mandatory arguments to long options are mandatory for short options too.
-  -d, --decode          decode data
-  -i, --ignore-garbage  when decoding, ignore non-alphabet characters
-  -w, --wrap=COLS       wrap encoded lines after COLS character (default 76).
+Mandatory arguments to long options are mandatory &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;short options too.
+  &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--decode&lt;/span&gt;          decode data
+  &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--ignore-garbage&lt;/span&gt;  when decoding, ignore non-alphabet characters
+  &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;--wrap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;COLS       wrap encoded lines after COLS character &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;default 76&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
                           Use 0 to disable line wrapping
 
-      --help     display this help and exit
-      --version  output version information and exit
+      &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;     display this &lt;span class=&quot;nb&quot;&gt;help &lt;/span&gt;and &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;  output version information and &lt;span class=&quot;nb&quot;&gt;exit
 
-With no FILE, or when FILE is -, read standard input.
+&lt;/span&gt;With no FILE, or when FILE is -, &lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;standard input.
 
-The data are encoded as described for the base64 alphabet in RFC 3548.
-When decoding, the input may contain newlines in addition to the bytes of
-the formal base64 alphabet.  Use --ignore-garbage to attempt to recover
-from any other non-alphabet bytes in the encoded stream.
+The data are encoded as described &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;the &lt;span class=&quot;nb&quot;&gt;base64 &lt;/span&gt;alphabet &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;RFC 3548.
+When decoding, the input may contain newlines &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;addition to the bytes of
+the formal &lt;span class=&quot;nb&quot;&gt;base64 &lt;/span&gt;alphabet.  Use &lt;span class=&quot;nt&quot;&gt;--ignore-garbage&lt;/span&gt; to attempt to recover
+from any other non-alphabet bytes &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the encoded stream.
 
-GNU coreutils online help: &amp;lt;http://www.gnu.org/software/coreutils/&amp;gt;
-For complete documentation, run: info coreutils 'base64 invocation'
+GNU coreutils online &lt;span class=&quot;nb&quot;&gt;help&lt;/span&gt;: &amp;lt;http://www.gnu.org/software/coreutils/&amp;gt;
+For &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;documentation, run: info coreutils &lt;span class=&quot;s1&quot;&gt;'base64 invocation'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;base64-인코딩&quot;&gt;base64 인코딩&lt;/h1&gt;
