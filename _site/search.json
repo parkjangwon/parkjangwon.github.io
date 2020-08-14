@@ -9,7 +9,7 @@
       "tags"     : "",
       "url"      : "/java/tool/2020/08/14/Java-Decompiler-%EC%86%8C%EA%B0%9C-CFR-Decompiler.html",
       "date"     : "2020-08-14 18:00:00 +0900",
-      "content"     : "가끔 컴파일 된 class 파일을 디컴파일을 해서 원 소스를 확인해야하는 상황이 발생한다.유명한 디컴파일러로 jd-gui가 있다. 해당 디컴파일로의 단점으로는 Java 1.8 이상의 버전으로 컴파일 된 소스를 디컴파일 할 수 없다는 점이다.CFR DecompilerCFR Decompiler는 Java 1.8이상의 최신 버전으로 컴파일된 class 파일..."
+      "content"     : "가끔 컴파일 된 class 파일을 디컴파일을 해서 원 소스를 확인해야하는 상황이 발생한다.유명한 디컴파일러로 jd-gui가 있다. 해당 디컴파일로의 단점으로는 Java 8 이상의 버전으로 컴파일 된 소스를 디컴파일 할 수 없다는 점이다.따라서 최신 자바 버전을 지원하는 디컴파일러를 소개 하도록 하겠다.CFR DecompilerCFR Decompiler..."
     } ,
   
     {
