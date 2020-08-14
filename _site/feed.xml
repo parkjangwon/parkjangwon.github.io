@@ -6,9 +6,126 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 14 Aug 2020 02:05:29 +0900</pubDate>
-    <lastBuildDate>Fri, 14 Aug 2020 02:05:29 +0900</lastBuildDate>
+    <pubDate>Fri, 14 Aug 2020 18:48:36 +0900</pubDate>
+    <lastBuildDate>Fri, 14 Aug 2020 18:48:36 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>Java Decompiler 소개 : CFR Decompiler</title>
+        <description>&lt;p&gt;가끔 컴파일 된 class 파일을 디컴파일을 해서 원 소스를 확인해야하는 상황이 발생한다.&lt;/p&gt;
+
+&lt;p&gt;유명한 디컴파일러로 &lt;strong&gt;jd-gui&lt;/strong&gt;가 있다. 해당 디컴파일로의 단점으로는 &lt;strong&gt;Java 1.8 이상의 버전으로 컴파일 된 소스를 디컴파일 할 수 없다는 점&lt;/strong&gt;이다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;cfr-decompiler&quot;&gt;CFR Decompiler&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200814/cfr.png&quot; alt=&quot;cfr&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;CFR Decompiler는 Java 1.8이상의 최신 버전으로 컴파일된 class 파일을 문제 없이 java 파일로 디컴파일이 가능하다.&lt;/p&gt;
+
+&lt;p&gt;GUI를 제공하지 않고 &lt;u&gt;CLI만 제공&lt;/u&gt;한다.&lt;/p&gt;
+
+&lt;p&gt;이 점은 사람에 따라서 장점이 될 수 있고, 단점이 될 수 있다. 개인 적으로 CLI를 선호하는 편이라 이 부분은 필자에게 단점은 아니었다.&lt;/p&gt;
+
+&lt;p&gt;* 즉, 서버에 Java만 설치 되어 있다면 FTP로 파일을 옮기지 않고 &lt;strong&gt;바로 소스를 디컴파일 할 수 있다!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;jar 파일로 배포 된다. 따라서 cfr을 사용하려면 사용할 &lt;u&gt;환경에 Jre &amp;amp; Jdk가 설치&lt;/u&gt;되어 있어야 한다.&lt;/p&gt;
+
+&lt;p&gt;또한 &lt;strong&gt;jar&lt;/strong&gt;이기 때문에, 사용자의 &lt;strong&gt;OS환경과 무관&lt;/strong&gt;하게 java만 설치 되어있으면 사용 가능하다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;cfr-decompiler-다운-로드&quot;&gt;CFR Decompiler 다운 로드&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.benf.org/other/cfr/&quot;&gt;Download Url&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위 링크를 클릭하여 이동한 후, &lt;strong&gt;Download cfr&lt;/strong&gt; 부분에 링크를 클릭하여 &lt;strong&gt;cfr-version.jar&lt;/strong&gt; 다운을 한다. (다운로드 시점에서 가장 최신 버전을 받는 걸 추천한다.)&lt;/p&gt;
+
+&lt;p&gt;* 그냥 다운로드 폴더에 저장하지말고, &lt;u&gt;본인 PC에 개발 관련 tool을 저장하는 디렉토리에 옮겨 놓는게&lt;/u&gt; 추후 재사용시 혼동이 없을 것 같다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  cfr &lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
+/Users/pjw/Documents/dev/tools/decompiler/cfr
+➜  cfr &lt;span class=&quot;nb&quot;&gt;ls
+&lt;/span&gt;cfr-0.150.jar class         java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;적당한 경로&lt;/strong&gt;에 다운 받은 &lt;strong&gt;cfr-version.jar&lt;/strong&gt; 옮겨 놓는다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;cfr-decompiler-실행-방법&quot;&gt;CFR Decompiler 실행 방법&lt;/h1&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  cfr java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; cfr-0.150.jar A.class &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; A.java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;위와 같이 &lt;strong&gt;java -jar “디컴파일할 클래스 파일명” &amp;gt; “디컴파일한 java 파일명”&lt;/strong&gt; 으로 인자를 주면 &lt;u&gt;디컴파일된 소스를 파일로 저장&lt;/u&gt; 할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  cfr java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; cfr-0.150.jar A.class
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;만약 디컴파일한 java 소스를 &lt;strong&gt;파일로 저장하지 않을 경우&lt;/strong&gt; 위와 같이 &lt;strong&gt;2번 째 인자를 생략&lt;/strong&gt;한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  cfr ll
+total 4192
+&lt;span class=&quot;nt&quot;&gt;-rwxr--r--&lt;/span&gt;@ 1 pjw  staff  1998700  8 14 17:51 cfr-0.150.jar
+drwxr-xr-x  3 pjw  staff       96  8 14 17:55 class
+drwxr-xr-x  3 pjw  staff       96  8 14 17:57 java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;필자의 경우 디컴파일을 할 소스를 저장할 폴더 “class”, 디컴파일이 된 java 파일을 저장할 폴더 “java” 폴더를 생성했다.&lt;/p&gt;
+
+&lt;p&gt;* 그럴 일은 없겠지만, 원본 소스를 건드리고 싶지 않기 때문에, “class” 폴더에 소스를 copy 한 후 작업을 한다.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;cfr-decompiler-사용-예시&quot;&gt;CFR Decompiler 사용 예시&lt;/h1&gt;
+
+&lt;p&gt;* 참고로 예시에서 사용한 &lt;strong&gt;IndexCtl.class&lt;/strong&gt;은 &lt;strong&gt;Java 1.8&lt;/strong&gt;로 컴파일한 소스이다.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  cfr &lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
+/Users/pjw/Documents/dev/tools/decompiler/cfr
+➜  cfr ll
+total 4192
+&lt;span class=&quot;nt&quot;&gt;-rwxr--r--&lt;/span&gt;@ 1 pjw  staff  1998700  8 14 17:51 cfr-0.150.jar
+drwxr-xr-x  3 pjw  staff       96  8 14 17:55 class
+drwxr-xr-x  3 pjw  staff       96  8 14 17:57 java
+➜  cfr java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; cfr-0.150.jar class/IndexCtl.class &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; java/IndexCtl.java
+➜  cfr &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-Rl&lt;/span&gt; class java
+class:
+total 8
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt;  1 pjw  staff  575  8 14 17:55 IndexCtl.class
+
+java:
+total 8
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt;  1 pjw  staff  456  8 14 18:32 IndexCtl.java
+➜  cfr &lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;java/IndexCtl.java
+/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Decompiled with CFR 0.150.
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Could not load the following classes:
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;  org.springframework.stereotype.Controller
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;  org.springframework.web.bind.annotation.GetMapping
+ &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;/
+package &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;.parkjw.jwtoolbox.ctl&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+import org.springframework.stereotype.Controller&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+import org.springframework.web.bind.annotation.GetMapping&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+@Controller
+public class IndexCtl &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    @GetMapping&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+    public String main&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;main/index&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Fri, 14 Aug 2020 18:00:00 +0900</pubDate>
+        <link>http://localhost:4000/java/2020/08/14/Java-Decompiler-%EC%86%8C%EA%B0%9C-CFR-Decompiler.html</link>
+        <guid isPermaLink="true">http://localhost:4000/java/2020/08/14/Java-Decompiler-%EC%86%8C%EA%B0%9C-CFR-Decompiler.html</guid>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>컴파일된 class 파일의 버전을 확인하는 방법</title>
