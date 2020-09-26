@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="google-site-verification" content="m53_dV8JIr-S7bpL6PBhUlZPmpCYUcrwa5RY0AO8q28" />
+<meta name="naver-site-verification" content="b8870cd11cad03ecbcc5a9eb81d8faf17f30a590" />
+<link href="/assets/favicon.ico" rel="shortcut icon"/>
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>오라클 클라우드 서버 무료로 사용하기</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>오라클 클라우드 서버 무료로 사용하기 | 생각날때쓰는개발일기</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="오라클 클라우드 서버 무료로 사용하기" />
+<meta name="author" content="parkjangwon" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="무료 클라우드를 생각하면 보통 AWS 프리티어를 떠올리겠지만, 프리티어의 경우 1년 동안만 무료로 사용할 수 있다." />
+<meta property="og:description" content="무료 클라우드를 생각하면 보통 AWS 프리티어를 떠올리겠지만, 프리티어의 경우 1년 동안만 무료로 사용할 수 있다." />
+<link rel="canonical" href="http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html" />
+<meta property="og:url" content="http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html" />
+<meta property="og:site_name" content="생각날때쓰는개발일기" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-26T18:00:00+09:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-09-26T18:00:00+09:00","headline":"오라클 클라우드 서버 무료로 사용하기","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html"},"url":"http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html","author":{"@type":"Person","name":"parkjangwon"},"description":"무료 클라우드를 생각하면 보통 AWS 프리티어를 떠올리겠지만, 프리티어의 경우 1년 동안만 무료로 사용할 수 있다.","@type":"BlogPosting","dateModified":"2020-09-26T18:00:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+
+<body>
+  <main class="container">
+    <section class="about">
+      <a href="/"><img src="/assets/pjw.png" alt="Park Jangwon"></a>
+      <h2 id="title">
+        <a href="/">Park Jangwon</a>
+      </h2>
+      <p class="tagline">Web Developer</p>
+      <a href="about.html" style="text-decoration:none; "><h3>About</h3></a>
+      <ul class="social"><a href="https://github.com/parkjangwon" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://instagram.com/p._.jw" target="_blank">
+          <li>
+            <i class="icon-instagram"></i>
+          </li>
+        </a></ul><p>&copy;
+        2020</p></section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html">
+    <h2 class="post-title">오라클 클라우드 서버 무료로 사용하기</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Sep 26, 2020</div><ul class="post-categories"><li>cloud</li><li>server</li></ul></div>
+  <div class="post">
+    <p>무료 클라우드를 생각하면 보통 AWS 프리티어를 떠올리겠지만, 프리티어의 경우 1년 동안만 무료로 사용할 수 있다.</p>
+
+<p>(물론 컨퍼런스와 같은 행사 등에서 크레딧을 받아 요금을 크레딧으로 지불 할 수 있지만..)</p>
+
+<p>종종 사용했던 프리티어 계정을 잊고 지냈다가 무료 사용기간이 지난 후 과금 폭탄을 맞았다라는 썰도 들리곤 한다.</p>
+
+<p>AWS는 대인배라서 그런지 상황을 잘 설명하면 한 번은 봐주긴한다..</p>
+
+<p>학생 혹은, 주머니 사정이 여의치않은 사람들은 이러한 상황 때문에 클라우드 서비스 사용이 부담스러울 것이다.</p>
+
+<p><strong>오라클 클라우드에서 평생 무료</strong>로 (물론 제공하는 범위의 제한은 있다.) 사용할 수 있는 서버를 제공해준다.</p>
+
+<p>VM의 스펙이 빵빵하지는 않지만, 개인이 개발/테스트 용도로 충분히 사용할 정도다.</p>
+
+<p>대략적인 순서는 아래와 같다.</p>
+
+<ol>
+  <li>오라클클라우드 계정 생성</li>
+  <li>인스턴스(VM이라고 보면 된다.) 생성</li>
+  <li>인스턴스 SSH 접속</li>
+</ol>
+
+<p><strong>1번 계정 생성</strong> 과정은 생략하고 바로 인스턴스 생성부터 설명하겠다.</p>
+
+<p><strong>작업환경은 윈도우즈 OS 기준.</strong></p>
+
+<hr />
+<h1 id="오라클-클라우드-홈페이지-접속">오라클 클라우드 홈페이지 접속</h1>
+
+<p><img src="/assets/20200926/1.png" alt="img" /></p>
+
+<p><img src="/assets/20200926/2.png" alt="img" /></p>
+
+<p>만약 계정이 없는 경우 “무료로 시작하기”를 통해 회원가입을 한다.</p>
+
+<p>계정을 생성 후 <strong>“Orcle Cloud 로그인”을 통해 로그인</strong> 한다.</p>
+
+<hr />
+<h1 id="오라클-클라우드-콘솔">오라클 클라우드 콘솔</h1>
+
+<p><img src="/assets/20200926/4.png" alt="img" /></p>
+
+<p><strong>VM 인스턴스 생성 클릭</strong></p>
+
+<p><img src="/assets/20200926/5.png" alt="img" /></p>
+
+<p><strong>인스턴스의 이름을 정한 뒤, 이미지 변경을 클릭하여 사용할 OS를 설정한다.</strong></p>
+
+<p><img src="/assets/20200926/6.png" alt="img" /></p>
+
+<p><strong>필자의 경우 CentOS7이 익숙하기 떄문에 오라클 리눅스가 아닌 CentOS7을 선택했다.</strong></p>
+
+<p><img src="/assets/20200926/7.png" alt="img" /></p>
+
+<hr />
+
+<h1 id="rsa-키-발급">RSA 키 발급</h1>
+
+<p><strong>인스턴스에 SSH로 접속하기 위하여 키체인을 생성해야한다. (SFTP 접속시에도 사용한다)</strong></p>
+
+<p><strong>PuttyGen을 사용하여 공개/비밀키를 생성할 것이다.</strong></p>
+
+<p><strong>Putty를 설치하면 같이 설치가 된다.</strong></p>
+
+<p><img src="/assets/20200926/8.png" alt="img" /></p>
+
+<p><strong>RSA / 2048bit (기본 값)으로 설정 후 “Generate” 클릭</strong></p>
+
+<p><img src="/assets/20200926/9.png" alt="img" /></p>
+
+<p><strong>참고로, 붉은색 표시한 영역에 마우스를 위치후 이리저리 움직여줘야 게이지가 올라간다.</strong></p>
+
+<p><img src="/assets/20200926/10.png" alt="img" /></p>
+
+<p><strong>발급이 완료 되면, 아래 캡쳐를 참고하여 공개키(.pub), putty 전용 비밀키(.ppk), openssh 비밀키 (.key) 3가지 형태로 저장한다.</strong></p>
+
+<p><img src="/assets/20200926/11.png" alt="img" /></p>
+
+<p><strong>공개키(.pub)</strong></p>
+
+<p><img src="/assets/20200926/12.png" alt="img" /></p>
+
+<p><strong>putty 전용 비밀키(.ppk) - Putty에서만 사용가능하다..</strong></p>
+
+<p><img src="/assets/20200926/13.png" alt="img" /></p>
+
+<p><strong>(1) openssh 비밀키 (.key) - SecureCRT, XShell등에서 사용 가능…</strong></p>
+
+<p><img src="/assets/20200926/14.png" alt="img" /></p>
+
+<p><strong>(2) openssh 비밀키 (.key) - SecureCRT, XShell등에서 사용 가능…</strong></p>
+
+<p><img src="/assets/20200926/15.png" alt="img" /></p>
+
+<p><strong>(3) openssh 비밀키 (.key) - SecureCRT, XShell등에서 사용 가능…</strong></p>
+
+<p><img src="/assets/20200926/16.png" alt="img" /></p>
+
+<p><strong>(4) openssh 비밀키 (.key) - SecureCRT, XShell등에서 사용 가능…</strong></p>
+
+<p><img src="/assets/20200926/17.png" alt="img" /></p>
+
+<p><strong>여기서 Public Key 텍스트르 전체 선택 후 복사한다.</strong></p>
+
+<hr />
+<h1 id="오라클-클라우드-콘솔-1">오라클 클라우드 콘솔</h1>
+
+<p><img src="/assets/20200926/18.png" alt="img" /></p>
+
+<p><strong>복사한 Public Key를 SSH 키 부분에 붙여넣은 후 “생성” 버튼을 클릭한다.</strong></p>
+
+<p><img src="/assets/20200926/19.png" alt="img" /></p>
+
+<p><strong>생성 중이다</strong></p>
+
+<p><img src="/assets/20200926/20.png" alt="img" /></p>
+
+<p><strong>우측 상단에서 컴퓨트 » 인스턴스 를 클릭 시 이동되는 페이지</strong></p>
+
+<p><img src="/assets/20200926/21.png" alt="img" /></p>
+
+<p><strong>조금 기다리면 실행 중 상태로 변경된다.</strong></p>
+
+<p><img src="/assets/20200926/22.png" alt="img" /></p>
+
+<p><strong>인스턴스 생성이 완료되었다! 이제 서버에 SSH로 접속을 해보자.</strong></p>
+
+<p><strong>먼저 공용 IP주소쪽에 있는 복사버튼을 눌러 IP주소를 복사하자.</strong></p>
+
+<hr />
+<h1 id="open-putty">Open Putty</h1>
+
+<p><img src="/assets/20200926/23.png" alt="img" /></p>
+
+<p><strong>오라클 클라우드 인스턴스 생성 시 기본 제공하는 일반 계정은 “opc”이다.</strong></p>
+
+<p><strong>따라서 host 부분에 opc@고정IP를 입력한다.</strong></p>
+
+<p><img src="/assets/20200926/24.png" alt="img" /></p>
+
+<p><strong>좌측 카테고리에서 Connection &gt; SSH &gt; Auth를 누른 후 Private Key File을 import 한다.</strong></p>
+
+<p><img src="/assets/20200926/25.png" alt="img" /></p>
+
+<p><strong>Open 클릭.</strong></p>
+
+<p><img src="/assets/20200926/26.png" alt="img" /></p>
+
+<p><strong>“예”를 눌러준다.</strong></p>
+
+<p><img src="/assets/20200926/27.png" alt="img" /></p>
+
+<p><strong>비밀번호 로그인이 아닌 키체인으로 로그인을 하였다.</strong></p>
+
+<p><strong>위에서 발급한 Key file들은 반드시 잊어버리면 안된다.</strong></p>
+
+<p><img src="/assets/20200926/31.png" alt="img" /></p>
+
+<p><img src="/assets/20200926/32.png" alt="img" /></p>
+
+<p><strong>서버 스펙은 대략 이정도이다.</strong></p>
+
+<hr />
+<h1 id="기본-서버-설정">기본 서버 설정</h1>
+
+<p><strong>여기까지만 해도 바로 사용할 수 있지만, 약간의 설정을 하자.</strong></p>
+
+<p><img src="/assets/20200926/28.png" alt="img" /></p>
+
+<p>root 계정으로 로그인한다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>su - 
+</code></pre></div></div>
+
+<p><img src="/assets/20200926/30.png" alt="img" /></p>
+
+<p>root의 비밀번호를 설정한다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd root
+</code></pre></div></div>
+
+<h1 id="사용자-계정-생성-그룹-포함">사용자 계정 생성 (그룹 포함)</h1>
+
+<p><strong>기본 제공하는 계정을 사용해도 되지만 필자는 opc 계정은 ssh 접속용도로만 사용하고, 서버 내부에서 사용할 계정은 따로 만들 것이다.</strong></p>
+
+<p><img src="/assets/20200926/33.png" alt="img" /></p>
+
+<p><strong>(1) 그룹을 추가한다. (당연히 다른 그룹이름을 사용해도 무관하다.)</strong></p>
+
+<p><strong>(2) 생성한 그룹에 속하는 계정을 추가한다. (당연히 다른 계정이름을 사용해도 무관하다.)</strong></p>
+
+<p><strong>(3) 생성한 계정의 비밀번호를 설정한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>groupadd 그룹이름
+useradd <span class="nt">-g</span> 그룹이름 계정이름
+passwd 계정이름
+</code></pre></div></div>
+<hr />
+<h1 id="sudo-권한-설정-패스워드-생략">sudo 권한 설정 (패스워드 생략)</h1>
+
+<p><strong>편의성을 위해 방금 생성한 계정이 비밀번호를 입력하지 않더라도 “sudo” 명령어를 사용할 수 있게 설정할 것이다.</strong></p>
+
+<p><img src="/assets/20200926/34.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/sudoers
+</code></pre></div></div>
+
+<p><img src="/assets/20200926/35.png" alt="img" /></p>
+
+<p><strong>아래와 같이 입력 후 저장하고 나간다. (:wq)</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>계정이름    <span class="nv">ALL</span><span class="o">=</span>NOPASSWD:    ALL
+</code></pre></div></div>
+
+<h1 id="ssh-root-로그인-제한">SSH root 로그인 제한</h1>
+
+<p><img src="/assets/20200926/36.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi /etc/ssh/sshd_config
+</code></pre></div></div>
+
+<p><img src="/assets/20200926/37.png" alt="img" /></p>
+
+<p><strong>기본 값은 “#PermitRootLogin no” 으로 되어 있다 (주석되어 있으므로 root 계정으로 SSH 접속 가능)</strong></p>
+
+<p><img src="/assets/20200926/38.png" alt="img" /></p>
+
+<p><strong>“PermitRootLogin yes” 로 변경 후 저장하고 나간다. (:wq)</strong></p>
+
+<p><img src="/assets/20200926/39.png" alt="img" /></p>
+
+<p><strong>설정 적용을 위하여 sshd 데몬을 재기동한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl restart sshd.service
+</code></pre></div></div>
+
+<p><strong>이제 사용하면된다..!</strong></p>
+
+<p><img src="/assets/20200926/40.png" alt="img" /></p>
+
+<p><strong>해당 포스트에서 OS 보안 취약점 설정까지 작성하기는 다소 무리가 있다고 생각되서 이정도까지만 작성하겠다.</strong></p>
+
+
+  </div><div id="disqus_thread" style="margin-top:25px"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html';
+      this.page.identifier = 'http://localhost:4000/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://parkjangwon.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+      powered by Disqus.</a></noscript></div>
+
+    </section>
+  </main><script async src="https://www.googletagmanager.com/gtag/js?id=UA-175195242-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-175195242-1');
+  </script>
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

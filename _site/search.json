@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "오라클 클라우드 서버 무료로 사용하기",
+      "title-lower"    : "오라클 클라우드 서버 무료로 사용하기",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "cloudserver",
+      "tags"     : "",
+      "url"      : "/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html",
+      "date"     : "2020-09-26 18:00:00 +0900",
+      "content"     : "무료 클라우드를 생각하면 보통 AWS 프리티어를 떠올리겠지만, 프리티어의 경우 1년 동안만 무료로 사용할 수 있다.(물론 컨퍼런스와 같은 행사 등에서 크레딧을 받아 요금을 크레딧으로 지불 할 수 있지만..)종종 사용했던 프리티어 계정을 잊고 지냈다가 무료 사용기간이 지난 후 과금 폭탄을 맞았다라는 썰도 들리곤 한다.AWS는 대인배라서 그런지 상황을 잘..."
+    } ,
+  
+    {
       "title"    : "Java Decompiler 소개 : CFR Decompiler",
       "title-lower"    : "java decompiler 소개 : cfr decompiler",
       "sub-titile" : "",
