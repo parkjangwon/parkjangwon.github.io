@@ -347,6 +347,21 @@ passwd 계정이름
 <p><strong>접속 성공! 키체인 파일은 꼭 어딘가에 백업을 해놓자..</strong></p>
 
 <hr />
+<h1 id="터미널mac-or-linux에서-비밀키-파일로-ssh-접속하는-방법">터미널(Mac or Linux)에서 비밀키 파일로 SSH 접속하는 방법</h1>
+
+<p><strong>SSH GUI툴이 아닌, 터미널(Mac or Linux)에서 접속 할 경우 아래 내용을 참고한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~ <span class="nb">ls</span> <span class="nt">-trl</span> 키체인파일이 존재하는 디렉토리/ <span class="c">#중요한건 디렉토리 and 키체인파일의 권한은 700 혹은 600으로 설정해야한다.</span>
+total 0
+drwx------@  4 pjw  staff   128  9 27 16:55 user-key
+➜  ~ ssh <span class="nt">-i</span> 비밀키파일<span class="o">(</span><span class="s2">"~.ppk"</span>가 아닌 openssh 형태의 파일. 여기 포스팅에서는 <span class="s2">"~.key"</span><span class="o">)</span> 계정이름@서버호스트<span class="o">(</span>ip 혹은 도메인<span class="o">)</span>
+<span class="c"># ex :  ssh -i privatekey.key user@10.10.10.10</span>
+Last login: Sun Sep 27 09:51:49 2020 from 223.131.194.250
+<span class="o">[</span>pjw@parkjw-svr ~]<span class="err">$</span>
+</code></pre></div></div>
+<p><strong>* 참고로 PuttyGEN이 아니더라도, 터미널에서 OpenSSH를 통하여 키체인을 발급해서 사용 할 수 있다…</strong></p>
+
+<hr />
 <h1 id="sudo-권한-설정-패스워드-생략">sudo 권한 설정 (패스워드 생략)</h1>
 
 <p><strong>편의성을 위해 방금 생성한 계정이 비밀번호를 입력하지 않더라도 “sudo” 명령어를 사용할 수 있게 설정할 것이다.</strong></p>

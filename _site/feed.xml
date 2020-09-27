@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Sep 2020 18:45:30 +0900</pubDate>
-    <lastBuildDate>Sun, 27 Sep 2020 18:45:30 +0900</lastBuildDate>
+    <pubDate>Sun, 27 Sep 2020 19:06:41 +0900</pubDate>
+    <lastBuildDate>Sun, 27 Sep 2020 19:06:41 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -303,6 +303,21 @@ passwd 계정이름
 &lt;p&gt;&lt;img src=&quot;/assets/20200926/52.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;접속 성공! 키체인 파일은 꼭 어딘가에 백업을 해놓자..&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;터미널mac-or-linux에서-비밀키-파일로-ssh-접속하는-방법&quot;&gt;터미널(Mac or Linux)에서 비밀키 파일로 SSH 접속하는 방법&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;SSH GUI툴이 아닌, 터미널(Mac or Linux)에서 접속 할 경우 아래 내용을 참고한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~ &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-trl&lt;/span&gt; 키체인파일이 존재하는 디렉토리/ &lt;span class=&quot;c&quot;&gt;#중요한건 디렉토리 and 키체인파일의 권한은 700 혹은 600으로 설정해야한다.&lt;/span&gt;
+total 0
+drwx------@  4 pjw  staff   128  9 27 16:55 user-key
+➜  ~ ssh &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 비밀키파일&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;~.ppk&quot;&lt;/span&gt;가 아닌 openssh 형태의 파일. 여기 포스팅에서는 &lt;span class=&quot;s2&quot;&gt;&quot;~.key&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 계정이름@서버호스트&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ip 혹은 도메인&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ex :  ssh -i privatekey.key user@10.10.10.10&lt;/span&gt;
+Last login: Sun Sep 27 09:51:49 2020 from 223.131.194.250
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;pjw@parkjw-svr ~]&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;* 참고로 PuttyGEN이 아니더라도, 터미널에서 OpenSSH를 통하여 키체인을 발급해서 사용 할 수 있다…&lt;/strong&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;h1 id=&quot;sudo-권한-설정-패스워드-생략&quot;&gt;sudo 권한 설정 (패스워드 생략)&lt;/h1&gt;
