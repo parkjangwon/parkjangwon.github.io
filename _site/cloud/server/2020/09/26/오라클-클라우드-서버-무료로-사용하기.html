@@ -250,6 +250,103 @@ useradd <span class="nt">-g</span> 그룹이름 계정이름
 passwd 계정이름
 </code></pre></div></div>
 <hr />
+<h1 id="새로-추가한-계정-키체인-생성">새로 추가한 계정 키체인 생성</h1>
+
+<p><strong>신규 추가 계정으로 ssh 접속을 할 수 있게 키체인을 생성, 등록을 한다</strong></p>
+
+<p><img src="/assets/20200926/41.png" alt="img" /></p>
+
+<p><strong>생성 방식은 동일 하며 새로 생성할 때, 키의 파일 이름을 다르게 저장한다.</strong></p>
+
+<p><strong>본인의 경우 계정명이 “pjw”이므로 새로 생성한 키 파일이름에 “-pjw” 를 붙였다.</strong></p>
+
+<hr />
+<h1 id="private-key를-통한-sftp-로그인">private key를 통한 SFTP 로그인</h1>
+
+<p><strong>FTP Tool은 WinSCP를 사용한다. (다른 Tool을 사용해도 무관하다.)</strong></p>
+
+<p><img src="/assets/20200926/42.png" alt="img" /></p>
+
+<p><strong>호스트 이름은 인스턴스에 할당 된 “고정 IP”를 입력</strong></p>
+
+<p><strong>사용자 이름은 “opc” (현재는 새로 생성한 계정의 키체인을 등록하지 않았기 때문)</strong></p>
+
+<p><strong>비밀번호는 공란으로 둔 채, 우측 하단에 보이는 “고급” 버튼을 클릭한다.</strong></p>
+
+<p><img src="/assets/20200926/43.png" alt="img" /></p>
+
+<p><strong>SSH &gt; 인증 &gt; 개인키 파일에 “최초”에 생성하였던 opc계정의 키체인 중 .ppk파일을 등록한다.</strong></p>
+
+<p><strong>그리고 확인을 누른 다음 로그인 버튼을 클릭한다.</strong></p>
+
+<p><img src="/assets/20200926/44.png" alt="img" /></p>
+
+<p><strong>정상적으로 로그인이 되면 이번에 새로 생성한 계정의 키체인 중 .pub 파일을 업로드한다.</strong></p>
+
+<p><strong>참고로 좌측이 로컬 PC, 우측이 원격지 서버 (오라클 클라우드 인스턴스)</strong></p>
+
+<hr />
+<h1 id="신규-계정에-대한-키체인-등록">신규 계정에 대한 키체인 등록</h1>
+
+<p><strong>최초에 제공된 opc 계정이 아닌 새로 추가한 계정으로 SSH 접속을 할 수 있게 키체인을 등록한다.</strong></p>
+
+<p><img src="/assets/20200926/45.png" alt="img" /></p>
+
+<p><strong>먼저 opc 계정으로 SSH 접속을 한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>su -
+<span class="nb">cd</span> /home/계정이름
+<span class="nb">mkdir</span> .ssh
+<span class="nb">chmod </span>700 .ssh
+<span class="nb">chown </span>계정이름:그룹이름 .ssh <span class="c">#이 부분은 캡쳐에서 누락이 되었다..</span>
+<span class="nb">cd</span> .ssh
+<span class="nb">cp</span> /home/opc/키체인.pub <span class="nb">.</span>
+<span class="nb">chmod </span>700 키체인.pub
+<span class="nb">chown </span>계정이름:그룹이름 키체인.pub
+<span class="nb">mv </span>키체인.pub authorized_keys <span class="c">#authorized_keys으로 이름을 바꿔준다.</span>
+<span class="nb">ls</span> <span class="nt">-al</span> <span class="c">#권한, 소유권 확인</span>
+</code></pre></div></div>
+
+<p><strong>(수정 전)</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi authorized_keys
+</code></pre></div></div>
+
+<p><img src="/assets/20200926/46.png" alt="img" /></p>
+
+<p><strong>공캐키 파일을 리눅스에서 사용될 수 있도록 수정을 해야한다.</strong></p>
+
+<p><strong>1) “AAA..” 앞 부분 내용을 지우고 “ssh-rsa “(공백 포함)으로 바꾼다.</strong></p>
+
+<p><strong>2) 줄바꿈 부분을 제거후 저장하고 나간다.</strong></p>
+
+<p><strong>(수정 후)</strong></p>
+
+<p><img src="/assets/20200926/47.png" alt="img" /></p>
+
+<p><img src="/assets/20200926/48.png" alt="img" /></p>
+
+<p><img src="/assets/20200926/51.png" alt="img" /></p>
+
+<p><strong>authorized_keys 파일과 .ssh 디렉토리의 권한은 700 or 600정도로 맞추고, 소유권 (계정,그룹)도 잘 맞춰주고 확인을 해본다.</strong></p>
+
+<p><strong>여기까지 설정을하면 끝났다! Putty로 opc 계정이 아닌 새로 생성한 계정으로 접속해보자.</strong></p>
+
+<p><strong>(위에 설명 한 키체인을 등록하는 방법은 꼭 오라클 클라우드가 아니더라도, 다른 리눅스 계열 서버에서 동일하게 적용할 수 있다.)</strong></p>
+
+<p><img src="/assets/20200926/49.png" alt="img" /></p>
+
+<p><strong>Private key 파일로 로그인 하는 요령은 opc계정으로 로그인했던 방식과 동일하다</strong></p>
+
+<p><img src="/assets/20200926/50.png" alt="img" /></p>
+
+<p><strong>Private key 파일로 로그인 하는 요령은 opc계정으로 로그인했던 방식과 동일하다</strong></p>
+
+<p><img src="/assets/20200926/52.png" alt="img" /></p>
+
+<p><strong>접속 성공! 키체인 파일은 꼭 어딘가에 백업을 해놓자..</strong></p>
+
+<hr />
 <h1 id="sudo-권한-설정-패스워드-생략">sudo 권한 설정 (패스워드 생략)</h1>
 
 <p><strong>편의성을 위해 방금 생성한 계정이 비밀번호를 입력하지 않더라도 “sudo” 명령어를 사용할 수 있게 설정할 것이다.</strong></p>

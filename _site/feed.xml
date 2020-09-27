@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Sep 2020 02:17:28 +0900</pubDate>
-    <lastBuildDate>Sun, 27 Sep 2020 02:17:28 +0900</lastBuildDate>
+    <pubDate>Sun, 27 Sep 2020 18:45:30 +0900</pubDate>
+    <lastBuildDate>Sun, 27 Sep 2020 18:45:30 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -207,6 +207,103 @@
 useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; 그룹이름 계정이름
 passwd 계정이름
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;hr /&gt;
+&lt;h1 id=&quot;새로-추가한-계정-키체인-생성&quot;&gt;새로 추가한 계정 키체인 생성&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;신규 추가 계정으로 ssh 접속을 할 수 있게 키체인을 생성, 등록을 한다&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/41.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;생성 방식은 동일 하며 새로 생성할 때, 키의 파일 이름을 다르게 저장한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;본인의 경우 계정명이 “pjw”이므로 새로 생성한 키 파일이름에 “-pjw” 를 붙였다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;private-key를-통한-sftp-로그인&quot;&gt;private key를 통한 SFTP 로그인&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;FTP Tool은 WinSCP를 사용한다. (다른 Tool을 사용해도 무관하다.)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/42.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;호스트 이름은 인스턴스에 할당 된 “고정 IP”를 입력&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;사용자 이름은 “opc” (현재는 새로 생성한 계정의 키체인을 등록하지 않았기 때문)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;비밀번호는 공란으로 둔 채, 우측 하단에 보이는 “고급” 버튼을 클릭한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/43.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SSH &amp;gt; 인증 &amp;gt; 개인키 파일에 “최초”에 생성하였던 opc계정의 키체인 중 .ppk파일을 등록한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;그리고 확인을 누른 다음 로그인 버튼을 클릭한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/44.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;정상적으로 로그인이 되면 이번에 새로 생성한 계정의 키체인 중 .pub 파일을 업로드한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;참고로 좌측이 로컬 PC, 우측이 원격지 서버 (오라클 클라우드 인스턴스)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;신규-계정에-대한-키체인-등록&quot;&gt;신규 계정에 대한 키체인 등록&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;최초에 제공된 opc 계정이 아닌 새로 추가한 계정으로 SSH 접속을 할 수 있게 키체인을 등록한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/45.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;먼저 opc 계정으로 SSH 접속을 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su -
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /home/계정이름
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; .ssh
+&lt;span class=&quot;nb&quot;&gt;chmod &lt;/span&gt;700 .ssh
+&lt;span class=&quot;nb&quot;&gt;chown &lt;/span&gt;계정이름:그룹이름 .ssh &lt;span class=&quot;c&quot;&gt;#이 부분은 캡쳐에서 누락이 되었다..&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; .ssh
+&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; /home/opc/키체인.pub &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;chmod &lt;/span&gt;700 키체인.pub
+&lt;span class=&quot;nb&quot;&gt;chown &lt;/span&gt;계정이름:그룹이름 키체인.pub
+&lt;span class=&quot;nb&quot;&gt;mv &lt;/span&gt;키체인.pub authorized_keys &lt;span class=&quot;c&quot;&gt;#authorized_keys으로 이름을 바꿔준다.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-al&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;#권한, 소유권 확인&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;(수정 전)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi authorized_keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/46.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;공캐키 파일을 리눅스에서 사용될 수 있도록 수정을 해야한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1) “AAA..” 앞 부분 내용을 지우고 “ssh-rsa “(공백 포함)으로 바꾼다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2) 줄바꿈 부분을 제거후 저장하고 나간다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;(수정 후)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/47.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/48.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/51.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;authorized_keys 파일과 .ssh 디렉토리의 권한은 700 or 600정도로 맞추고, 소유권 (계정,그룹)도 잘 맞춰주고 확인을 해본다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;여기까지 설정을하면 끝났다! Putty로 opc 계정이 아닌 새로 생성한 계정으로 접속해보자.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;(위에 설명 한 키체인을 등록하는 방법은 꼭 오라클 클라우드가 아니더라도, 다른 리눅스 계열 서버에서 동일하게 적용할 수 있다.)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/49.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Private key 파일로 로그인 하는 요령은 opc계정으로 로그인했던 방식과 동일하다&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/50.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Private key 파일로 로그인 하는 요령은 opc계정으로 로그인했던 방식과 동일하다&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20200926/52.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;접속 성공! 키체인 파일은 꼭 어딘가에 백업을 해놓자..&lt;/strong&gt;&lt;/p&gt;
+
 &lt;hr /&gt;
 &lt;h1 id=&quot;sudo-권한-설정-패스워드-생략&quot;&gt;sudo 권한 설정 (패스워드 생략)&lt;/h1&gt;
 
