@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "원격 개발 환경 구축하기(Golang)",
+      "title-lower"    : "원격 개발 환경 구축하기(golang)",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "golanglinuxcloud",
+      "tags"     : "",
+      "url"      : "/golang/linux/cloud/2020/09/28/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Golang.html",
+      "date"     : "2020-09-28 22:00:00 +0900",
+      "content"     : "이번에는 원격지 서버에 개발환경을 구성한 후, PC에서 원격 접속하여 코딩을 할 수 있는 환경을 구성하는 방법을 소개하겠다.보통 우리가 특정 언어 개발환경을 구성하는 방법은 아래와 같다. (Java를 기준으로…)1. 개발 pc에 jdk를 설치 후 환경변수 설정2. 특정 디렉토리에 워크스페이스 생성3. 사용할 IDE를 설치 후 생성된 워크스페이스 연결(..."
+    } ,
+  
+    {
       "title"    : "오라클 클라우드 서버 무료로 사용하기",
       "title-lower"    : "오라클 클라우드 서버 무료로 사용하기",
       "sub-titile" : "",
