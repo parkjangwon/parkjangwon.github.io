@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "원격 개발 환경 구축하기(Spring Boot CLI)",
+      "title-lower"    : "원격 개발 환경 구축하기(spring boot cli)",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "springbootjavalinuxcloud",
+      "tags"     : "",
+      "url"      : "/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html",
+      "date"     : "2020-10-01 18:00:00 +0900",
+      "content"     : "가끔 “아이패드로 코딩할 수 있나요?” 라는 질문을 받아 본 적이 있다.코딩 자체는 AppStore에서 업로드 된 IDE(단순 에디터라도 코딩 자체는 가능은 하다.) 앱을 사용해서 할 수 있다.Java의 경우 단순한 Java 컴파일러 앱은 있지만, JAVA EE를 온전하게 개발 할 수 있는 IDE(ex: Eclipse, Intelli J)앱은 찾지 못..."
+    } ,
+  
+    {
       "title"    : "원격 개발 환경 구축하기(Golang)",
       "title-lower"    : "원격 개발 환경 구축하기(golang)",
       "sub-titile" : "",

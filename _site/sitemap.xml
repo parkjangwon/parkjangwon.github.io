@@ -6,9 +6,14 @@
                 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
         <url>
             <loc>http://localhost:4000</loc>
-	    <lastmod>2020-09-29T00:46:51+09:00</lastmod>
+	    <lastmod>2020-10-02T03:08:58+09:00</lastmod>
             <priority>1.00</priority>
         </url><url>
+                <loc>http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html</loc>
+                <lastmod>2020-10-01T18:00:00+09:00</lastmod>
+                <changefreq>weekly</changefreq>
+                <priority>0.80</priority>
+            </url><url>
                 <loc>http://localhost:4000/golang/linux/cloud/2020/09/28/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Golang.html</loc>
                 <lastmod>2020-09-28T22:00:00+09:00</lastmod>
                 <changefreq>weekly</changefreq>

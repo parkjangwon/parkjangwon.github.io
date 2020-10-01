@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="google-site-verification" content="m53_dV8JIr-S7bpL6PBhUlZPmpCYUcrwa5RY0AO8q28" />
+<meta name="naver-site-verification" content="b8870cd11cad03ecbcc5a9eb81d8faf17f30a590" />
+<link href="/assets/favicon.ico" rel="shortcut icon"/>
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>원격 개발 환경 구축하기(Spring Boot CLI)</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>원격 개발 환경 구축하기(Spring Boot CLI) | 생각날때쓰는개발일기</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="원격 개발 환경 구축하기(Spring Boot CLI)" />
+<meta name="author" content="parkjangwon" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="가끔 “아이패드로 코딩할 수 있나요?” 라는 질문을 받아 본 적이 있다." />
+<meta property="og:description" content="가끔 “아이패드로 코딩할 수 있나요?” 라는 질문을 받아 본 적이 있다." />
+<link rel="canonical" href="http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html" />
+<meta property="og:url" content="http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html" />
+<meta property="og:site_name" content="생각날때쓰는개발일기" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-01T18:00:00+09:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-10-01T18:00:00+09:00","headline":"원격 개발 환경 구축하기(Spring Boot CLI)","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html"},"url":"http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html","author":{"@type":"Person","name":"parkjangwon"},"description":"가끔 “아이패드로 코딩할 수 있나요?” 라는 질문을 받아 본 적이 있다.","@type":"BlogPosting","dateModified":"2020-10-01T18:00:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+
+<body>
+  <main class="container">
+    <section class="about">
+      <a href="/"><img src="/assets/pjw.png" alt="Park Jangwon"></a>
+      <h2 id="title">
+        <a href="/">Park Jangwon</a>
+      </h2>
+      <p class="tagline">Web Developer</p>
+      <a href="about.html" style="text-decoration:none; "><h3>About</h3></a>
+      <ul class="social"><a href="https://github.com/parkjangwon" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://instagram.com/p._.jw" target="_blank">
+          <li>
+            <i class="icon-instagram"></i>
+          </li>
+        </a></ul><p>&copy;
+        2020</p></section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html">
+    <h2 class="post-title">원격 개발 환경 구축하기(Spring Boot CLI)</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 1, 2020</div><ul class="post-categories"><li>springboot</li><li>java</li><li>linux</li><li>cloud</li></ul></div>
+  <div class="post">
+    <p>가끔 “아이패드로 코딩할 수 있나요?” 라는 질문을 받아 본 적이 있다.</p>
+
+<p><strong>코딩 자체는 AppStore에서 업로드 된 IDE(단순 에디터라도 코딩 자체는 가능은 하다.) 앱을 사용해서 할 수 있다.</strong></p>
+
+<p>Java의 경우 단순한 Java 컴파일러 앱은 있지만, JAVA EE를 온전하게 개발 할 수 있는 IDE(ex: Eclipse, Intelli J)앱은 찾지 못하였다.</p>
+
+<p><strong>그래서 잠깐 “아이패드로 Spring Framework를 온전하게 개발할 수 있을까?”라는 주제로 구글링을 하였다.</strong></p>
+
+<p>몇 시간동안 구글링을 한 결과, IDE 앱을 찾기 보단, <strong>원격지 리눅스 서버에 Spring Boot CLI를 설치하고,</strong></p>
+
+<p><strong>SSH Client 앱을 통하여 접속 후 CLI 기반의 Text 에디터인 “vim”으로 개발을 하면 가능하겠다라고 생각했다.</strong></p>
+
+<p>여기서 문제가 되는 부분은, “vim”의 경우 숙련된 사람이라면 그나마 수월하겠지만, 그렇지 않은 사람이 더 많다는 것이다.</p>
+
+<p><strong>“Spacevim”</strong>이라는 에디터를 설치를 하여, 보다 편하게 개발을 할 수 있도록 환경을 구성할 것이다.</p>
+
+<p><strong>[“Spacevim”으로 작업 중인 Spring Boot 어플리케이션 : 아이패드에서 캡쳐를 했다.]</strong></p>
+
+<p><img src="/assets/20201001/springbootinspacevim.jpeg" alt="img" /></p>
+
+<p><strong>캡쳐에서 볼 수 있다시피, 이번에는 원격 리눅스 서버에 Spring Boot 개발환경을 구성한 후</strong></p>
+
+<p><strong>“Spacevim” 에디터를 통하여 터미널에서 직접 개발을 하는 환경을 세팅 할 것이다.</strong></p>
+
+<p><strong>이렇게 구성하면 스마트폰이나 태블릿 PC, 데스크탑 상관없이 모두 SSH 연결을 통하여 개발 할 수 있다.</strong></p>
+
+<p><strong>즉, 아이패드로 Spring Boot Framework 기반의 어플리케이션을 개발 할 수 있다!</strong></p>
+
+<p><strong>* 원격 리눅스 서버와 로컬 PC에서 VS Code를 연동한 부분은 지난 <a href="https://parkjangwon.github.io/golang/linux/cloud/2020/09/28/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0-Golang.html" target="_blank">포스트</a>를 참고하면 동일하게 세팅할 수 있다.</strong></p>
+
+<hr />
+
+<h1 id="설치-환경-및-순서">설치 환경 및 순서</h1>
+
+<p><strong>* 설치 환경은 Linux (CentOS7) &amp; open JDK 8</strong></p>
+
+<p><strong>* 본인은 이전 <a href="https://parkjangwon.github.io/cloud/server/2020/09/26/%EC%98%A4%EB%9D%BC%ED%81%B4-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%84%9C%EB%B2%84-%EB%AC%B4%EB%A3%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0.html" target="_blank">포스트</a>에서 구축한 Oracle Cloud 서버를 사용할 것이다.</strong></p>
+
+<ol>
+  <li>JDK 설치 및 환경 변수 설정</li>
+  <li>Maven 설치 및 환경 변수 설정</li>
+  <li>Spring Boot CLI 설치 및 환경 변수 설정</li>
+  <li>테스트 코드 작성 및 빌드 테스트</li>
+  <li>Spacevim 설치</li>
+</ol>
+
+<hr />
+
+<h1 id="jdk-설치">JDK 설치</h1>
+
+<p><img src="/assets/20201001/1.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/2.png" alt="img" /></p>
+
+<p><strong>패키지 매니저(yum)을 통하여 openJDK 8을 설치한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nt">-y</span> <span class="nb">install </span>java-1.8.0-openjdk java-1.8.0-openjdk-devel
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/3.png" alt="img" /></p>
+
+<p><strong>“java -version” 명령어로 설치가 되었는지 확인한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java <span class="nt">-version</span>
+</code></pre></div></div>
+
+<h1 id="java-환경-변수-설정">Java 환경 변수 설정</h1>
+
+<p><img src="/assets/20201001/4.png" alt="img" /></p>
+
+<p><strong>패키지 매니저(yum)을 통하여 JDK를 설치 할 경우 위 경로에 설치가 된다. 이 경로를 JAVA_HOME으로 설정 할 것이다.</strong></p>
+
+<p><img src="/assets/20201001/5.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.bash_profile
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/6.png" alt="img" /></p>
+
+<p><strong>각자 환경에 따라 .bash_profile의 내용은 다를 수 있다.</strong></p>
+
+<p><strong>여기서 중요한 부분은 JAVA_HOME, CLASSPATH이다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 아래 내용 추가</span>
+
+<span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.262.b10-0.el7_8.x86_64
+<span class="nv">CLASSPATH</span><span class="o">=</span><span class="nv">$JAVA_HOME</span>/jre/lib:<span class="nv">$JAVA_HOME</span>/lib/tools.jar
+<span class="nv">PATH</span><span class="o">=</span>기존에 설정된 값:<span class="nv">$JAVA_HOME</span>/bin
+
+<span class="nb">export </span>JAVA_HOME CLASSPATH PATH
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/7.png" alt="img" /></p>
+
+<p><strong>변경한 환경변수 값을 적용하기 위하여 source 명령어를 사용한다.</strong></p>
+
+<p><strong>* 그냥 ssh를 재접속하면 반영되긴 한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/.bash_profile <span class="c"># 변경한 환경변수 값 적용</span>
+<span class="nb">echo</span> <span class="nv">$JAVA_HOME</span>
+<span class="nb">echo</span> <span class="nv">$CLASSPATH</span>
+java <span class="nt">-version</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="maven-설치">Maven 설치</h1>
+
+<p>Spring Boot 어플리케이션을 jar로 빌드하기 위한 Maven을 설치한다.</p>
+
+<p>* 만약 빌드 툴을 Maven이 아닌 Gradle을 사용할 것이라면 구글링을 통하여 설치를 한다. (참고로 설치 과정은 굉장히 심플하다.)</p>
+
+<p><img src="/assets/20201001/8.png" alt="img" /></p>
+
+<p><strong>웹 다운로드 링크를 통하여 바로 서버에서 다운받기 위하여 “wget” 패키지를 설치한다. (본인은 사전에 설치를 하였다.)</strong></p>
+
+<p><strong>* 디렉토리 관리를 위하여 /home/사용자/tools 디렉토리를 만들었다.</strong></p>
+
+<p><strong>그 후, 아파치 홈페이지에서 제공하는 공식 다운로드 링크를 복사 한 다음 “wget 다운로드 링크”로 다운로드를 받는다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nt">-y</span> <span class="nb">install </span>wget <span class="c"># 이미 설치했을 경우 Skip</span>
+<span class="nb">mkdir </span>tools <span class="c"># 하기 싫으면 Skip</span>
+<span class="nb">cd </span>tools <span class="c"># 하기 싫으면 Skip</span>
+wget http://apache.tt.co.kr/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/9.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/10.png" alt="img" /></p>
+
+<p><strong>다운로드 받은 ~.tar.gz 파일을 압축해제 한 후,</strong></p>
+
+<p><strong>~bin 디렉토리 아래에 있는 mvn 실행 파일을 실행 시켜 정상 동작하는지 확인한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tar </span>xvf apache-maven-3.6.3-bin.tar.gz
+<span class="nb">ls</span> <span class="nt">-al</span>
+<span class="nb">cd </span>apache-maven-3.6.3/bin/
+./mvn <span class="nt">-version</span>
+</code></pre></div></div>
+<hr />
+
+<h1 id="maven-환경-변수-설정">Maven 환경 변수 설정</h1>
+
+<p><img src="/assets/20201001/11.png" alt="img" /></p>
+
+<p><strong>Maven Home이라고 출력된 경로를 복사한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.bash_profile
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/12.png" alt="img" /></p>
+
+<p><strong>Maven이 설치된 디렉토리를 MAVEN_HOME의 값으로 작성하고,</strong></p>
+
+<p><strong>PATH값 마지막에 “:MAVEN_HOME/bin”을 추가해준다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">MAVEN_HOME</span><span class="o">=</span>/home/사용자이름/tools/apache-maven-3.6.3
+<span class="nv">PATH</span><span class="o">=</span>기존에 설정된 값:<span class="nv">$MAVEN_HOME</span>/bin
+<span class="nb">export </span>MAVEN_HOME <span class="c"># 추가</span>
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/13.png" alt="img" /></p>
+
+<p><strong>변경한 환경변수 값을 적용하기 위하여 source 명령어를 사용한다.</strong></p>
+
+<p><strong>“mvn -version” 커맨드를 통하여 정상 동작 확인을 한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/.bash_profile <span class="c"># 변경한 환경변수 값 적용</span>
+<span class="nb">echo</span> <span class="nv">$MAVEN_HOME</span> <span class="c"># 확인</span>
+mvn <span class="nt">-version</span> <span class="c"># 확인</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="spring-boot-cli-설치">Spring Boot CLI 설치</h1>
+
+<p><img src="/assets/20201001/14.png" alt="img" /></p>
+
+<p><strong>본인의 경우 디렉토리 관리를 위하여 core 디렉토리에 Spring Boot CLI, 프로젝트별 워크스페이스는 workspaces 디렉토리 아래에 관리를 할 것이다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~ <span class="c"># 현재 사용자의 home 디렉토리로 이동한다.</span>
+<span class="nb">mkdir </span>spring-boot
+<span class="nb">cd </span>spring-boot
+<span class="nb">mkdir </span>core workspaces
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/15.png" alt="img" /></p>
+
+<p><strong>spring.io에서 공식으로 제공하는 Spring Boot CLI 다운로드 링크를 복사한 후 wget 패키지를 통하여 다운로드 받는다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://repo.spring.io/release/org/springframework/boot/spring-boot-cli/2.3.4.RELEASE/spring-boot-cli-2.3.4.RELEASE-bin.tar.gz
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/16.png" alt="img" /></p>
+
+<p><strong>다운로드 받은 ~tar.gz 파일을 압축 해제 한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tar </span>xvf spring-boot-cli-2.3.4.RELEASE-bin.tar.gz
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/17.png" alt="img" /></p>
+
+<p><strong>~bin 디렉토리로 이동한 후 spring CLI가 정상 동작하는지 “./spring version” 커맨드를 통하여 확인한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>spring-2.3.4.RELEASE/
+<span class="nb">cd </span>bin/
+./spring version
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="spring-boot-cli-환경변수-설정">Spring Boot CLI 환경변수 설정</h1>
+
+<p><img src="/assets/20201001/18.png" alt="img" /></p>
+
+<p><strong>“spring-boot-cli-2.3.4.RELEASE-bin.tar.gz”을 압축해제 하였을 때 생성되는 디렉토리 “spring-2.3.4.RELEASE”가 SPRING_HOME 값이 된다.</strong></p>
+
+<p><strong>해당 경로를 복사 한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.bash_profile
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/19.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">SPRING_HOME</span><span class="o">=</span>/home/사용자이름/spring-boot/core/spring-2.3.4.RELEASE
+<span class="nv">PATH</span><span class="o">=</span>기존에 설정된 값:<span class="nv">$SPRING_HOME</span>/bin
+<span class="nb">export </span>SPRING_HOME <span class="c"># 추가</span>
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/20.png" alt="img" /></p>
+
+<p><strong>마찬가지로 source 명령어로 변경한 환경변수 값을 적용 후 “spring version”명령어를 통하여 동작 여부를 확인한다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/.bash_profile <span class="c"># 변경한 환경변수 값 적용</span>
+<span class="nb">echo</span> <span class="nv">$SPRING_HOME</span> <span class="c"># 확인</span>
+spring version <span class="c"># 확인</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="spring-boot-cli를-통한-프로젝트-생성">Spring Boot CLI를 통한 프로젝트 생성</h1>
+
+<p><img src="/assets/20201001/21.png" alt="img" /></p>
+
+<p><strong>프로젝트를 생성할 디렉토리(본인의 경우 ~workspaces)로 이동한 후,</strong></p>
+
+<p><strong>“spring init 프로젝트명”을 입력하면 순식간에 기본 템플릿으로 프로젝트가 생성된다.</strong></p>
+
+<p><strong>생성된 프로젝트를 자세히 보면 너~무 default template이다.</strong></p>
+
+<p><strong>일반 PC로 작업을 한다면 별 문제가 되지 않겠지만, CLI의 터미넗에서 작업할 경우 여간 귀찮은게 아니다.</strong></p>
+
+<p><strong>당연히 Spring Boot CLI에서는 여러 옵션을 제공한다. 상세한 정보는 “spring init –list” 커맨드를 통하여 확인하거나 구글링을 해라.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring init 프로젝트명
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/22.png" alt="img" /></p>
+
+<p><strong>위 옵션들은 본인 생각에 이 정도면 적당한 초기 세팅값이라고 생각한다.</strong></p>
+
+<p><strong>여기서 jwapp은 임의로 지정한 값이기 때문에 각자 원하는 값을 넣으면 된다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring init <span class="nt">-d</span><span class="o">=</span>web <span class="nt">--groupId</span><span class="o">=</span><span class="k">in</span>.parkjw <span class="nt">--artifactId</span><span class="o">=</span>jwapp <span class="nt">--name</span><span class="o">=</span><span class="s2">"JwApp"</span> <span class="nt">--package-name</span><span class="o">=</span><span class="k">in</span>.parkjw.jwapp <span class="nt">--description</span><span class="o">=</span><span class="s2">"JwApp Demo"</span> <span class="nt">--build</span> maven jwapp
+</code></pre></div></div>
+<hr />
+
+<h1 id="spring-boot-어플리케이션-빌드-및-구동">Spring Boot 어플리케이션 빌드 및 구동</h1>
+
+<p><strong>Spring Boot Application을 구동하는 순서는 소스 빌드(build) &gt; 구동(run) 순이다.</strong></p>
+
+<p><img src="/assets/20201001/23.png" alt="img" /></p>
+
+<p><strong>먼저 pom.xml(Maven Build 기준)을 열어보자.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi pom.xml
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/24.png" alt="img" /></p>
+
+<p><strong>project/properties/java.version의 기본값은 11이다.</strong></p>
+
+<p><strong>JAVA_HOME을 jdk11로 세팅하였으면 따로 수정 할 필요는 없지만, 본인처럼 JDK8로 설정했을 경우 캡쳐와 같이 8로 바꿔주자.</strong></p>
+
+<p><strong>JAVA_HOME은 JDK8인데 java.version 값은 11일 경우 아래와 같은 에러가 발생할 것이다.</strong></p>
+
+<p><strong>* 혹은 JAVA_HOME이 JDK가 아닌 JRE일 경우도 발생한다.</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project jwapp: Fatal error compiling
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/25.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/26.png" alt="img" /></p>
+
+<p><strong>최초 build일 경우 maven repo에서 라이브러리들을 가져오기 때문에 다소 오래 걸릴 수 있다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn clean <span class="nb">install</span>
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/27.png" alt="img" /></p>
+
+<p><strong>target 디렉토리 아래에 빌드된 파일들이 생겼는지 확인 해보자.</strong></p>
+
+<p><img src="/assets/20201001/28.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/29.png" alt="img" /></p>
+
+<p><strong>mvn spring-boot:run 명령어로 Application을 구동 시키자.</strong></p>
+
+<p><strong>Log를 보았을 때 Application이 8080(Spring Boot 기본 port)port로 올라왔다는 것을 확인 할 수 있다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn spring-boot:run
+</code></pre></div></div>
+<p><strong>브라우저의 주소창에 서버IP:8080 으로 접속해보자.</strong></p>
+
+<p><img src="/assets/20201001/30.png" alt="img" /></p>
+
+<p><strong>너무 반가운 화면이 출력된다! 여기까지 따라오느라 고생이 많았다…</strong></p>
+
+<hr />
+
+<p><strong>만약, Application Log에는 정상적으로 올라갔으나, 브라우저를 통해 접속 시 서버의 응답이 없는 경우</strong></p>
+
+<p><strong>방화벽을 확인하자. 만약 inbound 정책이 없다면 추가를 하면 된다.</strong></p>
+
+<p><strong>AWS, Oracle Cloud 등 클라우드 서버인 경우 콘솔에 접속해서 보안그룹(방화벽)설정에 Inbound 정책을 추가하고,</strong></p>
+
+<p><strong>만약 공유기를 활용해서 서버를 구축하였다면 포트 포워딩 설정을 확인 하자.</strong></p>
+
+<p><strong>그리고 위에서 언급한 “외부 방화벽 정책”을 허용해도 접속이 되지 않는다면,</strong></p>
+
+<p><strong>OS 내부의 방화벽인 firewall(CentOS 7) or iptables(CentOS 6)에도 정책을 추가하면 된다.</strong></p>
+
+<hr />
+
+<h1 id="spacevim-설치">Spacevim 설치</h1>
+
+<p><strong>이제 마지막 단계이다.</strong></p>
+
+<p><strong><del>상개발자이면 그냥 여기서 그만하고 vim 에디터로 개발을 시작하면 된다.</del></strong></p>
+
+<hr />
+
+<h1 id="neovim-설치">Neovim 설치</h1>
+
+<p><strong>Spacevim은 vim 에디터에 설치를 할 수 있고, Neovim 에디터에도 설치할 수 있다.</strong></p>
+
+<p><strong>vim에디터는 단순 문서를 볼 때도 사용하기 때문에, Neovim 에디터를 설치한 후 Neovim 에디터에 Spacevim을 설치하도록 하겠다.</strong></p>
+
+<p><strong>* Spacevim으로 문서를 열 때 순정 vim에디터 보다 무겁게 열리기 때문….</strong></p>
+
+<p><img src="/assets/20201001/31.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>yum <span class="nt">-y</span> <span class="nb">install </span>epel-release
+<span class="nb">sudo </span>curl <span class="nt">-o</span> /etc/yum.repos.d/dperson-neovim-epel-7.repo https://copr.fedorainfracloud.org/coprs/dperson/neovim/repo/epel-7/dperson-neovim-epel-7.repo 
+<span class="nb">sudo </span>yum <span class="nt">-y</span> <span class="nb">install </span>neovim <span class="nt">--enablerepo</span><span class="o">=</span>epel
+</code></pre></div></div>
+<hr />
+
+<h1 id="neovim-spacevim-설치">(Neovim) Spacevim 설치</h1>
+
+<p><img src="/assets/20201001/32.png" alt="img" /></p>
+
+<p><strong>기본 설치는 이 명령어 한줄만 입력하면 끝난다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-sLf</span> https://spacevim.org/install.sh | bash <span class="nt">-s</span> <span class="nt">--</span> <span class="nt">--install</span> neovim
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/33.png" alt="img" /></p>
+
+<p><strong>nvim을 입력한 후 엔터를 쳐보자.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvim
+</code></pre></div></div>
+
+<p><strong><del>아무리 생각해도 spacevim 개발자는 정말 대단한것 같다.(심지어 Logo Text는 에디터를 열 때 마다 바뀐다..)</del></strong></p>
+
+<hr />
+
+<h1 id="neovim-spacevim-java-language-setting">(Neovim) Spacevim Java Language Setting</h1>
+
+<p><strong>많은 설정들이 있겠지만, 해당 포스팅에서는 정말 기초 설정만 하고, 나머지는 각자 구글링을 하여서 설정을 하자.</strong></p>
+
+<p><img src="/assets/20201001/34.png" alt="img" /></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.SpaceVim.d/init.toml
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/35.png" alt="img" /></p>
+
+<p>설정 파일 맨 아래에 해당 값을 추가한 후 문서를 저장하고 나간다..</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[[</span>layers]]
+name <span class="o">=</span> <span class="s2">"lang#java"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="spacevim-으로-spring-boot-개발하기">Spacevim 으로 Spring Boot 개발하기</h1>
+
+<p><strong>말은 거창하지만 가장 기본적인 내용만 설명하겠다.</strong></p>
+
+<p><img src="/assets/20201001/36.png" alt="img" /></p>
+
+<p><strong>1. 에디터 열기</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>프로젝트 워크스페이스 디렉토리
+nvim
+</code></pre></div></div>
+
+<p><img src="/assets/20201001/37.png" alt="img" /></p>
+
+<p><strong>2. 초기 화면 및 view 이동</strong></p>
+
+<p><strong>자세히 보면 “1 startify”, “2 vimfiler”라고 써있는데</strong></p>
+
+<p><strong>중립상태(esc)에서 spacebar를 누르면 단축키 가이드가 나온다.</strong></p>
+
+<p><img src="/assets/20201001/38.png" alt="img" /></p>
+
+<p><strong>만약 파일 목록으로 포커스(커서)를 옮기고 싶다면 (터치, 마우스클릭도 가능) (esc) &gt; spacebar &gt; 2를 누르면 포커스가 옮겨진다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>esc<span class="o">)</span> <span class="o">&gt;</span> spacebar <span class="o">&gt;</span> 원하는 view의 번호
+</code></pre></div></div>
+
+<p><strong>3. 터미널창 열기</strong></p>
+
+<p><img src="/assets/20201001/39.png" alt="img" /></p>
+
+<p><strong>spacebar &gt; “을 누르게되면 보통 말하는 터미널창이 열린다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>esc<span class="o">)</span> <span class="o">&gt;</span> spacebar <span class="o">&gt;</span> <span class="s2">" 
+</span></code></pre></div></div>
+
+<p><strong>4. 코드 수정 후 컴파일(빌드)</strong></p>
+
+<p><img src="/assets/20201001/40.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/41.png" alt="img" /></p>
+
+<p><strong>3번 항목에서 터미널을 연 후 Spring Boot App의 Root 디렉토리(보통 pom.xml이 위치한 디렉토리)로 이동 후,</strong></p>
+
+<p><strong>mvn clean install 입력</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn claen <span class="nb">install</span>
+</code></pre></div></div>
+
+<p><strong>5. Application 구동</strong></p>
+
+<p><img src="/assets/20201001/42.png" alt="img" /></p>
+
+<p><strong>…</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>…..</strong></p>
+
+<p><img src="/assets/20201001/43.png" alt="img" /></p>
+
+<p><strong>3번 항목에서 터미널을 연 후 Spring Boot App의 Root 디렉토리(보통 pom.xml이 위치한 디렉토리)로 이동 후,</strong></p>
+
+<p><strong>mvn spring-boot:run 입력</strong></p>
+
+<p><strong>수정된 코드가 반영되는 것을 확인 할 수 있다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvn spring-boot:run
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="이제-정말-끝났다">이제 정말 끝났다!</h1>
+
+<p><strong>이렇게 구성한 개발서버에 스마트폰이나, 태블릿, 혹은 PC에서 SSH Client App등으로 해당 서버에 접속하면,</strong></p>
+
+<p><strong>CLI 터미널 기반으로 Spring Boot 개발을 할 수 있다.</strong></p>
+
+<p><strong>특히 Spacevim으로 개발을 할 경우 터미널 화면을 클릭이나, 터치가 동작하므로 무선키보드만 준비되어있다면 생각보다 편하게 개발을 할 수 있다.</strong></p>
+
+<p><strong><del>이제 상개발자다운 환경에서 코딩을 즐길 수 있다.</del></strong></p>
+
+  </div><div id="disqus_thread" style="margin-top:25px"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html';
+      this.page.identifier = 'http://localhost:4000/springboot/java/linux/cloud/2020/10/01/%EC%9B%90%EA%B2%A9-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(Spring-Boot-CLI).html';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://parkjangwon.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+      powered by Disqus.</a></noscript></div>
+
+    </section>
+  </main><script async src="https://www.googletagmanager.com/gtag/js?id=UA-175195242-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-175195242-1');
+  </script>
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>
