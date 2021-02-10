@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "NGINX 웹서버에 LetsEncrypt SSL 인증서를 적용해보자",
+      "title-lower"    : "nginx 웹서버에 letsencrypt ssl 인증서를 적용해보자",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "nginxsslletsencrypt",
+      "tags"     : "",
+      "url"      : "/nginx/ssl/letsencrypt/2021/02/10/NGINX-%EC%9B%B9%EC%84%9C%EB%B2%84%EC%97%90-LetsEncrypt-SSL-%EC%9D%B8%EC%A6%9D%EC%84%9C%EB%A5%BC-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90.html",
+      "date"     : "2021-02-10 01:00:00 +0900",
+      "content"     : "웹서버를 구축 후 무료 SSL인증서 발급 및 HTTPS 적용을 하는 과정을 작성하겠다.웹 보안의 가장 기본이 되는 것은 HTTPS 적용이다. 아직 HTTPS가 뭔지 모르는 사람은 아래 포스트를 간단히 훝어 보고 넘어가는 것을 추천한다.HTTPS는 어떻게 동작하는거지?HTTPS 적용을 위한 SSL 인증서를 발급에 비용이 발생되지만, letsencrypt..."
+    } ,
+  
+    {
       "title"    : "스프링부트 어플리케이션을 도커컨테이너에 배포 해보자",
       "title-lower"    : "스프링부트 어플리케이션을 도커컨테이너에 배포 해보자",
       "sub-titile" : "",
