@@ -179,9 +179,9 @@ firewall-cmd --permanent --list-all
 ---
 # Let's Encrypt의 SSL 인증서 발급 및 갱신 세팅
 
-**단일 도메인 뿐만아니라 와일드카드(*.domain.com), 멀티도메인 (abc.domain.com, zxc,domain,com, asd.domain2.net)울 지원한다.**
+**단일 도메인 뿐만아니라 와일드카드(*.domain.com), 멀티도메인(abc.domain.com, zxc.domain.com, asd.domain2.net)을 지원한다.**
 
-**여기서는 편의상 하나의 도메인에 대해서만 발급하겠다..**
+**여기서는 편의상 단일 도메인에 대해서만 발급하겠다..**
 
 **인증서 이름(cert-name)을 지정하지 않는 경우, 첫번째 입력한 domainName이 인증서의 이름으로 설정 된다.**
 
@@ -253,9 +253,9 @@ letsencrypt --nginx certonly --cert-name devj-chain -d domain.com
 
 **따로 add domain, remove domain와 같은 명령어는 존재하지 않고,** 
 
-**명령어의 인자 중 -d 기준으로 입력되는 domain name 리스트와,**
+**명령어의 인자 중 -d 기준으로 입력되는 domainName 리스트와,**
 
-**인증서에 저장되어 있는 doamin name을 판단하여 letsencrypt에서 알아서 삭제, 추가를 한다.**
+**인증서에 저장되어 있는 doaminName을 판단하여 letsencrypt에서 알아서 삭제, 추가를 한다.**
 
 **인증서 발급, 갱신 시, 인증서에 들어가는 도메인이 현재 웹서버를 바라보고 있는지 DNS 룩업을 한다.**
 
