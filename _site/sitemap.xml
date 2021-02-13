@@ -6,9 +6,14 @@
                 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
         <url>
             <loc>http://localhost:4000</loc>
-	    <lastmod>2021-02-10T23:14:24+09:00</lastmod>
+	    <lastmod>2021-02-14T02:07:56+09:00</lastmod>
             <priority>1.00</priority>
         </url><url>
+                <loc>http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html</loc>
+                <lastmod>2021-02-13T01:00:00+09:00</lastmod>
+                <changefreq>weekly</changefreq>
+                <priority>0.80</priority>
+            </url><url>
                 <loc>http://localhost:4000/nginx/ssl/letsencrypt/2021/02/10/NGINX-%EC%9B%B9%EC%84%9C%EB%B2%84%EC%97%90-LetsEncrypt-SSL-%EC%9D%B8%EC%A6%9D%EC%84%9C%EB%A5%BC-%EC%A0%81%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90.html</loc>
                 <lastmod>2021-02-10T01:00:00+09:00</lastmod>
                 <changefreq>weekly</changefreq>

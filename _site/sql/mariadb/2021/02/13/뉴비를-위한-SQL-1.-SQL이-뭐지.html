@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="google-site-verification" content="m53_dV8JIr-S7bpL6PBhUlZPmpCYUcrwa5RY0AO8q28" />
+<meta name="naver-site-verification" content="b8870cd11cad03ecbcc5a9eb81d8faf17f30a590" />
+<link href="/assets/favicon.ico" rel="shortcut icon"/>
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>뉴비를 위한 SQL - 1. SQL이 뭐지?</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>뉴비를 위한 SQL - 1. SQL이 뭐지? | 생각날때쓰는개발일기</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="뉴비를 위한 SQL - 1. SQL이 뭐지?" />
+<meta name="author" content="parkjangwon" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="뉴비를 위한 SQL" />
+<meta property="og:description" content="뉴비를 위한 SQL" />
+<link rel="canonical" href="http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html" />
+<meta property="og:url" content="http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html" />
+<meta property="og:site_name" content="생각날때쓰는개발일기" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-02-13T01:00:00+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html"},"url":"http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html","author":{"@type":"Person","name":"parkjangwon"},"description":"뉴비를 위한 SQL","headline":"뉴비를 위한 SQL - 1. SQL이 뭐지?","dateModified":"2021-02-13T01:00:00+09:00","datePublished":"2021-02-13T01:00:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+</head>
+
+<body>
+  <main class="container">
+    <section class="about">
+      <a href="/"><img src="/assets/pjw.png" alt="Park Jangwon"></a>
+      <h2 id="title">
+        <a href="/">Park Jangwon</a>
+      </h2>
+      <p class="tagline">Web Developer</p>
+      <a href="about.html" style="text-decoration:none; "><h3>About</h3></a>
+      <ul class="social"><a href="https://github.com/parkjangwon" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://instagram.com/p._.jw" target="_blank">
+          <li>
+            <i class="icon-instagram"></i>
+          </li>
+        </a></ul><p>&copy;
+        2021</p></section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html">
+    <h2 class="post-title">뉴비를 위한 SQL - 1. SQL이 뭐지?</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Feb 13, 2021</div><ul class="post-categories"><li>sql</li><li>mariadb</li></ul></div>
+  <div class="post">
+    <h2 id="뉴비를-위한-sql">뉴비를 위한 SQL</h2>
+
+<ol>
+  <li><strong><a href="https://parkjangwon.github.io/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html" target="_blank">뉴비를 위한 SQL - 1. SQL이 뭐지?</a></strong></li>
+</ol>
+
+<hr />
+
+<p><strong>프로그래밍 입문을 할 때 거치는 관문 중 하나인 “SQL”에 대하여 얕게 소개를 하려고 한다.</strong></p>
+
+<p><strong>해당 포스트는 심도 깊게 정리를 하기보다, 이제 막 SQL을 배우는 “뉴비”를 위해 작성한 점을 참고하도록..</strong></p>
+
+<p><strong>참고로 작성자는 MariaDB(10.5.8)을 사용하고 있다.</strong></p>
+
+<hr />
+<h1 id="sql">SQL?</h1>
+<blockquote>
+  <p><strong><em>Structured Query Language</em></strong></p>
+</blockquote>
+
+<blockquote>
+  <p><em>구조화 질의어 : RDBMS의 데이터를 관리하기 위해 설계된 특수 목적의 프로그래밍 언어.</em></p>
+</blockquote>
+
+<p><strong>좀 더 친근하게 말하면, Oracle, MySQL, MariaDB와 같은 “DB”에서 원하는 데이터를 출력할 때, 작성하는 “쿼리” 이다.</strong></p>
+
+<hr />
+<h1 id="sql-활용-예시-1">SQL 활용 예시 #1</h1>
+<p><strong>스프링 프레임워크 기반 게시판을 개발할 때 보통 html, css, js를 사용하여 화면의 각 컴포넌트들을 구현,</strong></p>
+
+<p><strong>게시글 작성 화면에서 제목, 본문을 입력 후 저장 버튼을 클릭하면 입력한 게시물의 내용을 자바로 작성한 서버로 전송(보통 json 타입을 사용..),</strong></p>
+
+<p><strong>클라이언트(화면)에서 전달 받은 json 데이터를 Map 혹은 board DTO 타입으로으로 변환 후,</strong></p>
+
+<p><strong>서버에서 구현한 게시물 작성 관련 로직을 수행 후, 게시글을 영구적으로 저장하기 위해 미리 연동한 Database에 저장을 한다.</strong></p>
+
+<p><strong>이 때, 서버에서 게시물 관련 데이터를 Database가 알아 먹을 수 있는 형태로 만들어서 전달해줘야한다.</strong></p>
+
+<p><strong>여기서 알아 먹을 수 있는 형태가 “SQL”이다.</strong></p>
+
+<hr />
+<h1 id="sql-활용-예시-2">SQL 활용 예시 #2</h1>
+
+<p><strong>이 부장 “김 사원~ 이번 달에 A서비스에 가입한 회원 목록 좀 DB에서 뽑아줘~”</strong></p>
+
+<p><strong>오 차장 “김 사원~ 올해 입사 3년차 되는 직원들 직급을 대리로 그룹웨어 DB쪽에 업데이트 좀 쳐줘~”</strong></p>
+
+<p><strong>김 사원 “네 알겠습니다!”</strong></p>
+
+<p><strong>….</strong></p>
+
+<p><strong>김 사원 ‘왜 나만 시키냐 ㅠ_ㅠ’</strong></p>
+
+<blockquote>
+  <p>위와 같이 SQL은 개발자 뿐만 아니라, 비 개발자도 업무에서 사용할 수 있다.</p>
+</blockquote>
+
+<hr />
+<h1 id="요즘-누가-개발할-때-쿼리를-써요-hibernate-쓰면-되는데요">요즘 누가 개발할 때 쿼리를 써요? Hibernate 쓰면 되는데요?</h1>
+
+<p><strong>이렇게 생각하면… 뭐… 할 말이 없다…</strong></p>
+
+<p><strong>요즘 많이 사용하는 ORM 프레임워크인 Hibernate(JPA)도 개발자가 Hibernate에서 제공하는 API를 코드를 통해 호출하는 것 뿐이지,</strong></p>
+
+<p><strong>Hibernate 내부에서는 개발자가 호출한 API의 파라미터를 기반으로 SQL을 만들어서 연동한 DB에 날린다.</strong></p>
+
+<p><strong>혹시라도 오해를 할까봐 말하는데, 개발자가 직접 쿼리를 작성해서 xml 파일로 관리하거나 (Mybatis),</strong></p>
+
+<p><strong>쿼리가 아닌 프레임워크(Hibernate)에서 제공하는 API를 호출하는 차이일 뿐,</strong></p>
+
+<p><strong>Hibernate를 사용한다고 해서 SQL에 대한 학습 자체를 건너뛰어도 된다? 그건 아니다.</strong></p>
+
+<p>본인의 프로젝트에서 사용하는 프레임워크에 대해 이해 없이 사용하는 경우가 많다. 한 번 쯤은 겉 핥기 수준이라도 찾아보고 쓰는 습관을 들이자 -_-;;</p>
+
+<p><strong>쓸데 없는 말이 너무 길어졌다..! 이제 SQL을 공부하러 가자…</strong></p>
+
+<hr />
+
+<h1 id="sql의-종류-및-문법-mysql--mariadb-기준">SQL의 종류 및 문법 (MySQL &amp; MariaDB 기준)</h1>
+
+<h2 id="ddl--data-definition-language">DDL : Data Definition Language</h2>
+<blockquote>
+  <p><strong>“데이터 정의어”</strong></p>
+</blockquote>
+
+<h3 id="데이터-베이스의-테이블과-같은-데이터-구조-등을-정의-하는-언어를-말한다"><strong>데이터 베이스의 테이블과 같은 데이터 구조 등을 정의 하는 언어를 말한다.</strong></h3>
+
+<p><strong>데이터베이스 ,테이블의 추가, 삭제 혹은 컬럼을 추가, 컬럼의 속성을 수정 등..</strong></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>종류</strong></td>
+      <td><strong>역할</strong></td>
+    </tr>
+    <tr>
+      <td><strong>CREATE</strong></td>
+      <td><strong>데이터베이스, 테이블을 생성할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>ALTER</strong></td>
+      <td><strong>테이블의 속성을 수정할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>DROP</strong></td>
+      <td><strong>데이터베이스, 테이블을 삭제할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>TRUNCATE</strong></td>
+      <td><strong>테이블의 초기화 할 때 사용 (row삭제, index 삭제 등…)</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="create">CREATE</h3>
+<p><strong>별도 설정 없이 데이터 베이스를 생성하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="err">데이터베이스이름</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>데이터 베이스를 생성 시, 문자셋 설정을 하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="err">데이터베이스이름</span> <span class="k">DEFAULT</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8mb4</span> <span class="k">COLLATE</span> <span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>테이블 생성 시, 아~무 설정도 안하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="p">(</span>
+    <span class="err">컬럼</span><span class="mi">1</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+    <span class="err">컬럼</span><span class="mi">2</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
+    <span class="err">컬럼</span><span class="mi">3</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>테이블 생성 시, 기본키, 자동 증감 여부 및 NULL 허용 여부 옵션을 설정하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="p">(</span>
+    <span class="err">컬럼</span><span class="mi">1</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">2</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">3</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`컬럼1`</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>테이블 생성 시, 기본키, 자동 증감 여부, NULL 허용 여부, 테이블 엔진 옵션 및 기본 문자 셋을 설정하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="p">(</span>
+    <span class="err">컬럼</span><span class="mi">1</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">2</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">3</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`컬럼1`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>
+</code></pre></div></div>
+
+<p><strong>테이블 생성 시, 기본키, 자동 증감 여부, 자동 증감 값 지정, NULL 허용 여부, 음수 미 허용, 기본 값, 테이블 엔진 옵션 및 기본 문자 셋을 설정하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="p">(</span>
+    <span class="err">컬럼</span><span class="mi">1</span> <span class="nb">INT</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">2</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="err">컬럼</span><span class="mi">3</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="nb">unsigned</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`컬럼1`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">5</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>
+</code></pre></div></div>
+
+<h3 id="alter">ALTER</h3>
+<p><strong>테이블에 컬럼을 추가하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="err">컬럼속성</span><span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>테이블의 컬럼 속성을 변경하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="k">MODIFY</span> <span class="k">COLUMN</span> <span class="err">컬럼이름</span><span class="mi">1</span> <span class="err">컬럼속성</span><span class="mi">1</span> <span class="err">컬럼속성</span><span class="mi">2</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>테이블의 컬럼을 삭제하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="err">테이블이름</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>테이블의 이름을 변경하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="err">원래테이블이름</span> <span class="k">RENAME</span> <span class="err">바꿀테이블이름</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="drop">DROP</h3>
+<p><strong>데이터베이스를 DROP 하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="err">데이터베이스이름</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>테이블을 DROP 하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DROP</span> <span class="k">TABLE</span> <span class="err">테이블이름</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="truncate">TRUNCATE</h3>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">TRUNCATE</span> <span class="k">TABLE</span> <span class="err">테이블이름</span><span class="p">;</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="dml--data-manipulation-language">DML : Data Manipulation Language</h2>
+<blockquote>
+  <p><strong>“데이터 조작어”</strong></p>
+</blockquote>
+
+<h3 id="데이터베이스-혹은-테이블의-row를-조회-삽입-수정-삭제-등-데이터를-조작하는-언어를-말한다"><strong>데이터베이스 혹은 테이블의 row를 조회, 삽입, 수정, 삭제 등 데이터를 조작하는 언어를 말한다.</strong></h3>
+
+<p><strong>SELECT는 데이터베이스의 정보(환경변수, 버전 등…), 테이블의 데이터를 조회(검색)을 하는 질의어이며,</strong></p>
+
+<p><strong>나머지 INSERT, UPDATE, DELETE는 테이블에 있는 row(record, tuple)를 변형 (삽입, 수정, 삭제)를 하는 질의어이다.</strong></p>
+
+<p><strong>주로 웹 어플리케이션에서 CRUD 기능을 구현할 때 사용한다.</strong></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>종류</strong></td>
+      <td><strong>역할</strong></td>
+    </tr>
+    <tr>
+      <td><strong>SELECT</strong></td>
+      <td><strong>데이터베이스, 테이블의 정보를 조회할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>INSERT</strong></td>
+      <td><strong>테이블에 row를 삽입 할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>UPDATE</strong></td>
+      <td><strong>테이블의 row를 수정 할 때 사용</strong></td>
+    </tr>
+    <tr>
+      <td><strong>DELETE</strong></td>
+      <td><strong>테이블의 row를 삭제할 때 사용</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="select">SELECT</h3>
+<p><strong>조건이 없는 경우</strong> <em>: 모든 컬럼의 조회 할 시, 컬럼 명 대신 *(asterisk)을 입력</em></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="err">테이블</span><span class="p">;</span>
+
+<span class="k">SELECT</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="k">FROM</span> <span class="err">테이블</span><span class="p">;</span>
+
+<span class="k">SELECT</span> <span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">,</span> <span class="k">FROM</span> <span class="err">테이블</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>조건이 하나인 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">,</span> <span class="k">FROM</span> <span class="err">테이블</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>조건이 여러개인 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">,</span> <span class="k">FROM</span> <span class="err">테이블</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">2</span> <span class="o">=</span> <span class="s1">'조건2'</span><span class="p">;</span>
+
+<span class="k">SELECT</span> <span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">,</span> <span class="k">FROM</span> <span class="err">테이블</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">2</span> <span class="o">=</span> <span class="s1">'조건2'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">3</span> <span class="o">=</span> <span class="s1">'조건3'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="insert">INSERT</h3>
+<p><strong>하나의 row를 삽입하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="err">데이터</span><span class="mi">1</span><span class="p">,</span> <span class="err">데이터</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong>다수의 row를 삽입하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="err">컬럼</span><span class="mi">1</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">2</span><span class="p">)</span> 
+<span class="k">VALUES</span> 
+<span class="p">(</span><span class="err">데이터</span><span class="mi">1</span><span class="p">,</span> <span class="err">데이터</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">(</span><span class="err">데이터</span><span class="mi">1</span><span class="p">,</span> <span class="err">데이터</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">(</span><span class="err">데이터</span><span class="mi">1</span><span class="p">,</span> <span class="err">데이터</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">(</span><span class="err">데이터</span><span class="mi">1</span><span class="p">,</span> <span class="err">데이터</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="update">UPDATE</h3>
+<p><strong>조건 없이 테이블의 모든 row의 컬럼을 변경하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">UPDATE</span> <span class="err">테이블</span> <span class="k">SET</span> <span class="err">컬럼</span><span class="mi">3</span><span class="o">=</span><span class="s1">'수정3'</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">4</span><span class="o">=</span><span class="s1">'수정4'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>조건에 부합하는 row의 컬럼을 변경하는 경우</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">UPDATE</span> <span class="err">테이블</span> <span class="k">SET</span> <span class="err">컬럼</span><span class="mi">3</span><span class="o">=</span><span class="s1">'수정3'</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">4</span><span class="o">=</span><span class="s1">'수정4'</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="err">테이블</span> <span class="k">SET</span> <span class="err">컬럼</span><span class="mi">3</span><span class="o">=</span><span class="s1">'수정3'</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">4</span><span class="o">=</span><span class="s1">'수정4'</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">2</span> <span class="o">=</span> <span class="s1">'조건2'</span><span class="p">;</span>
+
+<span class="k">UPDATE</span> <span class="err">테이블</span> <span class="k">SET</span> <span class="err">컬럼</span><span class="mi">3</span><span class="o">=</span><span class="s1">'수정3'</span><span class="p">,</span> <span class="err">컬럼</span><span class="mi">4</span><span class="o">=</span><span class="s1">'수정4'</span> <span class="k">WHERE</span> <span class="err">컬럼</span><span class="mi">1</span> <span class="o">=</span> <span class="s1">'조건1'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">2</span> <span class="o">=</span> <span class="s1">'조건2'</span> <span class="k">AND</span> <span class="err">컬럼</span><span class="mi">3</span> <span class="o">=</span> <span class="s1">'조건3'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="delete">DELETE</h3>
+<p>DELETE FROM 테이블 WHERE 컬럼1 = ‘조건1’ AND 컬럼2 = ‘조건2’;</p>
+
+<hr />
+
+<h2 id="dcl--data-control-language">DCL : Data Control Language</h2>
+<blockquote>
+  <p><strong>“데이터 제어어”</strong></p>
+</blockquote>
+
+<h3 id="데이터베이스에-대한-접근-및-객체테이블-등-사용-권한을-부여-및-회수를-하는-언어를-말한다"><strong>데이터베이스에 대한 접근 및 객체(테이블 등) 사용 권한을 부여 및 회수를 하는 언어를 말한다.</strong></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>종류</strong></td>
+      <td><strong>역할</strong></td>
+    </tr>
+    <tr>
+      <td><strong>GRANT</strong></td>
+      <td><strong>데이터베이스의 권한을 사용자에게 부여</strong></td>
+    </tr>
+    <tr>
+      <td><strong>REVOKE</strong></td>
+      <td><strong>데이터베이스의 권한을 사용자에게 회수</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>권한의 종류는 꽤 많다… 자주 쓰는 권한 몇 가지 정도만 작성했다.</strong></p>
+<blockquote>
+  <p><strong>ALL(전체), ALTER, CREATE, INSERT, UPDATE, DELETE, DROP, INDEX…</strong></p>
+</blockquote>
+
+<h3 id="grant">GRANT</h3>
+<p><strong>mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’인 사용자에게 권한 부여</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">GRANT</span> <span class="err">권한</span> <span class="k">ON</span> <span class="n">DATABASENAME</span><span class="p">.</span><span class="n">TABLENAME</span> <span class="k">TO</span> <span class="s1">'username@myhost'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’이면서 비밀번호가 ‘password’인 사용자에게 권한 부여</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">GRANT</span> <span class="err">권한</span> <span class="k">ON</span> <span class="n">DATABASENAME</span><span class="p">.</span><span class="n">TABLENAME</span> <span class="k">TO</span> <span class="s1">'username@myhost'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'password'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="revoke">REVOKE</h3>
+<p><strong>mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’인 사용자에게서 권한 회수</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">REVOKE</span> <span class="err">권한</span> <span class="k">ON</span> <span class="n">DATABASENAME</span><span class="p">.</span><span class="n">TABLENAME</span> <span class="k">TO</span> <span class="s1">'username@host'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>권한을 부여/회수하였을 때 아래 쿼리를 통해 반영해야함.</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="tcl--transaction-control-language">TCL : Transaction Control Language</h2>
+<blockquote>
+  <p><strong>“트랜잭션 제어어”</strong></p>
+</blockquote>
+
+<h3 id="dml에-의해-조작된-결과를-작업-단위트랜잭션-별로-제어하는-언어를-말한다"><strong>DML에 의해 조작된 결과를 작업 단위(트랜잭션) 별로 제어하는 언어를 말한다.</strong></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>종류</strong></td>
+      <td><strong>역할</strong></td>
+    </tr>
+    <tr>
+      <td><strong>COMMIT</strong></td>
+      <td><strong>트랜잭션 처리가 정상적으로 종료 되었을 때, 변경 내용을 데이터베이스에 반영하는 연산</strong></td>
+    </tr>
+    <tr>
+      <td><strong>SAVEPOINT</strong></td>
+      <td><strong>현재 트랜잭션 상태를 저장한다. 해당 시점으로 트랜잭션으로 롤백 할 수 있다.</strong></td>
+    </tr>
+    <tr>
+      <td><strong>ROLLBACK</strong></td>
+      <td><strong>SAVEPOINT 혹은 COMMIT하기 전 트랜잭션으로 롤백</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>참고로 MySQL &amp; MariaDB는 기본으로 자동 커밋 모드이다. 롤백 기능을 사용하고 싶으면 자동 커밋 모드를 비활성화 해야한다.</strong></p>
+
+<p><strong>자동 커밋 모드 확인 : ON 활성, OFF 비활성</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SHOW</span> <span class="n">VARIABLES</span> <span class="k">LIKE</span> <span class="s1">'autocommit%'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>자동 커밋 활성</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">AUTOCOMMIT</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>자동 커밋 비활성</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">AUTOCOMMIT</span> <span class="o">=</span> <span class="k">FALSE</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="commit">COMMIT</h3>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="savepoint-innodb-지원">SAVEPOINT (InnoDB 지원)</h3>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SAVEPOINT</span> <span class="n">A</span> <span class="p">(</span><span class="err">포인터명</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="rollback">ROLLBACK</h3>
+<p><strong>COMMIT하기 전 트랜잭션으로 ROLLBACK</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ROLLBACK</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>SAVEPOINT A 트랜잭션으로 ROLLBACK</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ROLLBACK</span> <span class="k">TO</span> <span class="n">SAVEPOINT</span> <span class="n">A</span> <span class="p">(</span><span class="err">포인터명</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong>…….</strong></p>
+
+<p><strong>…….</strong></p>
+
+<p><strong>…….</strong></p>
+
+<p><strong>갑자기 여러 문법을 많이 보게 되어서 정신이 없을 것이다.</strong></p>
+
+<p><strong>약간이나마, SQL을 통해 데이터를 조회 및 조작을 어떻게 할 지 감이 잡혔을 것이다.</strong></p>
+
+<p><strong>하지만 슬프게도, 기본 중의 기본 문법만 언급한 것이다…</strong></p>
+
+<hr />
+
+<h2 id="rdbms--relational-data-base-management-system">RDBMS : Relational Data Base Management System</h2>
+<blockquote>
+  <p><strong>“관계형 데이터 베이스 관리 시스템”</strong></p>
+</blockquote>
+
+<p><strong>우리가 주로 접하는, 속칭 DB라고 부르는 시스템의 정식 명칭이다.</strong></p>
+
+<p><strong>MySQL, MariaDB, Oracle, PostgreSQL, SQL Server(MS-SQL)이 여기에 속한다.</strong></p>
+
+<p><strong>사전적인 의미 말고, 예시를 들어 좀 더 쉽게 설명을 하겠다.</strong></p>
+
+<p><strong>예를 들어, 우리가 객체 지향 관점으로 게시판을 개발 할 때, 전체 적인 게시판을 구성하는 객체로는 다음과 같을 것이다.</strong></p>
+
+<h3 id="게시물">게시물</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 게시물 ID (고유 값)
+&gt; 제목
+&gt; 본문
+&gt; 작성자
+&gt; 작성일
+</code></pre></div></div>
+
+<h3 id="게시물-추천">게시물 추천</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 게시물 추천 ID (고유 값)
+&gt; 게시물 ID
+&gt; 추천한 사용자 ID
+</code></pre></div></div>
+
+<h3 id="댓글">댓글</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 댓글 ID(고유 값)
+&gt; 게시물 ID
+&gt; 댓글 내용
+&gt; 댓글 작성자 ID
+&gt; 댓글 비밀번호
+&gt; 댓글 작성일자
+</code></pre></div></div>
+
+<h3 id="댓글-추천">댓글 추천</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 댓글 추천 ID (고유 값)
+&gt; 댓글 ID
+&gt; 추천한 사용자 ID
+</code></pre></div></div>
+
+<h3 id="사용자">사용자</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 사용자 ID (고유 값)
+&gt; 비밀번호
+&gt; 이름
+&gt; 이메일 주소
+&gt; 닉네임
+</code></pre></div></div>
+
+<p><strong>Board, Comment, User 등… 각 객체별로 사용자 ID 혹은 게시물의 ID 값으로 얽혀 있고, 연관(혹은 관계)을 지을 수 있다.</strong></p>
+
+<p><strong>마찬가지로 위에서 배웠던 DDL문의 “CREATE TABLE ~” 구문을 통하여 각 객체들을 테이블로 정의 할 수 있다.</strong></p>
+
+<p><strong>각 테이블(스키마)의 관계는 서로를 참조하는 외래키를 통해 보다 관계 지향적으로 정의 할 수 있다.</strong></p>
+
+<p><strong>여기서 나오는 개념이 기본키, 외래키, 제약 조건들이 있다. 이 부분은 이번 포스팅에서 설명 하지 않고 다음 포스팅에 정리를 하겠다.</strong></p>
+
+<hr />
+<h1 id="sql-공부를-위한-샘플-데이터-파일-사용하기">SQL 공부를 위한 샘플 데이터 파일 사용하기</h1>
+
+<p><strong>Oracle XE 에디션을 사용하는 경우, 학습용도로 사용할 수 있는 샘플 데이터베이스를 제공한다. (HR 계정)</strong></p>
+
+<p><strong>아쉽게도 MariaDB를 설치할 경우 샘플 데이터베이스를 제공하지 않는다.</strong></p>
+
+<p><strong>본인이 직접 더미데이터를 만들어도 되지만, 다행히도 깃허브에 샘플 데이터 베이스가 공개 되어있다.</strong></p>
+
+<p><strong>깃허브에 접속하여 샘플 데이터베이스를 내려 받은 후, 본인 로컬 DB에 Import 해서 사용하는 방법을 소개하겠다.</strong></p>
+
+<p><img src="/assets/20210213/1.png" alt="img" />
+<strong><a href="https://github.com/datacharmer/test_db" target="_blank">깃허브 이동(클릭)</a></strong></p>
+
+<p><strong>본인이 편한 방법으로 (git clone이나 zip 파일 다운로드) 샘플 파일을 내려 받자.</strong></p>
+
+<p><strong>압축을 풀면 아래와 같다</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">pwd</span>
+/Users/pjw/Downloads/test_db-master
+
+<span class="nb">ls</span> <span class="nt">-trl</span>
+total 336680
+<span class="nt">-rwxr-xr-x</span>@ 1 pjw  staff   2.0K  9  7 13:24 test_versions.sh
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   4.6K  9  7 13:24 test_employees_sha.sql
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   4.6K  9  7 13:24 test_employees_md5.sql
+<span class="nt">-rwxr-xr-x</span>@ 1 pjw  staff   1.8K  9  7 13:24 sql_test.sh
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   272B  9  7 13:24 show_elapsed.sql
+drwxrwxr-x@ 5 pjw  staff   160B  9  7 13:24 sakila
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   4.5K  9  7 13:24 objects.sql
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    21M  9  7 13:24 load_titles.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    37M  9  7 13:24 load_salaries3.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    38M  9  7 13:24 load_salaries2.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    38M  9  7 13:24 load_salaries1.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    17M  9  7 13:24 load_employees.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   1.1K  9  7 13:24 load_dept_manager.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff    14M  9  7 13:24 load_dept_emp.dump
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   250B  9  7 13:24 load_departments.dump
+drwxrwxr-x@ 5 pjw  staff   160B  9  7 13:24 images
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   7.8K  9  7 13:24 employees_partitioned_5.1.sql
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   6.1K  9  7 13:24 employees_partitioned.sql
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   4.1K  9  7 13:24 employees.sql
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   4.2K  9  7 13:24 README.md
+<span class="nt">-rw-rw-r--</span>@ 1 pjw  staff   964B  9  7 13:24 Changelog
+</code></pre></div></div>
+
+<p><strong>sql 파일을 import 하기 앞서, 본인 로컬 DB에 접속 후 Database를 하나 생성하자.</strong></p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">create</span> <span class="k">database</span> <span class="n">employees</span> <span class="k">default</span> <span class="nb">character</span> <span class="k">set</span> <span class="n">utf8mb4</span> <span class="k">collate</span> <span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>sql 파일을 employees 데이터 베이스에 import</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">pwd</span>
+/Users/pjw/Downloads/test_db-master
+
+mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; employees.sql
+</code></pre></div></div>
+
+<p><strong>작성자는 로컬 DB를 도커 엔진에 MariaDB 컨테이너를 올려서 사용해서 아래와 같이 작업 했다.</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS         PORTS                    NAMES
+1c19b0ef3306   mariadb   <span class="s2">"docker-entrypoint.s…"</span>   2 months ago   Up 6 seconds   0.0.0.0:3306-&gt;3306/tcp   mariadb
+
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; employees.sql
+ERROR at line 113: Failed to open file <span class="s1">'load_departments.dump'</span>, error: 2
+INFO
+CREATING DATABASE STRUCTURE
+INFO
+storage engine: InnoDB
+INFO
+LOADING departments
+</code></pre></div></div>
+
+<p><strong>위와 같이 오류가 나면서 테이블 스키마만 생성 되고, 실제 row들은 들어가지 않았다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi employees.sql
+
+.....
+.....
+
+SELECT <span class="s1">'LOADING departments'</span> as <span class="s1">'INFO'</span><span class="p">;</span>
+<span class="nb">source </span>load_departments.dump <span class="p">;</span>
+SELECT <span class="s1">'LOADING employees'</span> as <span class="s1">'
+</span></code></pre></div></div>
+
+<p><strong>source 명령어가 문제가 있나보다.. 도커에 해당 sql을 import 하였을 때 외부 dump 파일을 못 읽어들이는 것 같아 보였다.</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_employees.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_dept_emp.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_dept_manager.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_titles.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_salaries1.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_salaries2.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; load_salaries3.dump
+docker <span class="nb">exec</span> <span class="nt">-i</span> 1c19b0ef3306  mysql <span class="nt">-h127</span>.0.0.1 <span class="nt">-u</span>데이터베이스계정 <span class="nt">-p</span>비밀번호 employees &lt; show_elapsed.sql
+</code></pre></div></div>
+
+<p><strong>노가다를 하니 잘 들어갔다.</strong></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">use</span> <span class="n">employees</span><span class="p">;</span>
+
+<span class="k">show</span> <span class="n">tables</span><span class="p">;</span>
+</code></pre></div></div>
+<p><img src="/assets/20210213/2.png" alt="img" /></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">employees</span><span class="p">;</span>
+</code></pre></div></div>
+<p><img src="/assets/20210213/3.png" alt="img" /></p>
+
+<p><strong>다음 포스팅에서는 이 샘플 데이터로 실습을 하면서 공부를 하도록 하겠다.</strong></p>
+
+  </div><div id="disqus_thread" style="margin-top:25px"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html';
+      this.page.identifier = 'http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html';
+    };
+    (function () {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://parkjangwon.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+      powered by Disqus.</a></noscript></div>
+
+    </section>
+  </main><script async src="https://www.googletagmanager.com/gtag/js?id=UA-175195242-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-175195242-1');
+  </script>
+  <script src="/assets/js/simple-jekyll-search.min.js"></script>
+  <script src="/assets/js/search.js"></script>
+  
+</body>
+
+</html>

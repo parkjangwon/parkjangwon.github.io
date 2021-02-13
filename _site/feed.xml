@@ -6,9 +6,592 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 10 Feb 2021 23:14:24 +0900</pubDate>
-    <lastBuildDate>Wed, 10 Feb 2021 23:14:24 +0900</lastBuildDate>
+    <pubDate>Sun, 14 Feb 2021 02:07:56 +0900</pubDate>
+    <lastBuildDate>Sun, 14 Feb 2021 02:07:56 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>뉴비를 위한 SQL - 1. SQL이 뭐지?</title>
+        <description>&lt;h2 id=&quot;뉴비를-위한-sql&quot;&gt;뉴비를 위한 SQL&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 1. SQL이 뭐지?&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;프로그래밍 입문을 할 때 거치는 관문 중 하나인 “SQL”에 대하여 얕게 소개를 하려고 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;해당 포스트는 심도 깊게 정리를 하기보다, 이제 막 SQL을 배우는 “뉴비”를 위해 작성한 점을 참고하도록..&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;참고로 작성자는 MariaDB(10.5.8)을 사용하고 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;sql&quot;&gt;SQL?&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;Structured Query Language&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;구조화 질의어 : RDBMS의 데이터를 관리하기 위해 설계된 특수 목적의 프로그래밍 언어.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;좀 더 친근하게 말하면, Oracle, MySQL, MariaDB와 같은 “DB”에서 원하는 데이터를 출력할 때, 작성하는 “쿼리” 이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;sql-활용-예시-1&quot;&gt;SQL 활용 예시 #1&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;스프링 프레임워크 기반 게시판을 개발할 때 보통 html, css, js를 사용하여 화면의 각 컴포넌트들을 구현,&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;게시글 작성 화면에서 제목, 본문을 입력 후 저장 버튼을 클릭하면 입력한 게시물의 내용을 자바로 작성한 서버로 전송(보통 json 타입을 사용..),&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;클라이언트(화면)에서 전달 받은 json 데이터를 Map 혹은 board DTO 타입으로으로 변환 후,&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;서버에서 구현한 게시물 작성 관련 로직을 수행 후, 게시글을 영구적으로 저장하기 위해 미리 연동한 Database에 저장을 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;이 때, 서버에서 게시물 관련 데이터를 Database가 알아 먹을 수 있는 형태로 만들어서 전달해줘야한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;여기서 알아 먹을 수 있는 형태가 “SQL”이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;sql-활용-예시-2&quot;&gt;SQL 활용 예시 #2&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;이 부장 “김 사원~ 이번 달에 A서비스에 가입한 회원 목록 좀 DB에서 뽑아줘~”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;오 차장 “김 사원~ 올해 입사 3년차 되는 직원들 직급을 대리로 그룹웨어 DB쪽에 업데이트 좀 쳐줘~”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;김 사원 “네 알겠습니다!”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;….&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;김 사원 ‘왜 나만 시키냐 ㅠ_ㅠ’&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;위와 같이 SQL은 개발자 뿐만 아니라, 비 개발자도 업무에서 사용할 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;요즘-누가-개발할-때-쿼리를-써요-hibernate-쓰면-되는데요&quot;&gt;요즘 누가 개발할 때 쿼리를 써요? Hibernate 쓰면 되는데요?&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;이렇게 생각하면… 뭐… 할 말이 없다…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;요즘 많이 사용하는 ORM 프레임워크인 Hibernate(JPA)도 개발자가 Hibernate에서 제공하는 API를 코드를 통해 호출하는 것 뿐이지,&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Hibernate 내부에서는 개발자가 호출한 API의 파라미터를 기반으로 SQL을 만들어서 연동한 DB에 날린다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;혹시라도 오해를 할까봐 말하는데, 개발자가 직접 쿼리를 작성해서 xml 파일로 관리하거나 (Mybatis),&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;쿼리가 아닌 프레임워크(Hibernate)에서 제공하는 API를 호출하는 차이일 뿐,&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Hibernate를 사용한다고 해서 SQL에 대한 학습 자체를 건너뛰어도 된다? 그건 아니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;본인의 프로젝트에서 사용하는 프레임워크에 대해 이해 없이 사용하는 경우가 많다. 한 번 쯤은 겉 핥기 수준이라도 찾아보고 쓰는 습관을 들이자 -_-;;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;쓸데 없는 말이 너무 길어졌다..! 이제 SQL을 공부하러 가자…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;sql의-종류-및-문법-mysql--mariadb-기준&quot;&gt;SQL의 종류 및 문법 (MySQL &amp;amp; MariaDB 기준)&lt;/h1&gt;
+
+&lt;h2 id=&quot;ddl--data-definition-language&quot;&gt;DDL : Data Definition Language&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;“데이터 정의어”&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;데이터-베이스의-테이블과-같은-데이터-구조-등을-정의-하는-언어를-말한다&quot;&gt;&lt;strong&gt;데이터 베이스의 테이블과 같은 데이터 구조 등을 정의 하는 언어를 말한다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;데이터베이스 ,테이블의 추가, 삭제 혹은 컬럼을 추가, 컬럼의 속성을 수정 등..&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;종류&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;역할&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;CREATE&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;데이터베이스, 테이블을 생성할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;ALTER&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;테이블의 속성을 수정할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;DROP&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;데이터베이스, 테이블을 삭제할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;TRUNCATE&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;테이블의 초기화 할 때 사용 (row삭제, index 삭제 등…)&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;create&quot;&gt;CREATE&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;별도 설정 없이 데이터 베이스를 생성하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터베이스이름&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;데이터 베이스를 생성 시, 문자셋 설정을 하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터베이스이름&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;CHARACTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLLATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;utf8mb4_unicode_ci&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블 생성 시, 아~무 설정도 안하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블 생성 시, 기본키, 자동 증감 여부 및 NULL 허용 여부 옵션을 설정하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`컬럼1`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블 생성 시, 기본키, 자동 증감 여부, NULL 허용 여부, 테이블 엔진 옵션 및 기본 문자 셋을 설정하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`컬럼1`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블 생성 시, 기본키, 자동 증감 여부, 자동 증감 값 지정, NULL 허용 여부, 음수 미 허용, 기본 값, 테이블 엔진 옵션 및 기본 문자 셋을 설정하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`컬럼1`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;alter&quot;&gt;ALTER&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;테이블에 컬럼을 추가하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼속성&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블의 컬럼 속성을 변경하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MODIFY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼이름&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼속성&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼속성&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블의 컬럼을 삭제하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블의 이름을 변경하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;원래테이블이름&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;RENAME&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;바꿀테이블이름&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;drop&quot;&gt;DROP&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;데이터베이스를 DROP 하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터베이스이름&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;테이블을 DROP 하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;truncate&quot;&gt;TRUNCATE&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블이름&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;dml--data-manipulation-language&quot;&gt;DML : Data Manipulation Language&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;“데이터 조작어”&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;데이터베이스-혹은-테이블의-row를-조회-삽입-수정-삭제-등-데이터를-조작하는-언어를-말한다&quot;&gt;&lt;strong&gt;데이터베이스 혹은 테이블의 row를 조회, 삽입, 수정, 삭제 등 데이터를 조작하는 언어를 말한다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;SELECT는 데이터베이스의 정보(환경변수, 버전 등…), 테이블의 데이터를 조회(검색)을 하는 질의어이며,&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;나머지 INSERT, UPDATE, DELETE는 테이블에 있는 row(record, tuple)를 변형 (삽입, 수정, 삭제)를 하는 질의어이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;주로 웹 어플리케이션에서 CRUD 기능을 구현할 때 사용한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;종류&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;역할&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;SELECT&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;데이터베이스, 테이블의 정보를 조회할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;INSERT&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;테이블에 row를 삽입 할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;UPDATE&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;테이블의 row를 수정 할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;DELETE&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;테이블의 row를 삭제할 때 사용&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;select&quot;&gt;SELECT&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;조건이 없는 경우&lt;/strong&gt; &lt;em&gt;: 모든 컬럼의 조회 할 시, 컬럼 명 대신 *(asterisk)을 입력&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;조건이 하나인 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;조건이 여러개인 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건2'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건2'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;insert&quot;&gt;INSERT&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;하나의 row를 삽입하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;다수의 row를 삽입하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;데이터&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;update&quot;&gt;UPDATE&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;조건 없이 테이블의 모든 row의 컬럼을 변경하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정4'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;조건에 부합하는 row의 컬럼을 변경하는 경우&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정4'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정4'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건2'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;테이블&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'수정4'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건1'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건2'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AND&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;컬럼&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'조건3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;delete&quot;&gt;DELETE&lt;/h3&gt;
+&lt;p&gt;DELETE FROM 테이블 WHERE 컬럼1 = ‘조건1’ AND 컬럼2 = ‘조건2’;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;dcl--data-control-language&quot;&gt;DCL : Data Control Language&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;“데이터 제어어”&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;데이터베이스에-대한-접근-및-객체테이블-등-사용-권한을-부여-및-회수를-하는-언어를-말한다&quot;&gt;&lt;strong&gt;데이터베이스에 대한 접근 및 객체(테이블 등) 사용 권한을 부여 및 회수를 하는 언어를 말한다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;종류&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;역할&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;GRANT&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;데이터베이스의 권한을 사용자에게 부여&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;REVOKE&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;데이터베이스의 권한을 사용자에게 회수&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;권한의 종류는 꽤 많다… 자주 쓰는 권한 몇 가지 정도만 작성했다.&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;ALL(전체), ALTER, CREATE, INSERT, UPDATE, DELETE, DROP, INDEX…&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;grant&quot;&gt;GRANT&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’인 사용자에게 권한 부여&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;권한&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASENAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TABLENAME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'username@myhost'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’이면서 비밀번호가 ‘password’인 사용자에게 권한 부여&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;권한&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASENAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TABLENAME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'username@myhost'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IDENTIFIED&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'password'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;revoke&quot;&gt;REVOKE&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;mysql.user의 계정 중, Username이 ‘username’이면서 Host가 ‘myhost’인 사용자에게서 권한 회수&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;REVOKE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;권한&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASENAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TABLENAME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'username@host'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;권한을 부여/회수하였을 때 아래 쿼리를 통해 반영해야함.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;FLUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;tcl--transaction-control-language&quot;&gt;TCL : Transaction Control Language&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;“트랜잭션 제어어”&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;dml에-의해-조작된-결과를-작업-단위트랜잭션-별로-제어하는-언어를-말한다&quot;&gt;&lt;strong&gt;DML에 의해 조작된 결과를 작업 단위(트랜잭션) 별로 제어하는 언어를 말한다.&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;종류&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;역할&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;COMMIT&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;트랜잭션 처리가 정상적으로 종료 되었을 때, 변경 내용을 데이터베이스에 반영하는 연산&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;SAVEPOINT&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;현재 트랜잭션 상태를 저장한다. 해당 시점으로 트랜잭션으로 롤백 할 수 있다.&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;ROLLBACK&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;SAVEPOINT 혹은 COMMIT하기 전 트랜잭션으로 롤백&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;참고로 MySQL &amp;amp; MariaDB는 기본으로 자동 커밋 모드이다. 롤백 기능을 사용하고 싶으면 자동 커밋 모드를 비활성화 해야한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;자동 커밋 모드 확인 : ON 활성, OFF 비활성&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SHOW&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VARIABLES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIKE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'autocommit%'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;자동 커밋 활성&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTOCOMMIT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;자동 커밋 비활성&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTOCOMMIT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;commit&quot;&gt;COMMIT&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;savepoint-innodb-지원&quot;&gt;SAVEPOINT (InnoDB 지원)&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;포인터명&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;rollback&quot;&gt;ROLLBACK&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;COMMIT하기 전 트랜잭션으로 ROLLBACK&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;SAVEPOINT A 트랜잭션으로 ROLLBACK&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;포인터명&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;…….&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;…….&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;…….&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;갑자기 여러 문법을 많이 보게 되어서 정신이 없을 것이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;약간이나마, SQL을 통해 데이터를 조회 및 조작을 어떻게 할 지 감이 잡혔을 것이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;하지만 슬프게도, 기본 중의 기본 문법만 언급한 것이다…&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;rdbms--relational-data-base-management-system&quot;&gt;RDBMS : Relational Data Base Management System&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;“관계형 데이터 베이스 관리 시스템”&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;우리가 주로 접하는, 속칭 DB라고 부르는 시스템의 정식 명칭이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;MySQL, MariaDB, Oracle, PostgreSQL, SQL Server(MS-SQL)이 여기에 속한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;사전적인 의미 말고, 예시를 들어 좀 더 쉽게 설명을 하겠다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;예를 들어, 우리가 객체 지향 관점으로 게시판을 개발 할 때, 전체 적인 게시판을 구성하는 객체로는 다음과 같을 것이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;게시물&quot;&gt;게시물&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; 게시물 ID (고유 값)
+&amp;gt; 제목
+&amp;gt; 본문
+&amp;gt; 작성자
+&amp;gt; 작성일
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;게시물-추천&quot;&gt;게시물 추천&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; 게시물 추천 ID (고유 값)
+&amp;gt; 게시물 ID
+&amp;gt; 추천한 사용자 ID
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;댓글&quot;&gt;댓글&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; 댓글 ID(고유 값)
+&amp;gt; 게시물 ID
+&amp;gt; 댓글 내용
+&amp;gt; 댓글 작성자 ID
+&amp;gt; 댓글 비밀번호
+&amp;gt; 댓글 작성일자
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;댓글-추천&quot;&gt;댓글 추천&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; 댓글 추천 ID (고유 값)
+&amp;gt; 댓글 ID
+&amp;gt; 추천한 사용자 ID
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;사용자&quot;&gt;사용자&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; 사용자 ID (고유 값)
+&amp;gt; 비밀번호
+&amp;gt; 이름
+&amp;gt; 이메일 주소
+&amp;gt; 닉네임
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Board, Comment, User 등… 각 객체별로 사용자 ID 혹은 게시물의 ID 값으로 얽혀 있고, 연관(혹은 관계)을 지을 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;마찬가지로 위에서 배웠던 DDL문의 “CREATE TABLE ~” 구문을 통하여 각 객체들을 테이블로 정의 할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;각 테이블(스키마)의 관계는 서로를 참조하는 외래키를 통해 보다 관계 지향적으로 정의 할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;여기서 나오는 개념이 기본키, 외래키, 제약 조건들이 있다. 이 부분은 이번 포스팅에서 설명 하지 않고 다음 포스팅에 정리를 하겠다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;sql-공부를-위한-샘플-데이터-파일-사용하기&quot;&gt;SQL 공부를 위한 샘플 데이터 파일 사용하기&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Oracle XE 에디션을 사용하는 경우, 학습용도로 사용할 수 있는 샘플 데이터베이스를 제공한다. (HR 계정)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;아쉽게도 MariaDB를 설치할 경우 샘플 데이터베이스를 제공하지 않는다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;본인이 직접 더미데이터를 만들어도 되지만, 다행히도 깃허브에 샘플 데이터 베이스가 공개 되어있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;깃허브에 접속하여 샘플 데이터베이스를 내려 받은 후, 본인 로컬 DB에 Import 해서 사용하는 방법을 소개하겠다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/20210213/1.png&quot; alt=&quot;img&quot; /&gt;
+&lt;strong&gt;&lt;a href=&quot;https://github.com/datacharmer/test_db&quot; target=&quot;_blank&quot;&gt;깃허브 이동(클릭)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;본인이 편한 방법으로 (git clone이나 zip 파일 다운로드) 샘플 파일을 내려 받자.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;압축을 풀면 아래와 같다&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
+/Users/pjw/Downloads/test_db-master
+
+&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-trl&lt;/span&gt;
+total 336680
+&lt;span class=&quot;nt&quot;&gt;-rwxr-xr-x&lt;/span&gt;@ 1 pjw  staff   2.0K  9  7 13:24 test_versions.sh
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   4.6K  9  7 13:24 test_employees_sha.sql
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   4.6K  9  7 13:24 test_employees_md5.sql
+&lt;span class=&quot;nt&quot;&gt;-rwxr-xr-x&lt;/span&gt;@ 1 pjw  staff   1.8K  9  7 13:24 sql_test.sh
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   272B  9  7 13:24 show_elapsed.sql
+drwxrwxr-x@ 5 pjw  staff   160B  9  7 13:24 sakila
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   4.5K  9  7 13:24 objects.sql
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    21M  9  7 13:24 load_titles.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    37M  9  7 13:24 load_salaries3.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    38M  9  7 13:24 load_salaries2.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    38M  9  7 13:24 load_salaries1.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    17M  9  7 13:24 load_employees.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   1.1K  9  7 13:24 load_dept_manager.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff    14M  9  7 13:24 load_dept_emp.dump
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   250B  9  7 13:24 load_departments.dump
+drwxrwxr-x@ 5 pjw  staff   160B  9  7 13:24 images
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   7.8K  9  7 13:24 employees_partitioned_5.1.sql
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   6.1K  9  7 13:24 employees_partitioned.sql
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   4.1K  9  7 13:24 employees.sql
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   4.2K  9  7 13:24 README.md
+&lt;span class=&quot;nt&quot;&gt;-rw-rw-r--&lt;/span&gt;@ 1 pjw  staff   964B  9  7 13:24 Changelog
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;sql 파일을 import 하기 앞서, 본인 로컬 DB에 접속 후 Database를 하나 생성하자.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;database&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;character&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;collate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;utf8mb4_unicode_ci&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;sql 파일을 employees 데이터 베이스에 import&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;
+/Users/pjw/Downloads/test_db-master
+
+mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; employees.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;작성자는 로컬 DB를 도커 엔진에 MariaDB 컨테이너를 올려서 사용해서 아래와 같이 작업 했다.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS         PORTS                    NAMES
+1c19b0ef3306   mariadb   &lt;span class=&quot;s2&quot;&gt;&quot;docker-entrypoint.s…&quot;&lt;/span&gt;   2 months ago   Up 6 seconds   0.0.0.0:3306-&amp;gt;3306/tcp   mariadb
+
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; employees.sql
+ERROR at line 113: Failed to open file &lt;span class=&quot;s1&quot;&gt;'load_departments.dump'&lt;/span&gt;, error: 2
+INFO
+CREATING DATABASE STRUCTURE
+INFO
+storage engine: InnoDB
+INFO
+LOADING departments
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;위와 같이 오류가 나면서 테이블 스키마만 생성 되고, 실제 row들은 들어가지 않았다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi employees.sql
+
+.....
+.....
+
+SELECT &lt;span class=&quot;s1&quot;&gt;'LOADING departments'&lt;/span&gt; as &lt;span class=&quot;s1&quot;&gt;'INFO'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;load_departments.dump &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+SELECT &lt;span class=&quot;s1&quot;&gt;'LOADING employees'&lt;/span&gt; as &lt;span class=&quot;s1&quot;&gt;'
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;source 명령어가 문제가 있나보다.. 도커에 해당 sql을 import 하였을 때 외부 dump 파일을 못 읽어들이는 것 같아 보였다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_employees.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_dept_emp.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_dept_manager.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_titles.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_salaries1.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_salaries2.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; load_salaries3.dump
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; 1c19b0ef3306  mysql &lt;span class=&quot;nt&quot;&gt;-h127&lt;/span&gt;.0.0.1 &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt;데이터베이스계정 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;비밀번호 employees &amp;lt; show_elapsed.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;노가다를 하니 잘 들어갔다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/20210213/2.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/20210213/3.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;다음 포스팅에서는 이 샘플 데이터로 실습을 하면서 공부를 하도록 하겠다.&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 13 Feb 2021 01:00:00 +0900</pubDate>
+        <link>http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html</link>
+        <guid isPermaLink="true">http://localhost:4000/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html</guid>
+        
+        
+        <category>sql</category>
+        
+        <category>mariadb</category>
+        
+      </item>
     
       <item>
         <title>NGINX 웹서버에 LetsEncrypt SSL 인증서를 적용해보자</title>
@@ -177,9 +760,9 @@ firewall-cmd &lt;span class=&quot;nt&quot;&gt;--permanent&lt;/span&gt; &lt;span 
 &lt;hr /&gt;
 &lt;h1 id=&quot;lets-encrypt의-ssl-인증서-발급-및-갱신-세팅&quot;&gt;Let’s Encrypt의 SSL 인증서 발급 및 갱신 세팅&lt;/h1&gt;
 
-&lt;p&gt;&lt;strong&gt;단일 도메인 뿐만아니라 와일드카드(*.domain.com), 멀티도메인 (abc.domain.com, zxc,domain,com, asd.domain2.net)울 지원한다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;단일 도메인 뿐만아니라 와일드카드(*.domain.com), 멀티도메인(abc.domain.com, zxc.domain.com, asd.domain2.net)을 지원한다.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;여기서는 편의상 하나의 도메인에 대해서만 발급하겠다..&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;여기서는 편의상 단일 도메인에 대해서만 발급하겠다..&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;인증서 이름(cert-name)을 지정하지 않는 경우, 첫번째 입력한 domainName이 인증서의 이름으로 설정 된다.&lt;/strong&gt;&lt;/p&gt;
 
@@ -244,9 +827,9 @@ firewall-cmd &lt;span class=&quot;nt&quot;&gt;--permanent&lt;/span&gt; &lt;span 
 
 &lt;p&gt;&lt;strong&gt;따로 add domain, remove domain와 같은 명령어는 존재하지 않고,&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;명령어의 인자 중 -d 기준으로 입력되는 domain name 리스트와,&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;명령어의 인자 중 -d 기준으로 입력되는 domainName 리스트와,&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;인증서에 저장되어 있는 doamin name을 판단하여 letsencrypt에서 알아서 삭제, 추가를 한다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;인증서에 저장되어 있는 doaminName을 판단하여 letsencrypt에서 알아서 삭제, 추가를 한다.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;인증서 발급, 갱신 시, 인증서에 들어가는 도메인이 현재 웹서버를 바라보고 있는지 DNS 룩업을 한다.&lt;/strong&gt;&lt;/p&gt;
 

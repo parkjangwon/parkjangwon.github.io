@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "뉴비를 위한 SQL - 1. SQL이 뭐지?",
+      "title-lower"    : "뉴비를 위한 sql - 1. sql이 뭐지?",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "sqlmariadb",
+      "tags"     : "",
+      "url"      : "/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html",
+      "date"     : "2021-02-13 01:00:00 +0900",
+      "content"     : "뉴비를 위한 SQL  뉴비를 위한 SQL - 1. SQL이 뭐지?프로그래밍 입문을 할 때 거치는 관문 중 하나인 “SQL”에 대하여 얕게 소개를 하려고 한다.해당 포스트는 심도 깊게 정리를 하기보다, 이제 막 SQL을 배우는 “뉴비”를 위해 작성한 점을 참고하도록..참고로 작성자는 MariaDB(10.5.8)을 사용하고 있다.SQL?  Structur..."
+    } ,
+  
+    {
       "title"    : "NGINX 웹서버에 LetsEncrypt SSL 인증서를 적용해보자",
       "title-lower"    : "nginx 웹서버에 letsencrypt ssl 인증서를 적용해보자",
       "sub-titile" : "",
