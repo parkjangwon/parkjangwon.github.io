@@ -1,6 +1,18 @@
 [
   
     {
+      "title"    : "뉴비를 위한 SQL - 2. SELECT 간단 활용기",
+      "title-lower"    : "뉴비를 위한 sql - 2. select 간단 활용기",
+      "sub-titile" : "",
+      "sub-titile-lower" : "",
+      "categories" : "sqlmariadb",
+      "tags"     : "",
+      "url"      : "/sql/mariadb/2021/02/27/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-2.-SELECT-%EA%B0%84%EB%8B%A8-%ED%99%9C%EC%9A%A9%EA%B8%B0.html",
+      "date"     : "2021-02-27 01:00:00 +0900",
+      "content"     : "뉴비를 위한 SQL      뉴비를 위한 SQL - 1. SQL이 뭐지?        뉴비를 위한 SQL - 2. SELECT 간단 활용기  현업에서 자주 사용하는 SQL 중 하나가 SELECT이다.특정 데이터의 리스트나 사용자의 정보를 출력할 수 있고, 특정 테이블에 있는 row를 토대로 각종 통계 데이터를 만들 수 도 있다.이번에는 SELECT를 ..."
+    } ,
+  
+    {
       "title"    : "뉴비를 위한 SQL - 1. SQL이 뭐지?",
       "title-lower"    : "뉴비를 위한 sql - 1. sql이 뭐지?",
       "sub-titile" : "",

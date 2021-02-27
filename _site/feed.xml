@@ -6,16 +6,653 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 14 Feb 2021 02:07:56 +0900</pubDate>
-    <lastBuildDate>Sun, 14 Feb 2021 02:07:56 +0900</lastBuildDate>
+    <pubDate>Sat, 27 Feb 2021 11:34:07 +0900</pubDate>
+    <lastBuildDate>Sat, 27 Feb 2021 11:34:07 +0900</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>뉴비를 위한 SQL - 2. SELECT 간단 활용기</title>
+        <description>&lt;h2 id=&quot;뉴비를-위한-sql&quot;&gt;뉴비를 위한 SQL&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/12/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 1. SQL이 뭐지?&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/12/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 2. SELECT 간단 활용기&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;현업에서 자주 사용하는 SQL 중 하나가 SELECT이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;특정 데이터의 리스트나 사용자의 정보를 출력할 수 있고, 특정 테이블에 있는 row를 토대로 각종 통계 데이터를 만들 수 도 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;이번에는 SELECT를 활용하는 방법을 간단하게 소개하려고 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/12/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 1. SQL이 뭐지?&lt;/a&gt; 에서 import한 employees 데이터 베이스를 활용할 것이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;select&quot;&gt;SELECT&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;DML의 한 종류로써, SELECT는 데이터베이스, 테이블의 데이터를 조회을 하는 질의어&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;반드시 테이블의 row 정보만 출력할 수 있는게 아니라, RDBMS가 지원하는 범위에서 Database의 version과 같은 정보도 출력이 가능하다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;일반적인-select&quot;&gt;일반적인 SELECT&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;first_name&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Shahaf&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;mysql-or-mariadb의-version-출력&quot;&gt;MySQL or MariaDB의 Version 출력&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VERSION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;VERSION&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10.5.8-MariaDB-1:10.5.8+maria~focal&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;sql-serverms-sql의-version-출력&quot;&gt;SQL Server(MS-SQL)의 Version 출력&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;@@&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;VERSION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;‘Microsoft SQL Server 2014 (SP2-GDR) (KB4019093) - 12.0.5207.0 (X64)’&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;oracle의-version-출력&quot;&gt;Oracle의 Version 출력&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PRODUCT_COMPONENT_VERSION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;PRODUCT&lt;/td&gt;
+      &lt;td&gt;VERSION&lt;/td&gt;
+      &lt;td&gt;STATUS&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NLSRTL&lt;/td&gt;
+      &lt;td&gt;11.2.0.2.0&lt;/td&gt;
+      &lt;td&gt;Production&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Oracle Database 11g Express Edition&lt;/td&gt;
+      &lt;td&gt;11.2.0.2.0&lt;/td&gt;
+      &lt;td&gt;64bit Production&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;PL/SQL&lt;/td&gt;
+      &lt;td&gt;11.2.0.2.0&lt;/td&gt;
+      &lt;td&gt;Production&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;TNS for Linux:&lt;/td&gt;
+      &lt;td&gt;11.2.0.2.0&lt;/td&gt;
+      &lt;td&gt;Production&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;위 SQL에서 “VERSION()” 이라는 키워드는 뭔가 함수(Function)의 느낌이 나지 않는가?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;대부분의 RDBMS에서는 사용자의 편의를 위한 함수들을 지원한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;SQL문과 함수들을 활용하면 좀 더 편리하게 원하는 결과를 출력할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;h1 id=&quot;function&quot;&gt;Function&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;거의 모든 RDBMS에서는 다양한 내부 함수(Built in Function)를 지원한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;예를 들어 SELECT를 한 결과 리스트의 최대 값을 구할 때 MAX() 함수를 사용하는 등..&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;표준 SQL 함수(ANSI SQL Function)가 내부 함수들은 각 RDBMS 별로 지원 여부가 다르기 때문에 별도로 찾아보는 것을 추천한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://mariadb.com/kb/en/built-in-functions/&quot; target=&quot;_blank&quot;&gt;MariaDB Built in Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.mysqltutorial.org/mysql-functions.aspx/&quot; target=&quot;_blank&quot;&gt;MySQL Built in Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://docs.oracle.com/javadb/10.8.3.0/ref/rrefsqlj29026.html&quot; target=&quot;_blank&quot;&gt;Oracle Built in Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://docs.microsoft.com/ko-kr/sql/t-sql/functions/functions?view=sql-server-ver15&quot; target=&quot;_blank&quot;&gt;SQL Server Built in Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.postgresql.org/docs/9.1/plperl-builtins.html/&quot; target=&quot;_blank&quot;&gt;PostgreSQL Built in Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;표준-sql-함수ansi-sql-function&quot;&gt;표준 SQL 함수(ANSI SQL Function)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.oreilly.com/library/view/sql-in-a/9780596155322/ch04s02.html/&quot; target=&quot;_blank&quot;&gt;ANSI SQL Function&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;표준-sqlansi-sql은-또-뭐야&quot;&gt;표준 SQL(ANSI SQL)은 또 뭐야?&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;American National Standards Institute Structured Query Language&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;em&gt;미국 표준협회에서 정립한 표준 SQL&lt;/em&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;이 또한 정리를하면 내용이 꽤나 많다. 우리는 뉴비이다. 대~충 ANSI SQL이 어떤 느낌인지만 알고 넘어가자.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;del&gt;사실 핑계이다. 이 부분에 대해서는 아직 공부를 하지 않았다 -_-;;&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;표준 SQL을 사용함으로써 얻는 장점은 아래와 같다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1. 한 번 작성한 쿼리는 대부분의 RDBMS에서 지원이 된다. (다시 작성 안해도 된다!)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. 가독성이 좋아진다. (물론 사람 by 사람)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;oracle-join와-ansi-join-비교&quot;&gt;Oracle Join와 ANSI Join 비교&lt;/h2&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- Oracle SQL&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_B&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_BB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;-- ANSI SQL&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LEFT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OUTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_B&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TBL_B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;“어디서 가독성이 좋아진다는거야!” 라고 생각 할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;일단, 두 쿼리는 동일한 결과를 출력한다!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ANSI SQL에서는 테이블간의 Join 관계를 “FROM” 절에서 모두 기술되어 있고, 순수한 조건만 “WHERE”절에 기술 되어 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;아, 당장 Join이 뭔지 몰라도 된다!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;중요한건 표준 SQL을 사용하면 “한 번 작성한 쿼리”로 다양한 RDBMS에서 동일한 결과를 얻을 수 있다는 점이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;“그러면 표준 SQL만 배우면 되지, 왜 Oracle, MySQL 문법을 왜 배우는 거지?” 라고 생각할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;항상 표준 SQL이 가장 좋은 성능을 가져오는 것은 아니며, 쿼리에 따라서 표준 SQL이 오히려 가독성이 나빠질수 도 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;적재적소에 알맞는 쿼리를 작성하는 것이 가장 좋다!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;del&gt;뭐든지 꽉 막히게 살지말고, 유연하게 살도록 하자.&lt;/del&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;항상 삼천포로 빠지는 것 같다. 그래도 잔 지식(?)은 다다익선이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;del&gt;넘어가자.&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;자주 사용하는 ANSI SQL Function 몇 가지를 사용하는 법을 배워보자.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;sample-1&quot;&gt;Sample #1&lt;/h1&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;emp_no&lt;/td&gt;
+      &lt;td&gt;salary&lt;/td&gt;
+      &lt;td&gt;from_date&lt;/td&gt;
+      &lt;td&gt;to_date&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10022&lt;/td&gt;
+      &lt;td&gt;40000&lt;/td&gt;
+      &lt;td&gt;1999-09-03&lt;/td&gt;
+      &lt;td&gt;2000-09-02&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10022&lt;/td&gt;
+      &lt;td&gt;39935&lt;/td&gt;
+      &lt;td&gt;2000-09-02&lt;/td&gt;
+      &lt;td&gt;2001-09-02&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10022&lt;/td&gt;
+      &lt;td&gt;41348&lt;/td&gt;
+      &lt;td&gt;2001-09-02&lt;/td&gt;
+      &lt;td&gt;9999-01-01&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;sum&quot;&gt;SUM()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;합계를 구하는 집계함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;봉급만-출력&quot;&gt;봉급만 출력&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;salary&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;40000&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;39935&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;41348&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;봉급의-합계를-출력&quot;&gt;봉급의 합계를 출력&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;salary&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;121283&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;출력된-봉급의-합계를-출력-컬럼명salaries을-total로-표기&quot;&gt;출력된 봉급의 합계를 출력. 컬럼명(salaries)을 total로 표기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;total&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;121283&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;avg&quot;&gt;AVG()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;평균을 구하는 집계함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;출력된-봉급의-평균을-출력-컬럼명salaries을-avg로-표기&quot;&gt;출력된 봉급의 평균을 출력. 컬럼명(salaries)을 avg로 표기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AVG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;avg&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;avg&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;40427.6667&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;max&quot;&gt;MAX()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;최댓값을 구하는 집계함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;출력된-봉급의-최댓값을-출력-컬럼명salaries을-max로-표기&quot;&gt;출력된 봉급의 최댓값을 출력. 컬럼명(salaries)을 max로 표기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MAX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;max&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;41348&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;min&quot;&gt;MIN()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;최솟값을 구하는 집계함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;출력된-봉급의-최솟값을-출력-컬럼명salaries을-min로-표기&quot;&gt;출력된 봉급의 최솟값을 출력. 컬럼명(salaries)을 min로 표기&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;salary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;salaries&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;min&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;39935&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;sample-2&quot;&gt;Sample #2&lt;/h1&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;first_name&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;Shahaf&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;lower&quot;&gt;Lower()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;출력된 문자열을 소문자로 치환하는 함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;출력된-이름을-소문자로-치환&quot;&gt;출력된 이름을 소문자로 치환&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;first_name&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;shahaf&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;upper&quot;&gt;Upper()&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;&lt;em&gt;출력된 문자열을 대문자로 치환하는 함수&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;출력된-이름을-대문자로-치환&quot;&gt;출력된 이름을 대문자로 치환&lt;/h3&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Upper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10022&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;first_name&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;SHAHAF&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;관계&quot;&gt;관계&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;RDBMS(관계형 데이터베이스)라는 이름에서 유추할 수 있는 것 중 하나가, 각 데이터들을 관계를 지어서 저장 및 관리를 한다는 점이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;보다 쉬운 예를 들자면 직원과 부서의 관계이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;회사에 소속한 직원이라는 객체가 가지는 요소는 이름, 사원번호, 소속부서, 직급 등이 있을 것이다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;이러한 직원 정보를 데이터베이스의 “사원”이라는 테이블에 저장을 한다면 아래와 같은 형태로 표현할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;직원-테이블&quot;&gt;“직원” 테이블&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;사원번호&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;이름&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;부서이름&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;직급이름&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1234&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;김가나&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;개발1팀&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;사원&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1135&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;이다라&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;영업1팀&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;대리&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;235&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;박고니&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;영업1팀&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;부장&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;10&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;오박사&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;개발본부&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;상무&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;위와 같이 하나의 테이블에 사원의 모든 정보가 담게 된다면 각 컬럼에 중복되는 데이터가 발생되고, 만약 그 데이터의 크기 자체가 큰 경우 비효율적으로 사용하게된다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;또 DML을 통한 쿼리로 인하여  발생하는 여러 이상 현상이 발생할 수 도 있다. 그리고 저장하는 데이터를 활용하여 각종 쿼리를 효율적으로 작성하기도 어려워진다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;조금 더 전문적인 용어로 설명하면 데이터의 일관성, 중복 데이터의 최소화, 데이터의 유연성 향상의 관점으로 테이블을 나누어 관리를 한다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;이러한 과정을 정규화라고 하며, 정규화의 종류는 제 1정규화 ~ 제 6정규화가 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;지금은 그런게 있구나 정도만 하고 넘어가도록하자. 궁금하면 구글링을 하면 자세한 설명이 넘치고 넘친다..!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;다시 “직원” 테이블로 돌아가서, 분리하여 관리 할 수 있는 컬럼에 대하여 테이블로 나누어 보면 아래와 같이 표현할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;직원-테이블-1&quot;&gt;“직원” 테이블&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;사원번호&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;이름&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;부서코드&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;직급코드&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1234&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;김가나&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;4&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;5&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1135&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;이다라&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;5&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;4&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;235&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;박고니&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;5&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;3&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;10&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;오박사&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;2&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;2&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;부서-테이블&quot;&gt;“부서” 테이블&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;부서코드&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;부서이름&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;상위부서코드&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;본사&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;0&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;2&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;개발본부&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;1&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;3&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;영업본부&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;1&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;4&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;개발1팀&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;2&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;5&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;영업1팀&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;3&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;직급-테이블&quot;&gt;“직급” 테이블&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;직급코드&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;직급이름&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;1&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;사장&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;2&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;상무&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;3&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;부장&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;4&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;대리&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;center&gt;5&lt;/center&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;center&gt;사원&lt;/center&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;이렇게 테이블을 분리하면 어떤 효과를 가져올 수 있을까? 딱 눈에 보이는 장점을 나열하면 아래와 같다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1. 직원 테이블에 중복이 되는 데이터인 영업1팀 이라는 문자열 데이터를 숫자 3으로 대체를 하여서 저장을 했다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;👍  데이터의 중복을 줄여서 효율적인 데이터 저장을 하였다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. 부서테이블을 별개로 관리를 하여 부서코드와 상위부서코드를 활용하여 트리 구조의 조직도를 표현 할 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;👍 데이터를 하나의 목적이 아닌, 다양한 방법으로 활용을 할 수 있게 되었다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. 직급테이블을 구성하고 직급 코드를 부여를 함으로써, SELECT를 한 후 직급코드를 오름차순으로 정렬하면 직급이 높은 직원을 리스트 상단에 위치를 시킬 수 있다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;👍 2번과 마찬가지로 데이터를 다양한 방법으로 활용을 할 수 있게 되었다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;…&lt;/p&gt;
+
+&lt;p&gt;…&lt;/p&gt;
+
+&lt;p&gt;…&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;위와 같이 데이터의 중복을 피하기 위하여, 테이블을 정규화 하게되면 정보(데이터)들이 여러 테이블로 흩어지게 된다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;그렇다면, 여러 테이블에 흩어져있는 데이터를 조합하여 원하는 결과를 어떻게 얻을 수 있을까?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;그 방법에 대해서는 다음 포스팅에 이어서 정리 하도록 하겠다.&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 27 Feb 2021 01:00:00 +0900</pubDate>
+        <link>http://localhost:4000/sql/mariadb/2021/02/27/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-2.-SELECT-%EA%B0%84%EB%8B%A8-%ED%99%9C%EC%9A%A9%EA%B8%B0.html</link>
+        <guid isPermaLink="true">http://localhost:4000/sql/mariadb/2021/02/27/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-2.-SELECT-%EA%B0%84%EB%8B%A8-%ED%99%9C%EC%9A%A9%EA%B8%B0.html</guid>
+        
+        
+        <category>sql</category>
+        
+        <category>mariadb</category>
+        
+      </item>
     
       <item>
         <title>뉴비를 위한 SQL - 1. SQL이 뭐지?</title>
         <description>&lt;h2 id=&quot;뉴비를-위한-sql&quot;&gt;뉴비를 위한 SQL&lt;/h2&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/13/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 1. SQL이 뭐지?&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://parkjangwon.github.io/sql/mariadb/2021/02/12/%EB%89%B4%EB%B9%84%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-1.-SQL%EC%9D%B4-%EB%AD%90%EC%A7%80.html&quot; target=&quot;_blank&quot;&gt;뉴비를 위한 SQL - 1. SQL이 뭐지?&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;hr /&gt;
