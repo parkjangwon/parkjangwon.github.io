@@ -512,7 +512,7 @@ nvim
 **mvn clean install 입력**
 
 ```bash
-mvn claen install
+mvn clean install
 ```
 
 **5. Application 구동**
